@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios'
+import backend_url from "../config/config";
 
 export const createPost = createAsyncThunk(
     "post/createPost",
@@ -12,7 +13,7 @@ export const createPost = createAsyncThunk(
                     Authorization: `Bearer ${token}`
                 }
             }
-            const { data } = await axios.post("http://localhost:5000/api/v1/post/upload", postData, config)
+            const { data } = await axios.post(`${backend_url}/api/v1/post/upload`, postData, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -30,7 +31,7 @@ export const deletePost = createAsyncThunk(
                     Authorization: `Bearer ${token}`
                 }
             }
-            const { data } = await axios.delete(`http://localhost:5000/api/v1/post/${id}`, config)
+            const { data } = await axios.delete(`${backend_url}/api/v1/post/${id}`, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -48,7 +49,7 @@ export const likeAndUnlikePost = createAsyncThunk(
                     Authorization: `Bearer ${token}`
                 }
             }
-            const { data } = await axios.get(`http://localhost:5000/api/v1/post/${id}`, config)
+            const { data } = await axios.get(`${backend_url}/api/v1/post/${id}`, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -67,7 +68,7 @@ export const updatePost = createAsyncThunk(
                     Authorization: `Bearer ${token}`
                 }
             }
-            const { data } = await axios.put(`http://localhost:5000/api/v1/post/${id}`, postData, config)
+            const { data } = await axios.put(`${backend_url}/api/v1/post/${id}`, postData, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -85,7 +86,7 @@ export const getPostsOfTheFollowings = createAsyncThunk(
                     Authorization: `Bearer ${token}`
                 }
             }
-            const { data } = await axios.get("http://localhost:5000/api/v1/posts", config)
+            const { data } = await axios.get(`${backend_url}/api/v1/posts`, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -104,7 +105,7 @@ export const createComment = createAsyncThunk(
                     Authorization: `Bearer ${token}`
                 }
             }
-            const { data } = await axios.put(`http://localhost:5000/api/v1/post/comment/${id}`, { comment }, config)
+            const { data } = await axios.put(`${backend_url}/api/v1/post/comment/${id}`, { comment }, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -114,7 +115,7 @@ export const createComment = createAsyncThunk(
 
 export const deleteComment = createAsyncThunk(
     "post/deleteComment",
-    async ({id, commentId}, { rejectWithValue }) => {
+    async ({ id, commentId }, { rejectWithValue }) => {
         try {
             const token = JSON.parse(localStorage.getItem('token'))
             const config = {
@@ -122,7 +123,7 @@ export const deleteComment = createAsyncThunk(
                     Authorization: `Bearer ${token}`
                 }
             }
-            const { data } = await axios.delete(`http://localhost:5000/api/v1/post/comment/${id}`, commentId, config)
+            const { data } = await axios.delete(`${backend_url}/api/v1/post/comment/${id}`, { commentId }, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)

@@ -35,16 +35,16 @@ function App() {
           <Route path="/" element={isAuth && <Navbar />}>
             <Route index element={isAuth ? <Home /> : <Login />} />
             <Route path="signup" element={isAuth ? <Home /> : <Signup />} />
-            <Route path="home" element={isAuth && <Home />} />
-            <Route path="create-post" element={isAuth && <CreatePost />} />
-            <Route path="edit-post/:id" element={isAuth && <EditPost />} />
-            <Route path="search" element={isAuth && <Search />} />
-            <Route path="profile" element={isAuth && <Profile />} />
-            <Route path="profile/:id" element={isAuth && <UserProfile />} />
-            <Route path="update-profile" element={isAuth && <UpdateProfile />} />
-            <Route path="update-password" element={isAuth && <UpdatePassword />} />
-            <Route path="forgot-password" element={<ForgotPassword />} />
-            <Route path="reset-password/:token" element={<ResetPassword />} />
+            <Route path="home" element={isAuth ? <Home /> : <Login />} />
+            <Route path="create-post" element={isAuth ? <CreatePost /> : <Login />} />
+            <Route path="edit-post/:id" element={isAuth ? <EditPost /> : <Login />} />
+            <Route path="search" element={isAuth ? <Search /> : <Login />} />
+            <Route path="profile" element={isAuth ? <Profile /> : <Login />} />
+            <Route path="profile/:id" element={isAuth ? <UserProfile /> : <Login />} />
+            <Route path="update-profile" element={isAuth ? <UpdateProfile /> : <Login />} />
+            <Route path="update-password" element={isAuth ? <UpdatePassword /> : <Login />} />
+            <Route path="forgot-password" element={!isAuth ? <ForgotPassword /> : <NoPage />} />
+            <Route path="reset-password/:token" element={!isAuth ? <ResetPassword /> : <NoPage />} />
             <Route path="*" element={<NoPage />} />
           </Route>
         </Routes>

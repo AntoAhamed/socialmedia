@@ -1,12 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios'
+import backend_url from "../config/config";
 
 export const signup = createAsyncThunk(
     "user/signup",
     async (userData, { rejectWithValue }) => {
         try {
             const config = { headers: { "Content-Type": "application/json" } }
-            const { data } = await axios.post("http://localhost:5000/api/v1/register", userData, config)
+            const { data } = await axios.post(`${backend_url}/api/v1/register`, userData, config)
             localStorage.setItem("token", JSON.stringify(data.token))
             return data
         } catch (error) {
@@ -20,7 +21,7 @@ export const login = createAsyncThunk(
     async (userData, { rejectWithValue }) => {
         try {
             const config = { headers: { "Content-Type": "application/json" } }
-            const { data } = await axios.post("http://localhost:5000/api/v1/login", userData, config)
+            const { data } = await axios.post(`${backend_url}/api/v1/login`, userData, config)
             localStorage.setItem("token", JSON.stringify(data.token))
             return data
         } catch (error) {
@@ -37,7 +38,7 @@ export const loadUser = createAsyncThunk(
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
-            const { data } = await axios.get("http://localhost:5000/api/v1/me", config)
+            const { data } = await axios.get(`${backend_url}/api/v1/me`, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -53,7 +54,7 @@ export const getMyPosts = createAsyncThunk(
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
-            const { data } = await axios.get("http://localhost:5000/api/v1/my/posts", config)
+            const { data } = await axios.get(`${backend_url}/api/v1/my/posts`, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -83,7 +84,7 @@ export const forgotPassword = createAsyncThunk(
         try {
             const config = { headers: { "Content-Type": "application/json" } }
 
-            const { data } = await axios.post('http://localhost:5000/api/v1/forgot/password', email, config)
+            const { data } = await axios.post(`${backend_url}/api/v1/forgot/password`, email, config)
 
             return data
         } catch (error) {
@@ -98,7 +99,7 @@ export const resetPassword = createAsyncThunk(
         try {
             const config = { headers: { "Content-Type": "application/json" } }
 
-            const { data } = await axios.put(`http://localhost:5000/api/v1/password/reset/${token}`, passwords, config)
+            const { data } = await axios.put(`${backend_url}/api/v1/password/reset/${token}`, passwords, config)
 
             localStorage.setItem("token", JSON.stringify(data.token))
 
@@ -121,7 +122,7 @@ export const updatePassword = createAsyncThunk(
                 }
             }
             const { data } = await axios.put(
-                "http://localhost:5000/api/v1/update/password",
+                `${backend_url}/api/v1/update/password`,
                 passwords, config
             )
             localStorage.setItem("token", JSON.stringify(data.token))
@@ -144,7 +145,7 @@ export const updateProfile = createAsyncThunk(
                 }
             }
             const { data } = await axios.put(
-                "http://localhost:5000/api/v1/update/profile",
+                `${backend_url}/api/v1/update/profile`,
                 userData, config
             )
             return data
@@ -162,7 +163,7 @@ export const getAllUsers = createAsyncThunk(
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
-            const { data } = await axios.get(`http://localhost:5000/api/v1/users?name=${name}`, config)
+            const { data } = await axios.get(`${backend_url}/api/v1/users?name=${name}`, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -178,7 +179,7 @@ export const getUserProfile = createAsyncThunk(
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
-            const { data } = await axios.get(`http://localhost:5000/api/v1/user/${id}`, config)
+            const { data } = await axios.get(`${backend_url}/api/v1/user/${id}`, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -194,7 +195,7 @@ export const getUserPosts = createAsyncThunk(
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
-            const { data } = await axios.get(`http://localhost:5000/api/v1/userposts/${id}`, config)
+            const { data } = await axios.get(`${backend_url}/api/v1/userposts/${id}`, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -210,7 +211,7 @@ export const followUser = createAsyncThunk(
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
-            const { data } = await axios.get(`http://localhost:5000/api/v1/follow/${id}`, config)
+            const { data } = await axios.get(`${backend_url}/api/v1/follow/${id}`, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -226,7 +227,7 @@ export const deleteMyAccount = createAsyncThunk(
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
-            const { data } = await axios.delete('http://localhost:5000/api/v1/delete/me', config)
+            const { data } = await axios.delete(`${backend_url}/api/v1/delete/me`, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)

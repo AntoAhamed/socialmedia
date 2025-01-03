@@ -10,7 +10,7 @@ function Login() {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const { isLoading, user, error, success, message } = useSelector(state => state.user);
+  const { isLoading, user, error, success, message, isAuth } = useSelector(state => state.user);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,12 +25,13 @@ function Login() {
 
     dispatch(login(userData));
 
-    if (success) {
+    if (isAuth) {
       setEmail('');
       setPassword('');
       navigate('/profile');
     } else {
       console.log(error);
+      alert("Invalid email or password");
     }
   }
   return (
@@ -41,7 +42,7 @@ function Login() {
       {isLoading ? <Loader /> :
         <div className='lg:mx-32 md:mx-16 my-16'>
           <div className='border-2 flex flex-col p-16 mb-3 bg-white'>
-            <p className='text-3xl font-semibold italic text-center mb-3'>Instagram</p>
+            <p className='text-3xl font-semibold italic text-center mb-3'>Outstagram</p>
             <form onSubmit={handleSubmit}>
               <div className='grid mb-3'>
                 <TextField type='email' id="filled-basic" value={email} onChange={(e) => setEmail(e.target.value)} label="Email" variant="filled" required />

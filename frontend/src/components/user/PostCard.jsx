@@ -104,8 +104,8 @@ export default function PostCard(props) {
   };
 
   //Delete comment
-  const handleDeleteComment = (commentId) => {
-    dispatch(deleteComment({ id: post._id, commentId }));
+  const handleDeleteComment = async (commentId) => {
+    await dispatch(deleteComment({ id: post._id, commentId }));
     getPosts();
   };
 
@@ -125,9 +125,7 @@ export default function PostCard(props) {
           {/* Card Header */}
           <CardHeader
             avatar={
-              <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                {post?.owner?.name.charAt(0).toUpperCase()}
-              </Avatar>
+              <img src={post?.owner?.avatar?.url} alt='User' width='50' style={{ borderRadius: '50%' }} />
             }
             action={editAndDelete &&
               <IconButton aria-label="settings" onClick={handleClick}>

@@ -56,7 +56,7 @@ function Profile() {
     <>
       {isLoading ? <Loader /> :
         <div className={`border-l-4 border-r-8 border-gray-300 ${posts?.length <= 0 ? 'h-svh' : null}`}>
-          <div className='p-3 bg-white rounded-b-lg'>
+          <div className='p-3 bg-white rounded-b-lg shadow-xl'>
             <div className='grid lg:grid-cols-2 md:grid-cols-1 gap-4 mb-3'>
               <div className='flex justify-center'>
                 <img src={user?.avatar?.url || userPic} alt='User' width={'30%'} style={{ borderRadius: '50%' }} className='border-2' />
@@ -128,6 +128,8 @@ function Profile() {
             <div className='mb-3'>
               <p className='text-xl font-semibold'>{user?.name}</p>
               <p className='text-lg'>{user?.bio}</p>
+              <p className='text-md text-gray-500'>{user?.email}</p>
+              <p className='text-sm text-gray-500'>Joined On : {user?.createdAt}</p>
             </div>
             <div className='grid grid-cols-2'>
               <div className='grid mr-3'>

@@ -5,7 +5,7 @@ const cloudinary = require("cloudinary");
 // Create post
 exports.createPost = async (req, res) => {
   try {
-    const {image, caption} = req.body
+    const { image, caption } = req.body
 
     const myCloud = await cloudinary.v2.uploader.upload(image, {
       folder: "posts",
@@ -178,7 +178,7 @@ exports.updatePost = async (req, res) => {
       public_id: myCloud.public_id,
       url: myCloud.secure_url,
     }
-    
+
     post.caption = caption;
 
     await post.save();

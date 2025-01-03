@@ -38,7 +38,7 @@ function UserProfile() {
     <>
       {isLoading ? <Loader /> :
         <div className={`border-l-4 border-r-8 border-gray-300 ${posts?.length <= 0 ? 'h-svh' : null}`}>
-          <div className='p-3 bg-white rounded-br-lg'>
+          <div className='p-3 bg-white rounded-br-lg shadow-xl'>
             <div className='grid lg:grid-cols-2 md:grid-cols-1 gap-4 mb-3'>
               <div className='flex justify-center'>
                 <img src={userInfo?.user?.avatar?.url || userPic} alt='User' width={'30%'} style={{ borderRadius: '50%' }} className='border-2' />
@@ -61,6 +61,8 @@ function UserProfile() {
             <div className='mb-3'>
               <p className='text-xl font-semibold'>{userInfo?.user?.name}</p>
               <p className='text-lg'>{userInfo?.user?.bio}</p>
+              <p className='text-md text-gray-500'>{userInfo?.user?.email}</p>
+              <p className='text-sm text-gray-500'>Joined On : {userInfo?.user?.createdAt}</p>
             </div>
             {userInfo?.user?._id !== user?._id ?
               <div className='grid mt-3'>

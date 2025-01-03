@@ -13,11 +13,16 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // Using Middlewares
+const corsOptions = {
+  origin: process.env.CLIENT_URL,
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
 app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser())
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(fileUpload())
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Importing Routes
 const post = require("./routes/postRoutes");

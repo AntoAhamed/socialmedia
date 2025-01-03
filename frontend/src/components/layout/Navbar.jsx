@@ -9,9 +9,9 @@ function Navbar() {
   return (
     <>
       <nav className='border-b py-5'>
-        <ul className='grid lg:grid-cols-4 sm:grid-cols-1 gap-4'>
+        <ul className='grid lg:grid-cols-4 grid-cols-1 gap-4'>
           <li>
-            <p className='text-2xl font-bold italic text-center'>Instagram</p>
+            <p className='text-2xl font-bold italic text-center'>Outstagram</p>
           </li>
           <div className='flex justify-around col-span-3'>
             <li>
