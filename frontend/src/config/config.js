@@ -1,3 +1,3 @@
-const backend_url = "http://localhost:5000"
+const backend_url = "https://socialmedia-nlaw.onrender.com"
 
 export default backend_url
