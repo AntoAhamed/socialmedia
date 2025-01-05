@@ -41,7 +41,7 @@ function UserProfile() {
           <div className='p-3 bg-white rounded-br-lg shadow-xl'>
             <div className='grid lg:grid-cols-2 md:grid-cols-1 gap-4 mb-3'>
               <div className='flex justify-center'>
-                <img src={userInfo?.user?.avatar?.url || userPic} alt='User' width={'30%'} style={{ borderRadius: '50%' }} className='border-2' />
+                <img src={userInfo?.user?.avatar?.url || userPic} alt='User' width={'20%'} style={{ borderRadius: '50%' }} className='border-2' />
               </div>
               <div className='flex justify-between items-center'>
                 <div className='flex flex-col items-center hover:underline cursor-pointer'>

@@ -40,12 +40,12 @@ function UpdatePassword() {
   return (
     <>
       {isLoading ? <Loader /> :
-        <div className='grid lg:grid-cols-3 md:grid-cols-1'>
+        <div className='grid lg:grid-cols-3 md:grid-cols-1 h-screen'>
           <div>
-            <div className='bg-blue-500 w-full min-h-full rounded-tl-full rounded-br-full'></div>
+            <div className='bg-blue-500 w-full h-full'></div>
           </div>
-          <div className='col-span-2 lg:mx-24 md:mx-16 my-16'>
-            <div className='border-2 flex flex-col p-16 mb-3 bg-white'>
+          <div className='col-span-2 lg:mx-24 md:mx-16 lg:my-16 my-8'>
+            <div className='border-2 flex flex-col lg:p-16 p-4 mb-3 bg-white'>
               <p className='text-3xl font-semibold italic text-center mb-3'>Outstagram</p>
               <p className='font-semibold text-gray-500 text-center mb-3'>
                 Change your password very carefully

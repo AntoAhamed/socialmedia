@@ -52,8 +52,8 @@ function EditPost() {
     return (
         <>
             {isLoading ? <Loader /> :
-                <div className='px-32 py-16'>
-                    <div className='border-2 flex flex-col p-16 mb-3 bg-white'>
+                <div className='lg:px-32 lg:py-16 p-4 h-svh'>
+                    <div className='border-2 flex flex-col lg:p-16 p-4 mb-3 bg-white'>
                         <p className='text-3xl font-semibold italic text-center mb-3'>Outstagram</p>
                         <p className='font-semibold text-gray-500 text-center mb-3'>Edit post</p>
                         <div className='grid mb-3 border-dashed border-2 h-96'>

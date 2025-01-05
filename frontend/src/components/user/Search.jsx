@@ -24,7 +24,7 @@ function Search() {
     <>
       {isLoading ? <Loader /> :
         <div className='h-svh pt-4'>
-          <div className='flex flex-col px-32 py-20 bg-white'>
+          <div className='flex flex-col lg:px-32 lg:py-20 p-4 bg-white'>
             <div className='pb-3'>
               <p className='text-3xl font-semibold italic text-center mb-3'>Outstagram</p>
               <p className='font-semibold text-gray-500 text-center mb-3'>
@@ -35,7 +35,7 @@ function Search() {
                   <TextField type='text' id="filled-basic" value={name} onChange={(e) => setName(e.target.value)} label="Username" variant="filled" required />
                 </div>
                 <div className='grid mb-3'>
-                  <Button type='submit' variant='contained'>Search</Button>
+                  <Button type='submit' variant='contained' disabled={name === '' ? true : false}>Search</Button>
                 </div>
               </form>
             </div>

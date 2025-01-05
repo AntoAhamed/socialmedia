@@ -35,13 +35,13 @@ function Login() {
     }
   }
   return (
-    <div className='grid lg:grid-cols-2 md:grid-cols-1'>
+    <div className='grid lg:grid-cols-2 md:grid-cols-1 h-screen'>
       <div>
-        <div className='bg-blue-500 w-full min-h-screen rounded-br-full'></div>
+        <div className='bg-blue-500 w-full h-full rounded-br-full'></div>
       </div>
       {isLoading ? <Loader /> :
         <div className='lg:mx-32 md:mx-16 my-16'>
-          <div className='border-2 flex flex-col p-16 mb-3 bg-white'>
+          <div className='border-2 flex flex-col lg:p-16 p-8 mb-3 bg-white'>
             <p className='text-3xl font-semibold italic text-center mb-3'>Outstagram</p>
             <form onSubmit={handleSubmit}>
               <div className='grid mb-3'>

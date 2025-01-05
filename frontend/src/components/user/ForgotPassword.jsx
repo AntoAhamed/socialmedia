@@ -16,22 +16,19 @@ function ForgotPassword() {
 
     await dispatch(forgotPassword(email));
 
-    if (success) {
-      setEmail('');
-      alert(message);
-    } else {
-      console.log(error);
-    }
+    alert(`Account recovery link successfully sent to ${email}`)
+
+    setEmail('');
   }
   return (
     <>
       {isLoading ? <Loader /> :
         <div className='grid lg:grid-cols-3 md:grid-cols-1'>
           <div>
-            <div className='bg-blue-500 w-full min-h-full rounded-tl-full rounded-br-full'></div>
+            <div className='bg-blue-500 w-full h-full rounded-br-full'></div>
           </div>
           <div className='col-span-2 lg:mx-32 md:mx-16 my-32'>
-            <div className='border-2 flex flex-col p-16 mb-3 bg-white'>
+            <div className='border-2 flex flex-col lg:p-16 p-8 mb-3 bg-white'>
               <p className='text-3xl font-semibold italic text-center mb-3'>Outstagram</p>
               <p className='font-semibold text-gray-500 text-center mb-3'>
                 Recover your account

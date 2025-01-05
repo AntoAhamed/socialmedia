@@ -30,6 +30,7 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Loader from '../layout/Loader';
 import { loadUser } from '../../features/userSlice';
+import userPic from '../../assets/user.png'
 
 export default function PostCard(props) {
   const { post, editAndDelete, getPosts } = props
@@ -125,14 +126,14 @@ export default function PostCard(props) {
           {/* Card Header */}
           <CardHeader
             avatar={
-              <img src={post?.owner?.avatar?.url} alt='User' width='50' style={{ borderRadius: '50%' }} />
+              <img src={post?.owner?.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
             }
             action={editAndDelete &&
               <IconButton aria-label="settings" onClick={handleClick}>
                 <MoreVertIcon />
               </IconButton>
             }
-            title={<span className='text-lg font-semibold'>{post?.owner?.name}</span>}
+            title={<span className='text-lg font-semibold'><Link to={`/profile/${post?.owner?._id}`}>{post?.owner?.name}</Link></span>}
             subheader={post?.createdAt}
           />
           {/* Settings Menu */}
@@ -253,10 +254,10 @@ export default function PostCard(props) {
           </Modal>
           {/* Add Comment */}
           <CardActions disableSpacing sx={{ borderTop: '1px solid #bfbfbf' }}>
-            <img src={user?.avatar?.url} alt='User' width='50' style={{ borderRadius: '50%' }} />
+            <img src={user?.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
             <input type='text' placeholder='Add a comment...(Upto 100 latters)' value={comment} onChange={(e) => setComment(e.target.value)} className='w-full p-2 bg-gray-100 rounded-full focus:outline-none' maxLength={100} />
-            <IconButton aria-label="send" onClick={handleComment} >
-              <SendIcon sx={{ color: '#0099ff' }} />
+            <IconButton aria-label="send" disabled={comment==='' ? true : false} onClick={handleComment} >
+              <SendIcon sx={{ color: `${comment==='' ? 'gray' : '#0099ff'}` }} />
             </IconButton>
           </CardActions>
         </Card>}</>

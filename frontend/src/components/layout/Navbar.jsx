@@ -4,6 +4,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 function Navbar() {
   return (
@@ -13,7 +14,7 @@ function Navbar() {
           <li>
             <p className='text-2xl font-bold italic text-center'>Outstagram</p>
           </li>
-          <div className='flex justify-around col-span-3'>
+          <div className='flex justify-around lg:col-span-3'>
             <li>
               <Link to="/home">
                 <HomeIcon fontSize='large' />
@@ -30,12 +31,16 @@ function Navbar() {
               </Link>
             </li>
             <li>
+              <Link to="/notification">
+                <NotificationsIcon fontSize='large' />
+              </Link>
+            </li>
+            <li>
               <Link to="/profile">
                 <AccountCircleIcon fontSize='large' />
               </Link>
             </li>
           </div>
-
         </ul>
       </nav>
 
