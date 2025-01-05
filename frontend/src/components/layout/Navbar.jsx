@@ -30,11 +30,11 @@ function Navbar() {
                 <SearchIcon fontSize='large' />
               </Link>
             </li>
-            <li>
+            {/*<li>
               <Link to="/notification">
                 <NotificationsIcon fontSize='large' />
               </Link>
-            </li>
+            </li>*/}
             <li>
               <Link to="/profile">
                 <AccountCircleIcon fontSize='large' />

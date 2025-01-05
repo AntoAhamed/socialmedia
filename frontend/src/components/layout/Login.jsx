@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { clearErrorAndMessage, login } from '../../features/userSlice';
 import Loader from './Loader';
 
 function Login() {
-  const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const { isLoading, user, error, success, message, isAuth } = useSelector(state => state.user);
 
@@ -25,11 +23,9 @@ function Login() {
 
     await dispatch(login(userData));
 
-    if (isAuth) {
+    if (isAuth ) {
       setEmail('');
       setPassword('');
-
-      navigate('/profile');
     }else{
       console.log(error)
     }
