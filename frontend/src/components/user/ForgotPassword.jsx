@@ -11,10 +11,10 @@ function ForgotPassword() {
 
   const [email, setEmail] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    dispatch(forgotPassword(email));
+    await dispatch(forgotPassword(email));
 
     if (success) {
       setEmail('');

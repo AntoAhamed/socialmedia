@@ -84,7 +84,7 @@ export const forgotPassword = createAsyncThunk(
         try {
             const config = { headers: { "Content-Type": "application/json" } }
 
-            const { data } = await axios.post(`${backend_url}/api/v1/forgot/password`, email, config)
+            const { data } = await axios.post(`${backend_url}/api/v1/forgot/password`, {email}, config)
 
             return data
         } catch (error) {
@@ -252,6 +252,7 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         clearErrorAndMessage: (state) => {
+            state.success = false;
             state.message = null;
             state.error = null;
         },

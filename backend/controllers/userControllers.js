@@ -165,9 +165,9 @@ exports.forgotPassword = async (req, res) => {
       "host"
     )}/password/reset/${resetPasswordToken}`;*/
 
-    const resetUrl = `http://localhost:3000/password/reset/${resetPasswordToken}`;
+    const resetUrl = `http://localhost:3000/reset-password/${resetPasswordToken}`;
 
-    const message = `Reset Your Password by clicking on the link below: \n\n ${resetUrl}`;
+    const message = `Reset your password by clicking on the link below: \n\n ${resetUrl}`;
 
     try {
       await sendEmail({
@@ -226,7 +226,7 @@ exports.resetPassword = async (req, res) => {
       })
     }
 
-    user.password = req.body.password;
+    user.password = req.body.newPassword;
 
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;

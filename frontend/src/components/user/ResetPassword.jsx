@@ -3,22 +3,23 @@ import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetPassword } from '../../features/userSlice';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../layout/Loader';
 
 function ResetPassword() {
-  const { token } = useParams();
+  const { token } = useParams()
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const { isLoading, user, error, success, message } = useSelector(state => state.user);
 
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleReset = (e) => {
+  const handleReset = async (e) => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      alert('Passwords do not match');
+      return alert('Passwords do not match');
     }
 
     const passwords = {
@@ -26,12 +27,15 @@ function ResetPassword() {
       confirmPassword
     }
 
-    dispatch(resetPassword(token, passwords));
+    await dispatch(resetPassword({token, passwords}));
 
     if (success) {
-      alert(message);
+      setNewPassword('')
+      setConfirmPassword('')
+      alert(message)
+      navigate('/')
     } else {
-      console.log(error);
+      console.log(error)
     }
   }
   return (

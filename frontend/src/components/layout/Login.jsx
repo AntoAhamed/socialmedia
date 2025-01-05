@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../../features/userSlice';
+import { clearErrorAndMessage, login } from '../../features/userSlice';
 import Loader from './Loader';
 
 function Login() {
@@ -15,7 +15,7 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const userData = {
@@ -23,15 +23,15 @@ function Login() {
       password,
     }
 
-    dispatch(login(userData));
+    await dispatch(login(userData));
 
     if (isAuth) {
       setEmail('');
       setPassword('');
+
       navigate('/profile');
-    } else {
-      console.log(error);
-      alert("Invalid email or password");
+    }else{
+      console.log(error)
     }
   }
   return (

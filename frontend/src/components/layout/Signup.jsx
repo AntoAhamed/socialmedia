@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { signup } from '../../features/userSlice';
+import { clearErrorAndMessage, signup } from '../../features/userSlice';
 import Loader from '../layout/Loader';
 
 function Signup() {
@@ -16,7 +16,7 @@ function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const userData = {
@@ -25,16 +25,16 @@ function Signup() {
       password,
     }
 
-    dispatch(signup(userData));
+    await dispatch(signup(userData));
 
     if (isAuth) {
       setName('');
       setEmail('');
       setPassword('');
+
       navigate('/profile');
-    } else {
-      console.log(error);
-      alert("Invalid email or password");
+    }else{
+      console.log(error)
     }
   }
   return (
