@@ -52,8 +52,8 @@ function EditPost() {
     return (
         <>
             {isLoading ? <Loader /> :
-                <div className='lg:px-32 lg:py-16 p-4 h-svh'>
-                    <div className='border-2 flex flex-col lg:p-16 p-4 mb-3 bg-white'>
+                <div className='lg:px-32 p-4 h-full'>
+                    <div className='border-2 flex flex-col lg:p-16 p-4 bg-white'>
                         <p className='text-3xl font-semibold italic text-center mb-3'>Outstagram</p>
                         <p className='font-semibold text-gray-500 text-center mb-3'>Edit post</p>
                         <div className='grid mb-3 border-dashed border-2 h-96'>
@@ -62,7 +62,7 @@ function EditPost() {
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div className='grid mb-3'>
-                                <input type='file' accept='.png, .jpg, .jpeg' className='bg-gray-100 p-3 rounded-t-md border-gray-500 border-b' onChange={handleImageChange} required />
+                                <input type='file' accept='.png, .jpg, .jpeg' className='bg-gray-100 p-3 rounded-t-md border-gray-500 border-b' onChange={handleImageChange} />
                             </div>
                             <div className='grid mb-3'>
                                 <TextField id="standard-basic" label="Caption" value={caption} onChange={(e) => setCaption(e.target.value)} variant="standard" multiline required />

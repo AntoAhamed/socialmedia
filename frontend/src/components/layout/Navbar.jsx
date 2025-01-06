@@ -5,39 +5,47 @@ import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import { useMediaQuery } from '@mui/material';
 
 function Navbar() {
+  const isSmall = useMediaQuery("(max-width: 360px)");
+  const isMedium = useMediaQuery("(max-width: 720px)");
+
+  let size = "large";
+  if (isSmall) size = "small";
+  else if (isMedium) size = "medium";
+
   return (
     <>
-      <nav className='border-b py-5'>
+      <nav className='border-b lg:py-5 py-3'>
         <ul className='grid lg:grid-cols-4 grid-cols-1 gap-4'>
           <li>
-            <p className='text-2xl font-bold italic text-center'>Outstagram</p>
+            <p className='lg:text-2xl md:text-2xl text-xl font-bold italic text-center'>Outstagram</p>
           </li>
           <div className='flex justify-around lg:col-span-3'>
             <li>
               <Link to="/home">
-                <HomeIcon fontSize='large' />
+                <HomeIcon fontSize={size} />
               </Link>
             </li>
             <li>
               <Link to="/create-post">
-                <AddIcon fontSize='large' />
+                <AddIcon fontSize={size} />
               </Link>
             </li>
             <li>
               <Link to="/search">
-                <SearchIcon fontSize='large' />
+                <SearchIcon fontSize={size} />
               </Link>
             </li>
-            {/*<li>
-              <Link to="/notification">
-                <NotificationsIcon fontSize='large' />
+            <li>
+              <Link to="/notifications">
+                <NotificationsIcon fontSize={size} />
               </Link>
-            </li>*/}
+            </li>
             <li>
               <Link to="/profile">
-                <AccountCircleIcon fontSize='large' />
+                <AccountCircleIcon fontSize={size} />
               </Link>
             </li>
           </div>

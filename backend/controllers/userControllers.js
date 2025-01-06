@@ -128,7 +128,7 @@ exports.logout = async (req, res) => {
 exports.myProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).populate(
-      "posts followers following"
+      "posts followers following notifications.user"
     );
 
     res.status(200).json({
@@ -338,6 +338,7 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
+// Follow User
 exports.followUser = async (req, res) => {
   try {
     const userToFollow = await User.findById(req.params.id);
@@ -365,6 +366,13 @@ exports.followUser = async (req, res) => {
         message: "User Unfollowed",
       });
     } else {
+      // Notification for follows
+      userToFollow.notifications.unshift({
+        type: "follow",
+        message: "started following you.",
+        user: req.user._id,
+      })
+
       loggedInUser.following.push(userToFollow._id);
       userToFollow.followers.push(loggedInUser._id);
 
@@ -384,6 +392,7 @@ exports.followUser = async (req, res) => {
   }
 };
 
+// Delete Profile
 exports.deleteMyProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
@@ -557,6 +566,29 @@ exports.getUserPosts = async (req, res) => {
     res.status(200).json({
       success: true,
       posts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// Remove Notification
+exports.removeNotification = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    const index = user.notifications.indexOf(req.params.id);
+
+    user.notifications.splice(index, 1);
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Notification Removed Successfully",
     });
   } catch (error) {
     res.status(500).json({

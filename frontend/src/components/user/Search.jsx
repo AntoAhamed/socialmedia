@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers } from '../../features/userSlice';
 import userPic from '../../assets/user.png';
 import Loader from '../layout/Loader';
 
 function Search() {
-  const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const { isLoading, user, error, success, message, users } = useSelector(state => state.user);
 
@@ -23,7 +21,7 @@ function Search() {
   return (
     <>
       {isLoading ? <Loader /> :
-        <div className='h-svh pt-4'>
+        <div className={`${users?.length > 5 ? 'h-full' : 'h-svh'} p-4`}>
           <div className='flex flex-col lg:px-32 lg:py-20 p-4 bg-white'>
             <div className='pb-3'>
               <p className='text-3xl font-semibold italic text-center mb-3'>Outstagram</p>

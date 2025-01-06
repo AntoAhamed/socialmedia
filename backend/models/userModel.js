@@ -60,6 +60,32 @@ const userSchema = new mongoose.Schema({
     },
   ],
 
+  notifications: [
+    {
+      type: {
+        type: String,
+        enum: ["like", "comment", "follow", "other"], // Types of notifications
+        required: true,
+      },
+      message: {
+        type: String,
+        required: true,
+      },
+      user: {
+        type: mongoose.Schema.Types.ObjectId, // Who did this action
+        ref: "User",
+      },
+      post: {
+        type: mongoose.Schema.Types.ObjectId, // In which post
+        ref: "Post",
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now, // Timestamp of the notification
+      },
+    },
+  ],
+
   resetPasswordToken: String,
   resetPasswordExpire: Date,
 });

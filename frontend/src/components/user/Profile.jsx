@@ -91,7 +91,7 @@ function Profile() {
                 {user?.followers.map((follower, index) => (
                   <div className='flex justify-between items-center border-b-2 py-3' key={index}>
                     <div className='flex items-center'>
-                      <img src={follower.avatar?.url} alt='User' width='50' style={{ borderRadius: '50%' }} />
+                      <img src={follower.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
                       <div className='mx-3'>
                         <Link to={`/profile/${follower._id}`} className='font-semibold'>{follower.name}</Link>
                       </div>
@@ -115,7 +115,7 @@ function Profile() {
                 {user?.following.map((following, index) => (
                   <div className='flex justify-between items-center border-b-2 py-3' key={index}>
                     <div className='flex items-center'>
-                      <img src={following.avatar?.url} alt='User' width='50' style={{ borderRadius: '50%' }} />
+                      <img src={following.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
                       <div className='mx-3'>
                         <Link to={`/profile/${following._id}`} className='font-semibold'>{following.name}</Link>
                       </div>

@@ -44,8 +44,8 @@ export default function PostCard(props) {
   //Post liked or not by the user
   const [liked, setLiked] = React.useState(false);
 
-  const handleLike = () => {
-    dispatch(likeAndUnlikePost(post._id));
+  const handleLike = async () => {
+    await dispatch(likeAndUnlikePost(post._id));
     setLiked(!liked);
     getPosts();
   }
@@ -164,12 +164,12 @@ export default function PostCard(props) {
             </MenuItem>
           </Menu>
           {/* Card Media */}
-          <CardMedia
+          {post?.image?.url && <CardMedia
             component="img"
             height="194"
             image={post?.image?.url}
             alt="Post image"
-          />
+          />}
           {/* Card Content */}
           <CardContent>
             <Typography variant="body1">
@@ -190,15 +190,12 @@ export default function PostCard(props) {
             <IconButton aria-label="add to favorites" onClick={handleLike}>
               {!liked ? <FavoriteBorderIcon /> :
                 <FavoriteIcon sx={{ color: 'red' }} />}
-              <span className='ml-2'>{post?.likes.length}</span>
             </IconButton>
             <IconButton aria-label="add to favorites" onClick={handleCommentsModalOpen}>
               <CommentIcon />
-              <span className='ml-2'>{post?.comments.length}</span>
             </IconButton>
             <IconButton aria-label="share">
               <ShareIcon />
-              <span className='ml-2'>{post?.shares?.length || 0}</span>
             </IconButton>
           </CardActions>
           {/* Likes Modal */}
@@ -256,8 +253,8 @@ export default function PostCard(props) {
           <CardActions disableSpacing sx={{ borderTop: '1px solid #bfbfbf' }}>
             <img src={user?.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
             <input type='text' placeholder='Add a comment...(Upto 100 latters)' value={comment} onChange={(e) => setComment(e.target.value)} className='w-full p-2 bg-gray-100 rounded-full focus:outline-none' maxLength={100} />
-            <IconButton aria-label="send" disabled={comment==='' ? true : false} onClick={handleComment} >
-              <SendIcon sx={{ color: `${comment==='' ? 'gray' : '#0099ff'}` }} />
+            <IconButton aria-label="send" disabled={comment === '' ? true : false} onClick={handleComment} >
+              <SendIcon sx={{ color: `${comment === '' ? 'gray' : '#0099ff'}` }} />
             </IconButton>
           </CardActions>
         </Card>}</>

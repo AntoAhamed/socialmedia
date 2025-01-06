@@ -14,6 +14,7 @@ const {
   resetPassword,
   getMyPosts,
   getUserPosts,
+  removeNotification,
 } = require("../controllers/userControllers");
 const { isAuthenticated } = require("../middlewares/auth");
 
@@ -46,5 +47,7 @@ router.route("/users").get(isAuthenticated, getAllUsers);
 router.route("/forgot/password").post(forgotPassword);
 
 router.route("/password/reset/:token").put(resetPassword);
+
+router.route("/notification/:id").delete(isAuthenticated, removeNotification)
 
 module.exports = router;

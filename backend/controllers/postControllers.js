@@ -7,26 +7,41 @@ exports.createPost = async (req, res) => {
   try {
     const { image, caption } = req.body
 
-    const myCloud = await cloudinary.v2.uploader.upload(image, {
-      folder: "posts",
-    });
+    if (image !== '') {
+      const myCloud = await cloudinary.v2.uploader.upload(image, {
+        folder: "posts",
+      });
 
-    const newPostData = {
-      caption: caption,
-      image: {
-        public_id: myCloud.public_id,
-        url: myCloud.secure_url,
-      },
-      owner: req.user._id,
-    };
+      const newPostData = {
+        caption: caption,
+        image: {
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        },
+        owner: req.user._id,
+      };
 
-    const post = await Post.create(newPostData);
+      const post = await Post.create(newPostData);
 
-    const user = await User.findById(req.user._id);
+      const user = await User.findById(req.user._id);
 
-    user.posts.unshift(post._id);
+      user.posts.unshift(post._id);
 
-    await user.save();
+      await user.save();
+    } else {
+      const newPostData = {
+        caption: caption,
+        owner: req.user._id,
+      };
+
+      const post = await Post.create(newPostData);
+
+      const user = await User.findById(req.user._id);
+
+      user.posts.unshift(post._id);
+
+      await user.save();
+    }
 
     res.status(201).json({
       success: true,
@@ -107,6 +122,20 @@ exports.likeAndUnlikePost = async (req, res) => {
         message: "Post Unliked",
       });
     } else {
+      // Notification for likes
+      if (post.owner.toString() !== req.user._id.toString()) {
+        const user = await User.findById(post.owner);
+
+        user.notifications.unshift({
+          type: "like",
+          message: "liked your post.",
+          user: req.user._id,
+          post: post._id,
+        });
+
+        user.save();
+      }
+
       post.likes.push(req.user._id);
 
       await post.save();
@@ -217,6 +246,20 @@ exports.commentOnPost = async (req, res) => {
     });
 
     if (commentIndex !== -1) {
+      // Notification for comments
+      if (post.owner.toString() !== req.user._id.toString()) {
+        const user = await User.findById(post.owner);
+
+        user.notifications.unshift({
+          type: "comment",
+          message: "commented in your post.",
+          user: req.user._id,
+          post: post._id,
+        });
+
+        user.save();
+      }
+
       post.comments[commentIndex].comment = req.body.comment;
 
       await post.save();
@@ -226,6 +269,20 @@ exports.commentOnPost = async (req, res) => {
         message: "Comment Updated",
       });
     } else {
+      // Notification for comments
+      if (post.owner.toString() !== req.user._id.toString()) {
+        const user = await User.findById(post.owner);
+
+        user.notifications.unshift({
+          type: "comment",
+          message: "commented in your post.",
+          user: req.user._id,
+          post: post._id,
+        });
+
+        user.save();
+      }
+
       post.comments.push({
         user: req.user._id,
         comment: req.body.comment,

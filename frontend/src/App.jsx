@@ -6,6 +6,7 @@ import Signup from './components/layout/Signup';
 import Home from './components/post/Home';
 import CreatePost from './components/post/CreatePost';
 import Search from './components/user/Search';
+import Notifications from './components/user/Notifications';
 import Profile from './components/user/Profile';
 import NoPage from './components/layout/NoPage';
 import Footer from './components/layout/Footer';
@@ -39,6 +40,7 @@ function App() {
             <Route path="create-post" element={isAuth ? <CreatePost /> : <Login />} />
             <Route path="edit-post/:id" element={isAuth ? <EditPost /> : <Login />} />
             <Route path="search" element={isAuth ? <Search /> : <Login />} />
+            <Route path="notifications" element={isAuth ? <Notifications /> : <Login />} />
             <Route path="profile" element={isAuth ? <Profile /> : <Login />} />
             <Route path="profile/:id" element={isAuth ? <UserProfile /> : <Login />} />
             <Route path="update-profile" element={isAuth ? <UpdateProfile /> : <Login />} />
