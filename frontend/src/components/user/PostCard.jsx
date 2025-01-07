@@ -72,6 +72,15 @@ export default function PostCard(props) {
     }
   };
 
+  //Reply state and function
+  const [reply, setReply] = React.useState('')
+
+  const handleReply = () => {
+    alert("Reply sent")
+
+    setReply('')
+  }
+
   //Modal style
   const style = {
     position: 'absolute',
@@ -217,7 +226,7 @@ export default function PostCard(props) {
                 Likes
               </Typography>
               {post?.likes.map((like, index) => (
-                <div className='flex justify-between items-center border-b-2 py-3' key={index}>
+                <div className='flex justify-between items-center border-b py-3' key={index}>
                   <div className='flex items-center'>
                     <img src={like.avatar?.url} alt='User' width='50' style={{ borderRadius: '50%' }} />
                     <div className='mx-3'>
@@ -240,18 +249,26 @@ export default function PostCard(props) {
                 Comments
               </Typography>
               {post?.comments.map((comment, index) => (
-                <div className='flex justify-between items-center border-b-2 py-3' key={index}>
-                  <div className='flex items-center'>
-                    <img src={comment.user?.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
-                    <div className='mx-3'>
-                      <Link to={`/profile/${comment.user?._id}`} className='font-semibold'>{comment.user?.name}</Link>
-                      <p>{comment.comment}</p>
+                <div key={index} className='border-b py-1'>
+                  <div className='flex justify-between items-center'>
+                    <div className='flex items-center'>
+                      <img src={comment.user?.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
+                      <div className='mx-3'>
+                        <Link to={`/profile/${comment.user?._id}`} className='font-semibold'>{comment.user?.name}</Link>
+                        <p>{comment.comment}</p>
+                      </div>
                     </div>
+                    {comment.user?._id === user?._id &&
+                      <IconButton aria-label="send" onClick={() => handleDeleteComment(comment._id)} >
+                        <DeleteIcon color='error' />
+                      </IconButton>}
                   </div>
-                  {comment.user?._id === user?._id &&
-                    <IconButton aria-label="send" onClick={() => handleDeleteComment(comment._id)} >
-                      <DeleteIcon color='error' />
-                    </IconButton>}
+                  <div className='py-2 pl-14 flex'>
+                    <input type='text' placeholder={`Reply to ${comment.user?.name}...`} value={reply} onChange={(e)=>setReply(e.target.value)} className='w-full p-2 bg-gray-100 rounded-full focus:outline-none mr-2' maxLength={100} />
+                    <IconButton aria-label="send" disabled={reply === ''} onClick={handleReply}>
+                      <SendIcon sx={{ color: `${reply === '' ? 'gray' : '#0099ff'}` }} />
+                    </IconButton>
+                  </div>
                 </div>
               ))}
             </Box>
@@ -260,7 +277,7 @@ export default function PostCard(props) {
           <CardActions disableSpacing sx={{ borderTop: '1px solid #bfbfbf' }}>
             <img src={user?.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
             <input type='text' placeholder='Add a comment...(Upto 100 latters)' value={comment} onChange={(e) => setComment(e.target.value)} className='w-full p-2 mx-2 bg-gray-100 rounded-full focus:outline-none' maxLength={100} />
-            <IconButton aria-label="send" disabled={comment === '' ? true : false} onClick={handleComment} >
+            <IconButton aria-label="send" disabled={comment === ''} onClick={handleComment} >
               <SendIcon sx={{ color: `${comment === '' ? 'gray' : '#0099ff'}` }} />
             </IconButton>
           </CardActions>

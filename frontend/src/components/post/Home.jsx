@@ -10,8 +10,6 @@ function Home() {
 
   const posts = postInfo?.posts;
 
-  console.log(posts);
-
   const getPosts = () => {
     dispatch(getPostsOfTheFollowings());
   };

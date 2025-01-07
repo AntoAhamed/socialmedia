@@ -27,8 +27,6 @@ function App() {
   useEffect(() => {
     dispatch(loadUser());
   }, [dispatch]);
-
-  console.log(user);
   return (
     <div className="App">
       <BrowserRouter>

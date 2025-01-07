@@ -66,8 +66,6 @@ function UserProfile() {
     dispatch(getUserProfile(id));
     dispatch(getUserPosts(id));
   }, [dispatch, id]);
-
-  console.log(userInfo?.user)
   return (
     <>
       {isLoading ? <Loader /> :
@@ -105,7 +103,7 @@ function UserProfile() {
                   Followers
                 </Typography>
                 {userInfo?.user?.followers.map((follower, index) => (
-                  <div className='flex justify-between items-center border-b-2 py-3' key={index}>
+                  <div className='flex justify-between items-center border-b py-3' key={index}>
                     <div className='flex items-center'>
                       <img src={follower.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
                       <div className='mx-3'>
@@ -129,7 +127,7 @@ function UserProfile() {
                   Following
                 </Typography>
                 {userInfo?.user?.following.map((following, index) => (
-                  <div className='flex justify-between items-center border-b-2 py-3' key={index}>
+                  <div className='flex justify-between items-center border-b py-3' key={index}>
                     <div className='flex items-center'>
                       <img src={following.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
                       <div className='mx-3'>

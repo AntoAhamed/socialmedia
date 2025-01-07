@@ -97,7 +97,7 @@ function Profile() {
                   Followers
                 </Typography>
                 {user?.followers.map((follower, index) => (
-                  <div className='flex justify-between items-center border-b-2 py-3' key={index}>
+                  <div className='flex justify-between items-center border-b py-3' key={index}>
                     <div className='flex items-center'>
                       <img src={follower.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
                       <div className='mx-3'>
@@ -121,7 +121,7 @@ function Profile() {
                   Following
                 </Typography>
                 {user?.following.map((following, index) => (
-                  <div className='flex justify-between items-center border-b-2 py-3' key={index}>
+                  <div className='flex justify-between items-center border-b py-3' key={index}>
                     <div className='flex items-center'>
                       <img src={following.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
                       <div className='mx-3'>
