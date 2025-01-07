@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import userPic from '../../assets/user.png'
-import { Button, Typography } from '@mui/material'
+import { Button, Typography, useMediaQuery } from '@mui/material'
 import MyPosts from './MyPosts'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,14 +15,22 @@ function Profile() {
   const dispatch = useDispatch();
   const { isLoading, user, error, success, message, posts } = useSelector(state => state.user);
 
+  const isSmall = useMediaQuery("(max-width: 500px)");
+  const isMedium = useMediaQuery("(max-width: 755px)");
+
+  let size = 750;
+  if (isSmall) size = 360;
+  else if (isMedium) size = 500;
+
   //Modal style
   const style = {
     position: 'absolute',
-    top: '15%',
-    left: '50%',
-    right: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 700,
+    top: '0%', // Fixed top gap
+    left: '50%', // Center horizontally
+    transform: 'translateX(-50%)', // Adjust only horizontally
+    width: size,
+    maxHeight: '85vh', // Optional: Limit modal height to prevent overflow
+    overflowY: 'auto', // Enable scrolling for overflow content
     bgcolor: 'background.paper',
     border: '1px solid #000',
     boxShadow: 24,
@@ -126,10 +134,10 @@ function Profile() {
             </Modal>
 
             <div className='mb-3'>
-              <p className='text-xl font-semibold'>{user?.name}</p>
-              <p className='text-lg'>{user?.bio}</p>
-              <p className='text-md text-gray-500'>{user?.email}</p>
-              <p className='text-sm text-gray-500'>Joined On : {user?.createdAt}</p>
+              <p className='lg:text-2xl text-xl font-semibold'>{user?.name}</p>
+              <p className='lg:text-lg font-semibold'>{user?.bio}</p>
+              <p className='font-semibold text-gray-500'>{user?.email}</p>
+              <p className='text-sm font-semibold text-gray-500'>Joined On : {user?.createdAt.substring(0, 10)} at {user?.createdAt.substring(11, 19)}</p>
             </div>
             <div className='grid grid-cols-2'>
               <div className='grid mr-3'>

@@ -14,6 +14,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import CommentIcon from '@mui/icons-material/Comment';
 import ShareIcon from '@mui/icons-material/Share';
+import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
+import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import img from '../../assets/img.jpg'
@@ -31,6 +33,7 @@ import Modal from '@mui/material/Modal';
 import Loader from '../layout/Loader';
 import { loadUser } from '../../features/userSlice';
 import userPic from '../../assets/user.png'
+import { useMediaQuery } from '@mui/material';
 
 export default function PostCard(props) {
   const { post, editAndDelete, getPosts } = props
@@ -40,6 +43,13 @@ export default function PostCard(props) {
   const dispatch = useDispatch();
   const { user } = useSelector(state => state.user);
   const { isLoading, postInfo, error } = useSelector(state => state.post);
+
+  const isSmall = useMediaQuery("(max-width: 500px)");
+  const isMedium = useMediaQuery("(max-width: 755px)");
+
+  let size = 750;
+  if (isSmall) size = 360;
+  else if (isMedium) size = 500;
 
   //Post liked or not by the user
   const [liked, setLiked] = React.useState(false);
@@ -65,11 +75,12 @@ export default function PostCard(props) {
   //Modal style
   const style = {
     position: 'absolute',
-    top: '15%',
-    left: '50%',
-    right: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 700,
+    top: '0%', // Fixed top gap
+    left: '50%', // Center horizontally
+    transform: 'translateX(-50%)', // Adjust only horizontally
+    width: size,
+    maxHeight: '85vh', // Optional: Limit modal height to prevent overflow
+    overflowY: 'auto', // Enable scrolling for overflow content
     bgcolor: 'background.paper',
     border: '1px solid #000',
     boxShadow: 24,
@@ -132,7 +143,7 @@ export default function PostCard(props) {
               </IconButton>
             }
             title={<span className='text-lg font-semibold'><Link to={`/profile/${post?.owner?._id}`}>{post?.owner?.name}</Link></span>}
-            subheader={<span className='text-sm text-gray-500 font-semibold'>{post?.createdAt.substring(0,10)} at {post?.createdAt.substring(11,19)}</span>}
+            subheader={<span className='text-sm text-gray-500 font-semibold'>{post?.createdAt.substring(0, 10)} at {post?.createdAt.substring(11, 19)}</span>}
           />
           {/* Settings Menu */}
           <Menu
@@ -144,7 +155,6 @@ export default function PostCard(props) {
               onClick={() => {
                 handleClose();
                 naigate(`/edit-post/${post._id}`);
-                //onEdit(post._id);
               }}
             >
               <EditNoteIcon />
@@ -154,7 +164,6 @@ export default function PostCard(props) {
               onClick={() => {
                 handleClose();
                 handleDelete();
-                //onDelete(post._id);
               }}
             >
               <DeleteIcon />
@@ -192,8 +201,8 @@ export default function PostCard(props) {
             <IconButton aria-label="add to favorites" onClick={handleCommentsModalOpen}>
               <CommentIcon />
             </IconButton>
-            <IconButton aria-label="share">
-              <ShareIcon />
+            <IconButton aria-label="share" onClick={() => alert("Post saved")}>
+              <BookmarkBorderOutlinedIcon />
             </IconButton>
           </CardActions>
           {/* Likes Modal */}
@@ -205,7 +214,7 @@ export default function PostCard(props) {
           >
             <Box sx={style}>
               <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ marginBottom: '10px' }}>
-                Liked by
+                Likes
               </Typography>
               {post?.likes.map((like, index) => (
                 <div className='flex justify-between items-center border-b-2 py-3' key={index}>
