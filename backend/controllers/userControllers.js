@@ -402,7 +402,9 @@ exports.deleteMyProfile = async (req, res) => {
     const userId = user._id;
 
     // Removing Avatar from cloudinary
-    await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+    if (user.avatar.public_id) {
+      await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+    }
 
     await user.deleteOne();
 

@@ -24,7 +24,7 @@ function Home() {
     <>
       {isLoading ? <Loader /> :
         <div className='lg:px-32 md:px-16 sm:px-8'>
-          <div className='flex flex-col lg:p-16 p-4 mb-3 bg-white'>
+          <div className='flex flex-col lg:px-16 lg:py-4 p-4 bg-white'>
             <h1 className='text-xl text-gray-400 font-semibold mb-5 text-center'>Enjoy your newsfeed</h1>
             {posts?.length ? posts.map((post, index) => (
               <div className='mb-4' key={index}>

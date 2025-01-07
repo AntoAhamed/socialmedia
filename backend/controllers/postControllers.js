@@ -74,7 +74,9 @@ exports.deletePost = async (req, res) => {
       });
     }
 
-    await cloudinary.v2.uploader.destroy(post.image.public_id);
+    if (post.image.public_id) {
+      await cloudinary.v2.uploader.destroy(post.image.public_id);
+    }
 
     await post.deleteOne();
 
@@ -197,20 +199,28 @@ exports.updatePost = async (req, res) => {
       });
     }
 
-    await cloudinary.v2.uploader.destroy(post.image.public_id);
-
-    const myCloud = await cloudinary.v2.uploader.upload(image, {
-      folder: "posts",
-    });
-
-    post.image = {
-      public_id: myCloud.public_id,
-      url: myCloud.secure_url,
+    if (post.image.public_id) {
+      await cloudinary.v2.uploader.destroy(post.image.public_id);
     }
 
-    post.caption = caption;
+    if (image !== '') {
+      const myCloud = await cloudinary.v2.uploader.upload(image, {
+        folder: "posts",
+      });
 
-    await post.save();
+      post.image = {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      }
+
+      post.caption = caption;
+
+      await post.save();
+    } else {
+      post.caption = caption;
+
+      await post.save();
+    }
 
     res.status(200).json({
       success: true,

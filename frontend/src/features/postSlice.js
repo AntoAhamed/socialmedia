@@ -119,11 +119,12 @@ export const deleteComment = createAsyncThunk(
         try {
             const token = JSON.parse(localStorage.getItem('token'))
             const config = {
+                data: { commentId },
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             }
-            const { data } = await axios.delete(`${backend_url}/api/v1/post/comment/${id}`, { commentId }, config)
+            const { data } = await axios.delete(`${backend_url}/api/v1/post/comment/${id}`, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)

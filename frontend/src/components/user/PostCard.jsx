@@ -110,8 +110,6 @@ export default function PostCard(props) {
     getPosts();
   };
 
-  console.log(post);
-
   React.useEffect(() => {
     //Checking if the post is liked by the user
     if (post?.likes.find(like => like._id === user?._id)) {
@@ -134,7 +132,7 @@ export default function PostCard(props) {
               </IconButton>
             }
             title={<span className='text-lg font-semibold'><Link to={`/profile/${post?.owner?._id}`}>{post?.owner?.name}</Link></span>}
-            subheader={post?.createdAt}
+            subheader={<span className='text-sm text-gray-500 font-semibold'>{post?.createdAt.substring(0,10)} at {post?.createdAt.substring(11,19)}</span>}
           />
           {/* Settings Menu */}
           <Menu
@@ -235,13 +233,13 @@ export default function PostCard(props) {
               {post?.comments.map((comment, index) => (
                 <div className='flex justify-between items-center border-b-2 py-3' key={index}>
                   <div className='flex items-center'>
-                    <img src={comment.user.avatar?.url} alt='User' width='50' style={{ borderRadius: '50%' }} />
+                    <img src={comment.user?.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
                     <div className='mx-3'>
-                      <Link to={`/profile/${comment.user._id}`} className='font-semibold'>{comment.user.name}</Link>
+                      <Link to={`/profile/${comment.user?._id}`} className='font-semibold'>{comment.user?.name}</Link>
                       <p>{comment.comment}</p>
                     </div>
                   </div>
-                  {comment.user._id === user?._id &&
+                  {comment.user?._id === user?._id &&
                     <IconButton aria-label="send" onClick={() => handleDeleteComment(comment._id)} >
                       <DeleteIcon color='error' />
                     </IconButton>}
@@ -252,7 +250,7 @@ export default function PostCard(props) {
           {/* Add Comment */}
           <CardActions disableSpacing sx={{ borderTop: '1px solid #bfbfbf' }}>
             <img src={user?.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
-            <input type='text' placeholder='Add a comment...(Upto 100 latters)' value={comment} onChange={(e) => setComment(e.target.value)} className='w-full p-2 bg-gray-100 rounded-full focus:outline-none' maxLength={100} />
+            <input type='text' placeholder='Add a comment...(Upto 100 latters)' value={comment} onChange={(e) => setComment(e.target.value)} className='w-full p-2 mx-2 bg-gray-100 rounded-full focus:outline-none' maxLength={100} />
             <IconButton aria-label="send" disabled={comment === '' ? true : false} onClick={handleComment} >
               <SendIcon sx={{ color: `${comment === '' ? 'gray' : '#0099ff'}` }} />
             </IconButton>

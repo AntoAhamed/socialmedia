@@ -56,7 +56,7 @@ function Profile() {
     <>
       {isLoading ? <Loader /> :
         <div className={`border-l-4 border-r-8 border-gray-300 ${posts?.length <= 0 ? 'h-svh' : null}`}>
-          <div className='p-3 bg-white rounded-b-lg shadow-xl'>
+          <div className='lg:p-6 p-3 bg-white rounded-b-lg shadow-xl'>
             <div className='grid lg:grid-cols-2 md:grid-cols-1 gap-4 mb-3'>
               <div className='flex justify-center'>
                 <img src={user?.avatar?.url || userPic} alt='User' width={'20%'} style={{ borderRadius: '50%' }} className='border-2' />

@@ -13,13 +13,15 @@ function UserProfile() {
   const dispatch = useDispatch();
   const { isLoading, user, error, success, message, posts, userInfo } = useSelector(state => state.user);
 
-  const [followed, setFollowed] = useState(false);
+  // Calculate followed dynamically
+  const isFollowed = userInfo?.user?.followers.some(
+    (follower) => follower._id === user?._id
+  );
 
   const handleFollow = async () => {
     await dispatch(followUser(id));
     await dispatch(getUserProfile(id));
-    await dispatch(loadUser());
-    setFollowed(!followed);
+    dispatch(loadUser());
   }
 
   const getPosts = () => {
@@ -29,16 +31,12 @@ function UserProfile() {
   useEffect(() => {
     dispatch(getUserProfile(id));
     dispatch(getUserPosts(id));
-    //Checking if the user is already followed or not
-    if (userInfo?.user?.followers.find(follower => follower._id === user?._id)) {
-      setFollowed(true);
-    }
-  }, [dispatch]);
+  }, [dispatch, id]);
   return (
     <>
       {isLoading ? <Loader /> :
         <div className={`border-l-4 border-r-8 border-gray-300 ${posts?.length <= 0 ? 'h-svh' : null}`}>
-          <div className='p-3 bg-white rounded-br-lg shadow-xl'>
+          <div className='lg:p-6 p-3 bg-white rounded-br-lg shadow-xl'>
             <div className='grid lg:grid-cols-2 md:grid-cols-1 gap-4 mb-3'>
               <div className='flex justify-center'>
                 <img src={userInfo?.user?.avatar?.url || userPic} alt='User' width={'20%'} style={{ borderRadius: '50%' }} className='border-2' />
@@ -66,7 +64,7 @@ function UserProfile() {
             </div>
             {userInfo?.user?._id !== user?._id ?
               <div className='grid mt-3'>
-                {followed ? <Button variant='outlined' onClick={handleFollow}>Unfollow</Button> :
+                {isFollowed ? <Button variant='outlined' onClick={handleFollow}>Unfollow</Button> :
                   <Button variant='contained' onClick={handleFollow}>Follow</Button>}
               </div> : <div className='text-center text-gray-500'>It's your</div>}
           </div>

@@ -5,6 +5,11 @@ import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import { useMediaQuery } from '@mui/material';
 
 function Navbar() {
@@ -25,27 +30,27 @@ function Navbar() {
           <div className='flex justify-around lg:col-span-3'>
             <li>
               <Link to="/home">
-                <HomeIcon fontSize={size} />
+                <HomeOutlinedIcon fontSize={size} />
               </Link>
             </li>
             <li>
               <Link to="/create-post">
-                <AddIcon fontSize={size} />
+                <AddOutlinedIcon fontSize={size} />
               </Link>
             </li>
             <li>
               <Link to="/search">
-                <SearchIcon fontSize={size} />
+                <SearchOutlinedIcon fontSize={size} />
               </Link>
             </li>
             <li>
               <Link to="/notifications">
-                <NotificationsIcon fontSize={size} />
+                <NotificationsOutlinedIcon fontSize={size} />
               </Link>
             </li>
             <li>
               <Link to="/profile">
-                <AccountCircleIcon fontSize={size} />
+                <AccountCircleOutlinedIcon fontSize={size} />
               </Link>
             </li>
           </div>
