@@ -24,7 +24,7 @@ function Search() {
         <div className={`${users?.length > 5 ? 'h-full' : 'h-svh'} p-4`}>
           <div className='flex flex-col lg:px-32 lg:py-20 p-4 bg-white'>
             <div className='pb-3'>
-              <p className='text-3xl font-semibold italic text-center mb-3'>Outstagram</p>
+              <p className='lg:text-3xl text-2xl font-semibold italic text-center mb-3'>Outstagram</p>
               <p className='font-semibold text-gray-500 text-center mb-3'>
                 Search for your friends/loved ones
               </p>
@@ -40,16 +40,17 @@ function Search() {
 
             <div className='border-t pt-3'>
               {users && users.map(user => (
-                <div key={user._id} className='border-2 p-3 flex items-center'>
-                  <img src={user.avatar?.url || userPic} alt='user' className='w-10 h-10 rounded-full' />
-                  <div className='flex items-center justify-between w-full ml-3'>
-                    <div>
-                      <p className='font-semibold'>{user.name}</p>
-                      <p className='text-gray-500'>{user.email}</p>
+                <Link to={`/profile/${user._id}`} key={user._id}>
+                  <div className='border p-3 flex items-center'>
+                    <img src={user.avatar?.url || userPic} alt='user' className='w-10 h-10 rounded-full' />
+                    <div className='flex items-center justify-between w-full ml-3'>
+                      <div>
+                        <p className='font-semibold'>{user.name}</p>
+                        <p className='text-gray-500'>{user.email}</p>
+                      </div>
                     </div>
-                    <Link to={`/profile/${user._id}`} className='text-blue-500'>View Profile</Link>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>

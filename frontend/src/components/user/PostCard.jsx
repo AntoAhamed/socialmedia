@@ -63,8 +63,8 @@ export default function PostCard(props) {
   //Comment state and function
   const [comment, setComment] = React.useState('');
 
-  const handleComment = () => {
-    dispatch(createComment({ id: post._id, comment }));
+  const handleComment = async () => {
+    await dispatch(createComment({ id: post._id, comment }));
 
     if (postInfo?.success) {
       setComment('');

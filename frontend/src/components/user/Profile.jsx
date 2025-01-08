@@ -140,10 +140,10 @@ function Profile() {
               <p className='text-sm font-semibold text-gray-500'>Joined On : {user?.createdAt.substring(0, 10)} at {user?.createdAt.substring(11, 19)}</p>
             </div>
             <div className='grid grid-cols-2'>
-              <div className='grid mr-3'>
+              <div className='grid lg:mr-3 md:mr-2 mr-1'>
                 <Button variant='contained' onClick={() => navigate('/update-profile')}>Edit Profile</Button>
               </div>
-              <div className='grid ml-3'>
+              <div className='grid lg:ml-3 md:ml-2 ml-1'>
                 <Button variant='outlined' onClick={handleLogout}>Log out</Button>
               </div>
             </div>

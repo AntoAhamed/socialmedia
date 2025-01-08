@@ -42,6 +42,14 @@ exports.register = async (req, res) => {
       token,
     });*/
 
+    // Notification for account create
+    user.notifications.unshift({
+      type: "other",
+      message: "Account has been created successfully.",
+    })
+
+    await user.save();
+
     //Should be replaced by cookies...
     res.status(201).json({
       success: true,
@@ -230,6 +238,12 @@ exports.resetPassword = async (req, res) => {
 
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
+
+    // Notification for reset password
+    user.notifications.unshift({
+      type: "other",
+      message: "Account recovered successfully.",
+    })
 
     await user.save();
 

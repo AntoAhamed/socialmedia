@@ -58,7 +58,7 @@ function CreatePost() {
       {isLoading ? <Loader /> :
         <div className='lg:px-32 p-4 h-full'>
           <div className='border-2 flex flex-col lg:p-16 p-4 bg-white'>
-            <p className='text-3xl font-semibold italic text-center mb-3'>Outstagram</p>
+            <p className='lg:text-3xl text-2xl font-semibold italic text-center mb-3'>Outstagram</p>
             <p className='font-semibold text-gray-500 text-center mb-3'>Create post</p>
             <div className='grid mb-3 border-dashed border-2 h-96'>
               {image !== '' ? <img src={image} alt='' className='w-full h-96' /> :
