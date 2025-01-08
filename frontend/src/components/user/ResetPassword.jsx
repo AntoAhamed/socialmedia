@@ -15,7 +15,7 @@ function ResetPassword() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleReset = async (e) => {
+  const handleReset = (e) => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
@@ -27,12 +27,11 @@ function ResetPassword() {
       confirmPassword
     }
 
-    await dispatch(resetPassword({token, passwords}));
+    dispatch(resetPassword({token, passwords}));
 
     if (success) {
       setNewPassword('')
       setConfirmPassword('')
-      alert(message)
       navigate('/')
     } else {
       console.log(error)

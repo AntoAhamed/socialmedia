@@ -136,7 +136,6 @@ export default function PostCard(props) {
       setLiked(true);
     }
   }, [post]);
-
   return (
     <>
       {isLoading ? <Loader /> :
@@ -228,7 +227,7 @@ export default function PostCard(props) {
               {post?.likes.map((like, index) => (
                 <div className='flex justify-between items-center border-b py-3' key={index}>
                   <div className='flex items-center'>
-                    <img src={like.avatar?.url} alt='User' width='50' style={{ borderRadius: '50%' }} />
+                    <img src={like.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
                     <div className='mx-3'>
                       <Link to={`/profile/${like._id}`} className='font-semibold'>{like.name}</Link>
                     </div>

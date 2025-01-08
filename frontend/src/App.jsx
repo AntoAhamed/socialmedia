@@ -25,7 +25,11 @@ function App() {
   const { user, isAuth } = useSelector(state => state.user);
 
   useEffect(() => {
-    dispatch(loadUser());
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      dispatch(loadUser());
+    }
   }, [dispatch]);
   return (
     <div className="App">

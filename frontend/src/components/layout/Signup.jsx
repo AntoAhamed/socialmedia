@@ -30,6 +30,7 @@ function Signup() {
       setEmail('');
       setPassword('');
     }else{
+      alert("Something went wrong!")
       console.log(error)
     }
   }

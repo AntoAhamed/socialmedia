@@ -63,7 +63,6 @@ function UpdateProfile() {
     if (window.confirm('Are you sure you want to delete your account?')) {
       dispatch(deleteMyAccount());
       if (success) {
-        alert("Account deleted successfully");
         localStorage.removeItem('token');
         dispatch(tempLogout());
         navigate('/');

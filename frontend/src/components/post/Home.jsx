@@ -17,7 +17,6 @@ function Home() {
   useEffect(() => {
     getPosts();
   }, [dispatch]);
-
   return (
     <>
       {isLoading ? <Loader /> :

@@ -27,6 +27,7 @@ function Login() {
       setEmail('');
       setPassword('');
     }else{
+      alert("Something went wrong!")
       console.log(error)
     }
   }
