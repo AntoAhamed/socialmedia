@@ -164,7 +164,7 @@ exports.getPostOfFollowing = async (req, res) => {
       owner: {
         $in: user.following,
       },
-    }).populate("owner likes comments.user");
+    }).populate("owner likes comments.user comments.replies.user");
 
     res.status(200).json({
       success: true,
@@ -358,6 +358,92 @@ exports.deleteComment = async (req, res) => {
       return res.status(200).json({
         success: true,
         message: "Your Comment has deleted",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// Reply to a comment
+exports.replyToComment = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    let commentIndex = -1;
+    let replyIndex = -1;
+
+    // Checking if reply already exists
+    post.comments.forEach((comment, index) => {
+      if (comment._id.toString() === req.body.commentId.toString()) {
+        commentIndex = index
+
+        comment.replies.forEach((reply, index) => {
+          if (reply.user.toString() === req.user._id.toString()) {
+            replyIndex = index;
+          }
+        })
+      }
+    });
+
+    if (replyIndex !== -1) {
+      // Notification for reply
+      if (post.owner.toString() !== req.user._id.toString()) {
+        const user = await User.findById(post.owner);
+
+        user.notifications.unshift({
+          type: "reply",
+          message: "replyed in your post.",
+          user: req.user._id,
+          post: post._id,
+        });
+
+        user.save();
+      }
+
+      post.comments[commentIndex].replies[replyIndex].reply = req.body.reply;
+
+      await post.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Reply Updated",
+      });
+    } else {
+      // Notification for reply
+      if (post.owner.toString() !== req.user._id.toString()) {
+        const user = await User.findById(post.owner);
+
+        user.notifications.unshift({
+          type: "reply",
+          message: "replyed in your post.",
+          user: req.user._id,
+          post: post._id,
+        });
+
+        user.save();
+      }
+
+      post.comments[commentIndex].replies.push({
+        user: req.user._id,
+        reply: req.body.reply,
+      });
+
+      await post.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Reply added",
       });
     }
   } catch (error) {

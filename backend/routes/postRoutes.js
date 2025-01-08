@@ -7,6 +7,7 @@ const {
   updatePost,
   commentOnPost,
   deleteComment,
+  replyToComment,
 } = require("../controllers/postControllers");
 const { isAuthenticated } = require("../middlewares/auth");
 
@@ -26,5 +27,7 @@ router
   .route("/post/comment/:id")
   .put(isAuthenticated, commentOnPost)
   .delete(isAuthenticated, deleteComment);
+
+router.route("/post/comment/reply/:id").post(isAuthenticated, replyToComment);
 
 module.exports = router;

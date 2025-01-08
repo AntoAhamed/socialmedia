@@ -35,18 +35,18 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
-      /*replies: [
+      replies: [
         {
           user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
           },
           reply: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: String,
             required: true,
           }
         }
-      ],*/
+      ],
     },
   ],
 });

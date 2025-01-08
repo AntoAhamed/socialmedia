@@ -132,6 +132,24 @@ export const deleteComment = createAsyncThunk(
     }
 )
 
+export const replyToComment = createAsyncThunk(
+    "post/replyToComment",
+    async ({ id, commentId, reply }, { rejectWithValue }) => {
+        try {
+            const token = JSON.parse(localStorage.getItem('token'))
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const { data } = await axios.post(`${backend_url}/api/v1/post/comment/reply/${id}`, {commentId, reply}, config)
+            return data
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 let initialState = {
     isLoading: false,
     postInfo: null,
@@ -236,6 +254,19 @@ const postSlice = createSlice({
                 state.postInfo = action.payload
             })
             .addCase(deleteComment.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = action.payload
+            })
+            //Reply to comment
+            .addCase(replyToComment.pending, (state) => {
+                state.isLoading = true
+                state.error = null
+            })
+            .addCase(replyToComment.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.postInfo = action.payload
+            })
+            .addCase(replyToComment.rejected, (state, action) => {
                 state.isLoading = false
                 state.error = action.payload
             })

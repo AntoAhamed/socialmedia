@@ -64,7 +64,7 @@ const userSchema = new mongoose.Schema({
     {
       type: {
         type: String,
-        enum: ["like", "comment", "follow", "other"], // Types of notifications
+        enum: ["like", "comment", "share", "reply", "follow", "other"], // Types of notifications
         required: true,
       },
       message: {

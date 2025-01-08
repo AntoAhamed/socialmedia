@@ -25,7 +25,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { createComment, deleteComment, deletePost, likeAndUnlikePost } from '../../features/postSlice';
+import { createComment, deleteComment, deletePost, likeAndUnlikePost, replyToComment } from '../../features/postSlice';
 import SendIcon from '@mui/icons-material/Send';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -72,14 +72,20 @@ export default function PostCard(props) {
     }
   };
 
-  //Reply state and function
-  const [reply, setReply] = React.useState('')
+  // Reply state and function
+  const [replies, setReplies] = React.useState({}); // Store replies by comment ID
 
-  const handleReply = () => {
-    alert("Reply sent")
+  const handleReplyChange = (commentId, value) => {
+    setReplies(prev => ({ ...prev, [commentId]: value })); // Update only the specific comment's reply
+  };
 
-    setReply('')
-  }
+  const handleReply = async (commentId) => {
+    await dispatch(replyToComment({ id: post._id, commentId, reply: replies[commentId] }))
+
+    setReplies(prev => ({ ...prev, [commentId]: '' })); // Clear the reply for the specific comment
+
+    getPosts();
+  };
 
   //Modal style
   const style = {
@@ -130,12 +136,19 @@ export default function PostCard(props) {
     getPosts();
   };
 
+  //Delete reply
+  const handleDeleteReply = async () => {
+
+  }
+
   React.useEffect(() => {
     //Checking if the post is liked by the user
     if (post?.likes.find(like => like._id === user?._id)) {
       setLiked(true);
     }
   }, [post]);
+
+  //console.log(post)
   return (
     <>
       {isLoading ? <Loader /> :
@@ -247,6 +260,8 @@ export default function PostCard(props) {
               <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ marginBottom: '10px' }}>
                 Comments
               </Typography>
+
+              {/*Comment*/}
               {post?.comments.map((comment, index) => (
                 <div key={index} className='border-b py-1'>
                   <div className='flex justify-between items-center'>
@@ -262,11 +277,44 @@ export default function PostCard(props) {
                         <DeleteIcon color='error' />
                       </IconButton>}
                   </div>
-                  <div className='py-2 pl-14 flex'>
-                    <input type='text' placeholder={`Reply to ${comment.user?.name}...`} value={reply} onChange={(e)=>setReply(e.target.value)} className='w-full p-2 bg-gray-100 rounded-full focus:outline-none mr-2' maxLength={100} />
-                    <IconButton aria-label="send" disabled={reply === ''} onClick={handleReply}>
-                      <SendIcon sx={{ color: `${reply === '' ? 'gray' : '#0099ff'}` }} />
-                    </IconButton>
+
+                  {/*Replies*/}
+                  <div className='py-2 pl-14 flex flex-col'>
+                    {comment.replies.map((reply, index) => (
+                      <div key={index} className='flex justify-between items-center'>
+                        <div className='flex items-center'>
+                          <img src={reply.user?.avatar?.url || userPic} alt='User' width='30' style={{ borderRadius: '50%' }} />
+                          <div className='mx-3'>
+                            <Link to={`/profile/${reply.user?._id}`} className='font-semibold'>{reply.user?.name}</Link>
+                            <p className='text-sm'>{reply.reply}</p>
+                          </div>
+                        </div>
+                        {reply.user?._id === user?._id &&
+                          <IconButton aria-label="send" >
+                            <DeleteIcon color='error' fontSize='small' />
+                          </IconButton>}
+                      </div>
+                    ))}
+
+                    {/*Reply field*/}
+                    <div className='flex'>
+                      <input
+                        type='text'
+                        placeholder={`Reply to ${comment.user?.name || 'Outstagram user'}...(Upto 100 letters)`}
+                        value={replies[comment._id] || ''} // Use the specific comment's reply
+                        onChange={(e) => handleReplyChange(comment._id, e.target.value)} // Update reply for the specific comment
+                        disabled={!comment.user}
+                        className='w-full p-2 mt-1 mr-1 bg-gray-100 rounded-full focus:outline-none'
+                        maxLength={100}
+                      />
+                      <IconButton
+                        aria-label="send"
+                        disabled={!replies[comment._id]} // Disable if the reply is empty
+                        onClick={() => handleReply(comment._id)} // Send reply for the specific comment
+                      >
+                        <SendIcon fontSize='small' sx={{ color: `${!replies[comment._id] ? 'gray' : '#0099ff'}` }} />
+                      </IconButton>
+                    </div>
                   </div>
                 </div>
               ))}
