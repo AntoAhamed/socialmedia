@@ -29,8 +29,6 @@ function EditPost() {
         setImage('');
         setCaption('');
 
-        alert("Post updated successfully");
-
         navigate('/profile');
     }
 

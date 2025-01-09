@@ -23,7 +23,11 @@ function Notifications() {
                     <p className='font-semibold text-gray-500 text-center mb-3'>Your notifications</p>
                     {user?.notifications?.length > 0 ? user?.notifications?.map(notification => (
                         <div key={notification._id} className='border p-3 flex items-center'>
-                            <img src={notification.user?.avatar?.url || userPic} alt='user' className='w-10 h-10 rounded-full' />
+                            <img
+                                src={notification.user?.avatar?.url || userPic}
+                                alt="User"
+                                className="w-12 h-12 rounded-full object-cover"
+                            />
                             <div className='flex items-center justify-between w-full mx-3'>
                                 <p>
                                     <Link to={`/profile/${notification.user?._id}`} className='font-semibold hover:border-b-2 hover:border-black'>{notification.user?.name}</Link>

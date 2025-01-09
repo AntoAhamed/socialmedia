@@ -30,7 +30,6 @@ function Signup() {
       setEmail('');
       setPassword('');
     }else{
-      alert("Something went wrong!")
       console.log(error)
     }
   }
@@ -51,10 +50,11 @@ function Signup() {
                 <TextField type='text' id="filled-basic" value={name} onChange={(e) => setName(e.target.value)} label="Name" variant="filled" required />
               </div>
               <div className='grid mb-3'>
-                <TextField type='email' id="filled-basic" value={email} onChange={(e) => setEmail(e.target.value)} label="Email" variant="filled" required />
+                <TextField type='email' id="filled-basic2" value={email} onChange={(e) => setEmail(e.target.value)} label="Email" variant="filled" required />
               </div>
               <div className='grid mb-3'>
-                <TextField type='password' id="filled-basic" value={password} onChange={(e) => setPassword(e.target.value)} label="Password" variant="filled" required />
+                <TextField type='password' id="filled-basic3" value={password} onChange={(e) => setPassword(e.target.value)} label="Password" variant="filled" required />
+                <p className='text-sm text-gray-500'>&#9432; Password should be at least 6 charecter long.</p>
               </div>
               <div className='grid mb-3'>
                 <Button type='submit' variant='contained'>Sign up</Button>

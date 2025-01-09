@@ -42,7 +42,11 @@ function Search() {
               {users && users.map(user => (
                 <Link to={`/profile/${user._id}`} key={user._id}>
                   <div className='border p-3 flex items-center'>
-                    <img src={user.avatar?.url || userPic} alt='user' className='w-10 h-10 rounded-full' />
+                    <img
+                      src={user.avatar?.url || userPic}
+                      alt="User"
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
                     <div className='flex items-center justify-between w-full ml-3'>
                       <div>
                         <p className='font-semibold'>{user.name}</p>

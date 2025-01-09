@@ -68,7 +68,11 @@ function Profile() {
           <div className='lg:p-6 p-3 bg-white rounded-b-lg shadow-xl'>
             <div className='grid lg:grid-cols-2 md:grid-cols-1 gap-4 mb-3'>
               <div className='flex justify-center'>
-                <img src={user?.avatar?.url || userPic} alt='User' width={'20%'} style={{ borderRadius: '50%' }} className='border-2' />
+                <img
+                  src={user?.avatar?.url || userPic}
+                  alt="User"
+                  className="lg:w-32 md:w-24 w-20 lg:h-32 md:h-24 h-20 rounded-full object-cover"
+                />
               </div>
               <div className='flex justify-between items-center'>
                 <div className='flex flex-col items-center hover:underline cursor-pointer'>
@@ -100,7 +104,11 @@ function Profile() {
                 {user?.followers.map((follower, index) => (
                   <div className='flex justify-between items-center border-b py-3' key={index}>
                     <div className='flex items-center'>
-                      <img src={follower.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
+                      <img
+                        src={follower.avatar?.url || userPic}
+                        alt="User"
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
                       <div className='mx-3'>
                         <Link to={`/profile/${follower._id}`} className='font-semibold'>{follower.name}</Link>
                       </div>
@@ -124,7 +132,11 @@ function Profile() {
                 {user?.following.map((following, index) => (
                   <div className='flex justify-between items-center border-b py-3' key={index}>
                     <div className='flex items-center'>
-                      <img src={following.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
+                      <img
+                        src={following.avatar?.url || userPic}
+                        alt="User"
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
                       <div className='mx-3'>
                         <Link to={`/profile/${following._id}`} className='font-semibold'>{following.name}</Link>
                       </div>

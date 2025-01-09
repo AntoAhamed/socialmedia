@@ -169,7 +169,11 @@ export default function PostCard(props) {
           {/* Card Header */}
           <CardHeader
             avatar={
-              <img src={post?.owner?.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
+              <img
+                src={post?.owner?.avatar?.url || userPic}
+                alt="User"
+                className="w-12 h-12 rounded-full object-cover"
+              />
             }
             action={editAndDelete &&
               <IconButton aria-label="settings" onClick={handleClick}>
@@ -207,10 +211,15 @@ export default function PostCard(props) {
           {/* Card Media */}
           {post?.image?.url && <CardMedia
             component="img"
-            height="194"
             image={post?.image?.url}
             alt="Post image"
-          />}
+            sx={{
+              height: 194, // Fixed height
+              objectFit: 'contain', // Ensures the full image fits within the height
+              backgroundColor: '#f0f0f0', // Optional: Adds a background to fill empty space
+            }}
+          />
+          }
           {/* Card Content */}
           <CardContent>
             <Typography variant="body1">
@@ -253,7 +262,11 @@ export default function PostCard(props) {
               {post?.likes.map((like, index) => (
                 <div className='flex justify-between items-center border-b py-3' key={index}>
                   <div className='flex items-center'>
-                    <img src={like.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
+                    <img
+                      src={like.avatar?.url || userPic}
+                      alt="User"
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
                     <div className='mx-3'>
                       <Link to={`/profile/${like._id}`} className='font-semibold'>{like.name}</Link>
                     </div>
@@ -279,7 +292,11 @@ export default function PostCard(props) {
                 <div key={index} className='border-b py-2'>
                   <div className='flex justify-between items-center'>
                     <div className='flex items-center'>
-                      <img src={comment.user?.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
+                      <img
+                        src={comment.user?.avatar?.url || userPic}
+                        alt="User"
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
                       <div className='mx-3'>
                         <Link to={`/profile/${comment.user?._id}`} className='font-semibold'>{comment.user?.name}</Link>
                         <p>{comment.comment}</p>
@@ -297,7 +314,11 @@ export default function PostCard(props) {
                       comment.replies.map((reply, index) => (
                         <div key={index} className='flex justify-between items-center py-1'>
                           <div className='flex items-center'>
-                            <img src={reply.user?.avatar?.url || userPic} alt='User' width='30' style={{ borderRadius: '50%' }} />
+                            <img
+                              src={reply.user?.avatar?.url || userPic}
+                              alt="User"
+                              className="w-12 h-12 rounded-full object-cover"
+                            />
                             <div className='mx-3'>
                               <Link to={`/profile/${reply.user?._id}`} className='font-semibold'>{reply.user?.name}</Link>
                               <p className='text-sm'>{reply.reply}</p>
@@ -345,7 +366,11 @@ export default function PostCard(props) {
           </Modal>
           {/* Add Comment */}
           <CardActions disableSpacing sx={{ borderTop: '1px solid #bfbfbf' }}>
-            <img src={user?.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
+            <img
+              src={user?.avatar?.url || userPic}
+              alt="User"
+              className="w-12 h-12 rounded-full object-cover"
+            />
             <input type='text' placeholder='Add a comment...(Upto 100 latters)' value={comment} onChange={(e) => setComment(e.target.value)} className='w-full p-2 mx-2 bg-gray-100 rounded-full focus:outline-none' maxLength={100} />
             <IconButton aria-label="send" disabled={comment === ''} onClick={handleComment} >
               <SendIcon sx={{ color: `${comment === '' ? 'gray' : '#0099ff'}` }} />
