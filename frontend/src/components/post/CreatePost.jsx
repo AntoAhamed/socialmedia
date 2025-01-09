@@ -26,14 +26,12 @@ function CreatePost() {
 
     await dispatch(createPost(postData));
 
-    await dispatch(getMyPosts());
-
-    await dispatch(loadUser());
-
     setImage('');
     setCaption('');
 
-    alert("Post created successfully");
+    await dispatch(getMyPosts());
+
+    await dispatch(loadUser());
 
     navigate('/profile');
   }

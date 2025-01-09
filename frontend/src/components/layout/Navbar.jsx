@@ -1,5 +1,5 @@
-import React from 'react'
-import { Outlet, Link } from "react-router-dom";
+import React, { act, useEffect, useState } from 'react'
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
@@ -13,6 +13,8 @@ import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined
 import { useMediaQuery } from '@mui/material';
 
 function Navbar() {
+  const navigate = useNavigate();
+  const [activeComponent, setActiveComponent] = useState("home");
   const isSmall = useMediaQuery("(max-width: 360px)");
   const isMedium = useMediaQuery("(max-width: 720px)");
 
@@ -20,39 +22,66 @@ function Navbar() {
   if (isSmall) size = "small";
   else if (isMedium) size = "medium";
 
+  // To store which component is active
+  const handleActive = (component) => {
+    setActiveComponent(component);
+    localStorage.setItem('active', component)
+  }
+
+  useEffect(() => {
+    const active = localStorage.getItem('active')
+
+    if (active) {
+      setActiveComponent(active)
+      navigate(`/${active}`)
+    } else {
+      localStorage.setItem('active', "home")
+    }
+  }, [])
+
   return (
     <>
-      <nav className='border-b lg:py-5 py-3'>
+      <nav className='border-b lg:py-3 py-2'>
         <ul className='grid lg:grid-cols-4 grid-cols-1 gap-4'>
-          <li>
+          <li className='p-2 select-none'>
             <p className='lg:text-2xl md:text-2xl text-xl font-bold italic text-center'>Outstagram</p>
           </li>
           <div className='flex justify-around lg:col-span-3'>
-            <li>
-              <Link to="/home">
-                <HomeOutlinedIcon fontSize={size} />
-              </Link>
-            </li>
-            <li>
-              <Link to="/create-post">
-                <AddOutlinedIcon fontSize={size} />
-              </Link>
-            </li>
-            <li>
-              <Link to="/search">
-                <SearchOutlinedIcon fontSize={size} />
-              </Link>
-            </li>
-            <li>
-              <Link to="/notifications">
-                <NotificationsOutlinedIcon fontSize={size} />
-              </Link>
-            </li>
-            <li>
-              <Link to="/profile">
-                <AccountCircleOutlinedIcon fontSize={size} />
-              </Link>
-            </li>
+            <Link to="/home" onClick={() => handleActive("home")}>
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "home" && 'bg-gray-200'}`}>
+                {activeComponent === "home" ?
+                  <HomeIcon fontSize={size} /> :
+                  <HomeOutlinedIcon fontSize={size} />}
+              </li>
+            </Link>
+            <Link to="/create-post" onClick={() => handleActive("create-post")}>
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "create-post" && 'bg-gray-200'}`}>
+                {activeComponent === "create-post" ?
+                  <AddIcon fontSize={size} /> :
+                  <AddOutlinedIcon fontSize={size} />}
+              </li>
+            </Link>
+            <Link to="/search" onClick={() => handleActive("search")}>
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "search" && 'bg-gray-200'}`}>
+                {activeComponent === "search" ?
+                  <SearchIcon fontSize={size} /> :
+                  <SearchOutlinedIcon fontSize={size} />}
+              </li>
+            </Link>
+            <Link to="/notifications" onClick={() => handleActive("notifications")}>
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "notifications" && 'bg-gray-200'}`}>
+                {activeComponent === "notifications" ?
+                  <NotificationsIcon fontSize={size} /> :
+                  <NotificationsOutlinedIcon fontSize={size} />}
+              </li>
+            </Link>
+            <Link to="/profile" onClick={() => handleActive("profile")}>
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "profile" && 'bg-gray-200'}`}>
+                {activeComponent === "profile" ?
+                  <AccountCircleIcon fontSize={size} /> :
+                  <AccountCircleOutlinedIcon fontSize={size} />}
+              </li>
+            </Link>
           </div>
         </ul>
       </nav>

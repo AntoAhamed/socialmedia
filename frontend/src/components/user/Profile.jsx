@@ -48,6 +48,7 @@ function Profile() {
   const handleFollowingModalClose = () => setOpenFollowing(false);
 
   const handleLogout = () => {
+    localStorage.removeItem('active');
     localStorage.removeItem('token');
     dispatch(tempLogout());
     navigate('/');

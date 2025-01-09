@@ -73,6 +73,15 @@ export default function PostCard(props) {
   };
 
   // Reply state and function
+  const [openReplies, setOpenReplies] = React.useState({}); // Track visibility of replies by comment ID
+
+  const toggleReplies = (commentId) => {
+    setOpenReplies(prev => ({
+      ...prev,
+      [commentId]: !prev[commentId], // Toggle visibility for the specific comment
+    }));
+  };
+
   const [replies, setReplies] = React.useState({}); // Store replies by comment ID
 
   const handleReplyChange = (commentId, value) => {
@@ -110,7 +119,10 @@ export default function PostCard(props) {
   //Modal state for comments
   const [openComments, setOpenComments] = React.useState(false);
   const handleCommentsModalOpen = () => setOpenComments(true);
-  const handleCommentsModalClose = () => setOpenComments(false);
+  const handleCommentsModalClose = () => {
+    setOpenReplies(false);
+    setOpenComments(false);
+  }
 
   //Settting the anchor element for the menu
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -281,21 +293,31 @@ export default function PostCard(props) {
 
                   {/*Replies*/}
                   <div className='pl-14 flex flex-col'>
-                    {comment.replies.map((reply, index) => (
-                      <div key={index} className='flex justify-between items-center py-1'>
-                        <div className='flex items-center'>
-                          <img src={reply.user?.avatar?.url || userPic} alt='User' width='30' style={{ borderRadius: '50%' }} />
-                          <div className='mx-3'>
-                            <Link to={`/profile/${reply.user?._id}`} className='font-semibold'>{reply.user?.name}</Link>
-                            <p className='text-sm'>{reply.reply}</p>
+                    {openReplies[comment._id] ?
+                      comment.replies.map((reply, index) => (
+                        <div key={index} className='flex justify-between items-center py-1'>
+                          <div className='flex items-center'>
+                            <img src={reply.user?.avatar?.url || userPic} alt='User' width='30' style={{ borderRadius: '50%' }} />
+                            <div className='mx-3'>
+                              <Link to={`/profile/${reply.user?._id}`} className='font-semibold'>{reply.user?.name}</Link>
+                              <p className='text-sm'>{reply.reply}</p>
+                            </div>
                           </div>
+                          {reply.user?._id === user?._id &&
+                            <IconButton aria-label="send" onClick={() => handleDeleteReply(comment._id, reply._id)}>
+                              <DeleteIcon color='error' fontSize='small' />
+                            </IconButton>}
                         </div>
-                        {reply.user?._id === user?._id &&
-                          <IconButton aria-label="send" onClick={() => handleDeleteReply(comment._id, reply._id)}>
-                            <DeleteIcon color='error' fontSize='small' />
-                          </IconButton>}
-                      </div>
-                    ))}
+                      )) :
+                      comment.replies.length > 0 &&
+                      <div className='py-1'>
+                        <span
+                          className='text-sm font-semibold hover:border-b-2 border-black hover:cursor-pointer'
+                          onClick={() => toggleReplies(comment._id)}
+                        >
+                          {comment.replies.length} more replies
+                        </span>
+                      </div>}
 
                     {/*Reply field*/}
                     <div className='flex'>

@@ -30,8 +30,7 @@ function Notifications() {
                                     <span> {notification.message}</span>
                                 </p>
                                 <p className='text-blue-700 text-sm font-semibold flex lg:flex-row md:flex-row flex-col'>
-                                    <span>On {notification.createdAt.substring(0, 10)}</span>
-                                    <span> at {notification.createdAt.substring(11, 19)}</span>
+                                    <span>On {notification.createdAt.substring(0, 10)} at {notification.createdAt.substring(11, 19)}</span>
                                 </p>
                             </div>
                             <IconButton className='hover:text-red-500' onClick={() => handleRemoveNotification(notification._id)}>
