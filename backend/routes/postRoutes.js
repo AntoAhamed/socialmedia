@@ -8,6 +8,7 @@ const {
   commentOnPost,
   deleteComment,
   replyToComment,
+  deleteReply,
 } = require("../controllers/postControllers");
 const { isAuthenticated } = require("../middlewares/auth");
 
@@ -28,6 +29,9 @@ router
   .put(isAuthenticated, commentOnPost)
   .delete(isAuthenticated, deleteComment);
 
-router.route("/post/comment/reply/:id").post(isAuthenticated, replyToComment);
+router
+  .route("/post/comment/reply/:id")
+  .post(isAuthenticated, replyToComment)
+  .delete(isAuthenticated, deleteReply);
 
 module.exports = router;

@@ -246,7 +246,8 @@ exports.commentOnPost = async (req, res) => {
       });
     }
 
-    let commentIndex = -1;
+    // Code for one user one comment
+    /*let commentIndex = -1;
 
     // Checking if comment already exists
     post.comments.forEach((item, index) => {
@@ -304,7 +305,34 @@ exports.commentOnPost = async (req, res) => {
         success: true,
         message: "Comment added",
       });
+    }*/
+
+    // Code for one user multiple comments
+    // Notification for comments
+    if (post.owner.toString() !== req.user._id.toString()) {
+      const user = await User.findById(post.owner);
+
+      user.notifications.unshift({
+        type: "comment",
+        message: "commented in your post.",
+        user: req.user._id,
+        post: post._id,
+      });
+
+      user.save();
     }
+
+    post.comments.push({
+      user: req.user._id,
+      comment: req.body.comment,
+    });
+
+    await post.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Comment added",
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -380,6 +408,7 @@ exports.replyToComment = async (req, res) => {
       });
     }
 
+    // Code for one user one comment and one reply
     let commentIndex = -1;
     let replyIndex = -1;
 
@@ -396,7 +425,7 @@ exports.replyToComment = async (req, res) => {
       }
     });
 
-    if (replyIndex !== -1) {
+    /*if (replyIndex !== -1) {
       // Notification for reply
       if (post.owner.toString() !== req.user._id.toString()) {
         const user = await User.findById(post.owner);
@@ -444,6 +473,103 @@ exports.replyToComment = async (req, res) => {
       return res.status(200).json({
         success: true,
         message: "Reply added",
+      });
+    }*/
+
+    // Code for one user one comment and multiple replies
+    // Notification for reply
+    if (post.owner.toString() !== req.user._id.toString()) {
+      const user = await User.findById(post.owner);
+
+      user.notifications.unshift({
+        type: "reply",
+        message: "replyed in your post.",
+        user: req.user._id,
+        post: post._id,
+      });
+
+      user.save();
+    }
+
+    post.comments[commentIndex].replies.push({
+      user: req.user._id,
+      reply: req.body.reply,
+    });
+
+    await post.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Reply added",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// Delete reply
+exports.deleteReply = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    // Checking If owner wants to delete
+    if (post.owner.toString() === req.user._id.toString()) {
+      if (req.body.commentId === undefined) {
+        return res.status(400).json({
+          success: false,
+          message: "Comment Id is required",
+        });
+      }
+
+      if (req.body.replyId === undefined) {
+        return res.status(400).json({
+          success: false,
+          message: "Reply Id is required",
+        });
+      }
+
+      post.comments.forEach((comment, index) => {
+        if (comment._id.toString() === req.body.commentId.toString()) {
+          comment.replies.forEach((reply, index) => {
+            if (reply._id.toString() === req.body.replyId.toString()) {
+              return comment.replies.splice(index, 1);
+            }
+          })
+        }
+      });
+
+      await post.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Selected Reply has deleted",
+      });
+    } else {
+      post.comments.forEach((comment, index) => {
+        if (comment._id.toString() === req.body.commentId.toString()) {
+          comment.replies.forEach((reply, index) => {
+            if (reply._id.toString() === req.body.replyId.toString()) {
+              return comment.replies.splice(index, 1);
+            }
+          })
+        }
+      });
+
+      await post.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Your Reply has deleted",
       });
     }
   } catch (error) {

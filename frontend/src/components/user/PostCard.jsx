@@ -25,7 +25,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { createComment, deleteComment, deletePost, likeAndUnlikePost, replyToComment } from '../../features/postSlice';
+import { createComment, deleteComment, deletePost, deleteReply, likeAndUnlikePost, replyToComment } from '../../features/postSlice';
 import SendIcon from '@mui/icons-material/Send';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -137,8 +137,9 @@ export default function PostCard(props) {
   };
 
   //Delete reply
-  const handleDeleteReply = async () => {
-
+  const handleDeleteReply = async (commentId, replyId) => {
+    await dispatch(deleteReply({ id: post._id, commentId, replyId }));
+    getPosts();
   }
 
   React.useEffect(() => {
@@ -263,7 +264,7 @@ export default function PostCard(props) {
 
               {/*Comment*/}
               {post?.comments.map((comment, index) => (
-                <div key={index} className='border-b py-1'>
+                <div key={index} className='border-b py-2'>
                   <div className='flex justify-between items-center'>
                     <div className='flex items-center'>
                       <img src={comment.user?.avatar?.url || userPic} alt='User' width='50' style={{ borderRadius: '50%' }} />
@@ -279,9 +280,9 @@ export default function PostCard(props) {
                   </div>
 
                   {/*Replies*/}
-                  <div className='py-2 pl-14 flex flex-col'>
+                  <div className='pl-14 flex flex-col'>
                     {comment.replies.map((reply, index) => (
-                      <div key={index} className='flex justify-between items-center'>
+                      <div key={index} className='flex justify-between items-center py-1'>
                         <div className='flex items-center'>
                           <img src={reply.user?.avatar?.url || userPic} alt='User' width='30' style={{ borderRadius: '50%' }} />
                           <div className='mx-3'>
@@ -290,7 +291,7 @@ export default function PostCard(props) {
                           </div>
                         </div>
                         {reply.user?._id === user?._id &&
-                          <IconButton aria-label="send" >
+                          <IconButton aria-label="send" onClick={() => handleDeleteReply(comment._id, reply._id)}>
                             <DeleteIcon color='error' fontSize='small' />
                           </IconButton>}
                       </div>
