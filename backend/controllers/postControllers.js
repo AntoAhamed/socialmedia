@@ -155,6 +155,47 @@ exports.likeAndUnlikePost = async (req, res) => {
   }
 };
 
+// Save and unsave post
+exports.saveAndUnsavePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    if (post.saves.includes(req.user._id)) {
+      const index = post.saves.indexOf(req.user._id);
+
+      post.saves.splice(index, 1);
+
+      await post.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Post Unsaved",
+      });
+    } else {
+      post.saves.push(req.user._id);
+
+      await post.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Post Saved",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 // Get posts of the followings
 exports.getPostOfFollowing = async (req, res) => {
   try {
@@ -164,7 +205,7 @@ exports.getPostOfFollowing = async (req, res) => {
       owner: {
         $in: user.following,
       },
-    }).populate("owner likes comments.user comments.replies.user");
+    }).populate("owner likes comments.user comments.replies.user saves");
 
     res.status(200).json({
       success: true,

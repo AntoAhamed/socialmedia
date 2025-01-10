@@ -9,6 +9,7 @@ const {
   deleteComment,
   replyToComment,
   deleteReply,
+  saveAndUnsavePost,
 } = require("../controllers/postControllers");
 const { isAuthenticated } = require("../middlewares/auth");
 
@@ -21,6 +22,10 @@ router
   .get(isAuthenticated, likeAndUnlikePost)
   .put(isAuthenticated, updatePost)
   .delete(isAuthenticated, deletePost);
+
+router
+  .route("/post/save/:id")
+  .get(isAuthenticated, saveAndUnsavePost)
 
 router.route("/posts").get(isAuthenticated, getPostOfFollowing);
 

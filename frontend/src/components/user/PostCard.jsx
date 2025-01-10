@@ -25,7 +25,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { createComment, deleteComment, deletePost, deleteReply, likeAndUnlikePost, replyToComment } from '../../features/postSlice';
+import { createComment, deleteComment, deletePost, deleteReply, likeAndUnlikePost, replyToComment, saveAndUnsavePost } from '../../features/postSlice';
 import SendIcon from '@mui/icons-material/Send';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -34,6 +34,7 @@ import Loader from '../layout/Loader';
 import { loadUser } from '../../features/userSlice';
 import userPic from '../../assets/user.png'
 import { useMediaQuery } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function PostCard(props) {
   const { post, editAndDelete, getPosts } = props
@@ -96,6 +97,16 @@ export default function PostCard(props) {
     getPosts();
   };
 
+  //Post saved or not by the user
+  const [saved, setSaved] = React.useState(false);
+
+  const handleSave = async () => {
+    await dispatch(saveAndUnsavePost(post._id));
+    console.log(postInfo)
+    setSaved(!saved);
+    getPosts();
+  }
+
   //Modal style
   const style = {
     position: 'absolute',
@@ -123,6 +134,28 @@ export default function PostCard(props) {
     setOpenReplies(false);
     setOpenComments(false);
   }
+
+  //Settting the anchor element for the comment menu
+  const [anchorElCom, setAnchorElCom] = React.useState(null);
+
+  const handleCommentClick = (event) => {
+    setAnchorElCom(event.currentTarget);
+  };
+
+  const handleCommentClose = () => {
+    setAnchorElCom(null);
+  };
+
+  //Settting the anchor element for the reply menu
+  const [anchorElRep, setAnchorElRep] = React.useState(null);
+
+  const handleReplyClick = (event) => {
+    setAnchorElRep(event.currentTarget);
+  };
+
+  const handleReplyClose = () => {
+    setAnchorElRep(null);
+  };
 
   //Settting the anchor element for the menu
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -154,10 +187,16 @@ export default function PostCard(props) {
     getPosts();
   }
 
+  console.log(post)
+
   React.useEffect(() => {
     //Checking if the post is liked by the user
     if (post?.likes.find(like => like._id === user?._id)) {
       setLiked(true);
+    }
+    //Checking if the post is saved by the user
+    if (post?.saves.find(save => save._id === user?._id)) {
+      setSaved(true);
     }
   }, [post]);
 
@@ -227,12 +266,17 @@ export default function PostCard(props) {
             </Typography>
           </CardContent>
           {/* Card likes and comments summery */}
-          <CardContent>
+          <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant="div" color="text.secondary" sx={{ marginRight: '10px', cursor: 'pointer' }} onClick={handleLikesModalOpen}>
-              {post?.likes.length} likes
+              {post?.likes.length} reacts
             </Typography>
-            <Typography variant="div" color="text.secondary" sx={{ cursor: 'pointer' }} onClick={handleCommentsModalOpen}>
-              {post?.comments.length} comments
+            <Typography>
+              <Typography variant="div" color="text.secondary" sx={{ marginRight: '10px', cursor: 'pointer' }} onClick={handleCommentsModalOpen}>
+                {post?.comments.length} comments
+              </Typography>
+              <Typography variant="div" color="text.secondary" sx={{ cursor: 'pointer' }}>
+                {post?.saves.length} saves
+              </Typography>
             </Typography>
           </CardContent>
           {/* Card Actions */}
@@ -244,8 +288,9 @@ export default function PostCard(props) {
             <IconButton aria-label="add to favorites" onClick={handleCommentsModalOpen}>
               <CommentIcon />
             </IconButton>
-            <IconButton aria-label="share" onClick={() => alert("Post saved")}>
-              <BookmarkBorderOutlinedIcon />
+            <IconButton aria-label="share" onClick={handleSave}>
+              {!saved ? <BookmarkBorderOutlinedIcon /> :
+                <BookmarkOutlinedIcon sx={{ color: '#0066ff' }} />}
             </IconButton>
           </CardActions>
           {/* Likes Modal */}
@@ -298,14 +343,42 @@ export default function PostCard(props) {
                         className="w-12 h-12 rounded-full object-cover"
                       />
                       <div className='mx-3'>
-                        <Link to={`/profile/${comment.user?._id}`} className='font-semibold'>{comment.user?.name}</Link>
+                        <div>
+                          <Link to={`/profile/${comment.user?._id}`} className='font-semibold'>{comment.user?.name}</Link>
+                          <span className='font-semibold text-gray-500' style={{ fontSize: '12px' }}> {comment.createdAt.substring(8, 10)}-{comment.createdAt.substring(5, 7)} at {comment.createdAt.substring(11, 16)}</span>
+                        </div>
                         <p>{comment.comment}</p>
                       </div>
                     </div>
-                    {comment.user?._id === user?._id &&
-                      <IconButton aria-label="send" onClick={() => handleDeleteComment(comment._id)} >
-                        <DeleteIcon color='error' />
-                      </IconButton>}
+                    <div className='flex flex-col justify-center items-center'>
+                      {comment.user?._id === user?._id &&
+                        <div>
+                          <IconButton aria-label="settings" onClick={handleCommentClick}>
+                            <MoreVertIcon fontSize='small' />
+                          </IconButton>
+
+                          <Menu
+                            anchorEl={anchorElCom}
+                            open={Boolean(anchorElCom)}
+                            onClose={handleCommentClose}
+                          >
+                            <MenuItem
+                              onClick={() => {
+                                handleCommentClose();
+                                handleDeleteComment(comment._id)
+                              }}
+                              className='hover:text-red-500'
+                            >
+                              <DeleteIcon fontSize='small' />
+                            </MenuItem>
+                          </Menu>
+                        </div>}
+
+                      {/*<IconButton aria-label="add to favorites" onClick={handleLike}>
+                        {!liked ? <FavoriteBorderIcon fontSize='small' /> :
+                          <FavoriteIcon fontSize='small' sx={{ color: 'red' }} />}
+                      </IconButton>*/}
+                    </div>
                   </div>
 
                   {/*Replies*/}
@@ -320,14 +393,42 @@ export default function PostCard(props) {
                               className="w-12 h-12 rounded-full object-cover"
                             />
                             <div className='mx-3'>
-                              <Link to={`/profile/${reply.user?._id}`} className='font-semibold'>{reply.user?.name}</Link>
+                              <div>
+                                <Link to={`/profile/${reply.user?._id}`} className='font-semibold'>{reply.user?.name}</Link>
+                                <span className='font-semibold text-gray-500' style={{ fontSize: '10px' }}> {comment.createdAt.substring(8, 10)}-{comment.createdAt.substring(5, 7)} at {comment.createdAt.substring(11, 16)}</span>
+                              </div>
                               <p className='text-sm'>{reply.reply}</p>
                             </div>
                           </div>
-                          {reply.user?._id === user?._id &&
-                            <IconButton aria-label="send" onClick={() => handleDeleteReply(comment._id, reply._id)}>
-                              <DeleteIcon color='error' fontSize='small' />
-                            </IconButton>}
+                          <div className='flex flex-col justify-center items-center'>
+                            {reply.user?._id === user?._id &&
+                              <div>
+                                <IconButton aria-label="settings" onClick={handleReplyClick}>
+                                  <MoreVertIcon fontSize='small' />
+                                </IconButton>
+
+                                <Menu
+                                  anchorEl={anchorElRep}
+                                  open={Boolean(anchorElRep)}
+                                  onClose={handleReplyClose}
+                                >
+                                  <MenuItem
+                                    onClick={() => {
+                                      handleReplyClose();
+                                      handleDeleteReply(comment._id, reply._id)
+                                    }}
+                                    className='hover:text-red-500'
+                                  >
+                                    <DeleteIcon fontSize='small' />
+                                  </MenuItem>
+                                </Menu>
+                              </div>}
+
+                            {/*<IconButton aria-label="add to favorites" onClick={handleLike}>
+                              {!liked ? <FavoriteBorderIcon fontSize='small' /> :
+                                <FavoriteIcon fontSize='small' sx={{ color: 'red' }} />}
+                            </IconButton>*/}
+                          </div>
                         </div>
                       )) :
                       comment.replies.length > 0 &&
@@ -376,7 +477,9 @@ export default function PostCard(props) {
               <SendIcon sx={{ color: `${comment === '' ? 'gray' : '#0099ff'}` }} />
             </IconButton>
           </CardActions>
-        </Card>}</>
+        </Card>
+      }
+    </>
   );
 }
 

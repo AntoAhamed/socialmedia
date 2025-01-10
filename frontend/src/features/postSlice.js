@@ -57,6 +57,24 @@ export const likeAndUnlikePost = createAsyncThunk(
     }
 )
 
+export const saveAndUnsavePost = createAsyncThunk(
+    "post/saveAndUnsavePost",
+    async (id, { rejectWithValue }) => {
+        try {
+            const token = JSON.parse(localStorage.getItem('token'))
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const { data } = await axios.get(`${backend_url}/api/v1/post/save/${id}`, config)
+            return data
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 export const updatePost = createAsyncThunk(
     "post/updatePost",
     async ({ id, postData }, { rejectWithValue }) => {
@@ -247,6 +265,19 @@ const postSlice = createSlice({
                 state.postInfo = action.payload
             })
             .addCase(likeAndUnlikePost.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = action.payload
+            })
+            //Save and unsave post
+            .addCase(saveAndUnsavePost.pending, (state) => {
+                state.isLoading = true
+                state.error = null
+            })
+            .addCase(saveAndUnsavePost.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.postInfo = action.payload
+            })
+            .addCase(saveAndUnsavePost.rejected, (state, action) => {
                 state.isLoading = false
                 state.error = action.payload
             })
