@@ -158,6 +158,7 @@ exports.likeAndUnlikePost = async (req, res) => {
 // Save and unsave post
 exports.saveAndUnsavePost = async (req, res) => {
   try {
+    const user = await User.findById(req.user._id);
     const post = await Post.findById(req.params.id);
 
     if (!post) {
@@ -168,19 +169,24 @@ exports.saveAndUnsavePost = async (req, res) => {
     }
 
     if (post.saves.includes(req.user._id)) {
-      const index = post.saves.indexOf(req.user._id);
+      const indexOfPost = post.saves.indexOf(req.user._id);
+      const indexOfUser = user.saves.indexOf(post._id);
 
-      post.saves.splice(index, 1);
+      post.saves.splice(indexOfPost, 1);
+      user.saves.splice(indexOfUser, 1);
 
       await post.save();
+      await user.save();
 
       return res.status(200).json({
         success: true,
         message: "Post Unsaved",
       });
     } else {
+      user.saves.push(post._id);
       post.saves.push(req.user._id);
 
+      await user.save();
       await post.save();
 
       return res.status(200).json({

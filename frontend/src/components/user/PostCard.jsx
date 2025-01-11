@@ -102,9 +102,9 @@ export default function PostCard(props) {
 
   const handleSave = async () => {
     await dispatch(saveAndUnsavePost(post._id));
-    console.log(postInfo)
     setSaved(!saved);
     getPosts();
+    //dispatch(loadUser());
   }
 
   //Modal style
@@ -187,8 +187,6 @@ export default function PostCard(props) {
     getPosts();
   }
 
-  console.log(post)
-
   React.useEffect(() => {
     //Checking if the post is liked by the user
     if (post?.likes.find(like => like._id === user?._id)) {
@@ -200,7 +198,7 @@ export default function PostCard(props) {
     }
   }, [post]);
 
-  //console.log(post)
+  console.log(post.saves)
   return (
     <>
       {isLoading ? <Loader /> :
@@ -252,11 +250,7 @@ export default function PostCard(props) {
             component="img"
             image={post?.image?.url}
             alt="Post image"
-            sx={{
-              height: 194, // Fixed height
-              objectFit: 'contain', // Ensures the full image fits within the height
-              backgroundColor: '#f0f0f0', // Optional: Adds a background to fill empty space
-            }}
+            sx={{ maxHeight: 300, objectFit: 'contain', backgroundColor: '#f0f0f0' }}
           />
           }
           {/* Card Content */}

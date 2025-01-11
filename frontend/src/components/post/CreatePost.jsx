@@ -67,7 +67,7 @@ function CreatePost() {
                 <input type='file' accept='.png, .jpg, .jpeg' className='bg-gray-100 p-3 rounded-t-md border-gray-500 border-b' onChange={handleImageChange} />
               </div>
               <div className='grid mb-3'>
-                <TextField id="standard-basic" label="Caption" value={caption} onChange={(e) => setCaption(e.target.value)} variant="standard" multiline required />
+                <TextField id="standard-basic" label="Caption" value={caption} onChange={(e) => setCaption(e.target.value)} variant="standard" multiline required inputProps={{ maxLength: 400 }} />
               </div>
               <div className='grid mb-3'>
                 <Button type='submit' variant='contained' onChange={handleImageChange} color='success'>Post</Button>

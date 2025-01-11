@@ -22,22 +22,28 @@ function Navbar() {
   if (isSmall) size = "small";
   else if (isMedium) size = "medium";
 
+  const handleComponent = (active) => {
+    setActiveComponent(active)
+  }
+
+  /*
   // To store which component is active
   const handleActive = (component) => {
     setActiveComponent(component);
-    localStorage.setItem('active', component)
+    //localStorage.setItem('active', component)
   }
 
   useEffect(() => {
-    const active = localStorage.getItem('active')
+    //const active = localStorage.getItem('active')
+    let active = "home"
 
     if (active) {
       setActiveComponent(active)
       navigate(`/${active}`)
     } else {
-      localStorage.setItem('active', "home")
+      //localStorage.setItem('active', "home")
     }
-  }, [])
+  }, [])*/
 
   return (
     <>
@@ -47,36 +53,36 @@ function Navbar() {
             <p className='lg:text-2xl md:text-2xl text-xl font-bold italic text-center'>Outstagram</p>
           </li>
           <div className='flex justify-around lg:col-span-3'>
-            <Link to="/home" onClick={() => handleActive("home")}>
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "home" && 'bg-gray-200'}`}>
+            <Link to="/home">
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "home" && 'bg-gray-200'}`} onClick={()=>handleComponent("home")}>
                 {activeComponent === "home" ?
                   <HomeIcon fontSize={size} /> :
                   <HomeOutlinedIcon fontSize={size} />}
               </li>
             </Link>
-            <Link to="/create-post" onClick={() => handleActive("create-post")}>
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "create-post" && 'bg-gray-200'}`}>
+            <Link to="/create-post">
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "create-post" && 'bg-gray-200'}`} onClick={()=>handleComponent("create-post")}>
                 {activeComponent === "create-post" ?
                   <AddIcon fontSize={size} /> :
                   <AddOutlinedIcon fontSize={size} />}
               </li>
             </Link>
-            <Link to="/search" onClick={() => handleActive("search")}>
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "search" && 'bg-gray-200'}`}>
+            <Link to="/search">
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "search" && 'bg-gray-200'}`} onClick={()=>handleComponent("search")}>
                 {activeComponent === "search" ?
                   <SearchIcon fontSize={size} /> :
                   <SearchOutlinedIcon fontSize={size} />}
               </li>
             </Link>
-            <Link to="/notifications" onClick={() => handleActive("notifications")}>
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "notifications" && 'bg-gray-200'}`}>
+            <Link to="/notifications">
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "notifications" && 'bg-gray-200'}`} onClick={()=>handleComponent("notifications")}>
                 {activeComponent === "notifications" ?
                   <NotificationsIcon fontSize={size} /> :
                   <NotificationsOutlinedIcon fontSize={size} />}
               </li>
             </Link>
-            <Link to="/profile" onClick={() => handleActive("profile")}>
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "profile" && 'bg-gray-200'}`}>
+            <Link to="/profile">
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "profile" && 'bg-gray-200'}`} onClick={()=>handleComponent("profile")}>
                 {activeComponent === "profile" ?
                   <AccountCircleIcon fontSize={size} /> :
                   <AccountCircleOutlinedIcon fontSize={size} />}

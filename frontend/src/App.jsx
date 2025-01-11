@@ -19,6 +19,7 @@ import EditPost from './components/post/EditPost';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from './features/userSlice';
+import SavedItems from './components/user/SavedItems';
 
 function App() {
   const dispatch = useDispatch();
@@ -31,6 +32,8 @@ function App() {
       dispatch(loadUser());
     }
   }, [dispatch]);
+
+  console.log(user)
   return (
     <div className="App">
       <BrowserRouter>
@@ -40,6 +43,7 @@ function App() {
             <Route path="signup" element={isAuth ? <Home /> : <Signup />} />
             <Route path="home" element={isAuth ? <Home /> : <Login />} />
             <Route path="create-post" element={isAuth ? <CreatePost /> : <Login />} />
+            <Route path="saved-items" element={isAuth ? <SavedItems saves={user?.saves} /> : <Login />} />
             <Route path="edit-post/:id" element={isAuth ? <EditPost /> : <Login />} />
             <Route path="search" element={isAuth ? <Search /> : <Login />} />
             <Route path="notifications" element={isAuth ? <Notifications /> : <Login />} />

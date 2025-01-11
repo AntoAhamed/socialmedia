@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import userPic from '../../assets/user.png'
-import { Button, Typography, useMediaQuery } from '@mui/material'
+import { Button, IconButton, Typography, useMediaQuery } from '@mui/material'
 import MyPosts from './MyPosts'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -8,6 +8,10 @@ import { getMyPosts, getUserProfile, loadUser, tempLogout } from '../../features
 import Loader from '../layout/Loader'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
 
 function Profile() {
   const navigate = useNavigate();
@@ -46,6 +50,17 @@ function Profile() {
   const [openFollowing, setOpenFollowing] = React.useState(false);
   const handleFollowingModalOpen = () => setOpenFollowing(true);
   const handleFollowingModalClose = () => setOpenFollowing(false);
+
+  //Settting the anchor element for the menu
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('active');
@@ -156,8 +171,32 @@ function Profile() {
               <div className='grid lg:mr-3 md:mr-2 mr-1'>
                 <Button variant='contained' onClick={() => navigate('/update-profile')}>Edit Profile</Button>
               </div>
-              <div className='grid lg:ml-3 md:ml-2 ml-1'>
-                <Button variant='outlined' onClick={handleLogout}>Log out</Button>
+              <div className='grid lg:grid-cols-12 md:grid-cols-8 grid-cols-4 lg:ml-3 md:ml-2 ml-1'>
+                <div className='grid lg:col-span-11 md:col-span-7 col-span-3'>
+                  <Button variant='outlined' onClick={handleLogout}>Log out</Button>
+                </div>
+                <div className='flex justify-end'>
+                  <IconButton aria-label='action' onClick={handleClick}>
+                    <MoreVertIcon />
+                  </IconButton>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem
+                      onClick={() => {
+                        handleClose();
+                        dispatch(loadUser());
+                        //Save func
+                        navigate('/saved-items');
+                      }}
+                    >
+                      <BookmarksIcon />
+                      <span className='text-black hover:text-blue-500'>Saved Items</span>
+                    </MenuItem>
+                  </Menu>
+                </div>
               </div>
             </div>
           </div>

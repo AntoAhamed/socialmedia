@@ -136,7 +136,7 @@ exports.logout = async (req, res) => {
 exports.myProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).populate(
-      "posts followers following notifications.user"
+      "posts followers following notifications.user saves"
     );
 
     res.status(200).json({
@@ -495,7 +495,7 @@ exports.deleteMyProfile = async (req, res) => {
 exports.getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).populate(
-      "posts followers following"
+      "posts followers following saves"
     );
 
     if (!user) {
