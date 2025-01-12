@@ -18,7 +18,7 @@ function Notifications() {
     return (
         <div className='p-4'>
             {isLoading ? <Loader /> :
-                <div className={`lg:${user?.notifications?.length > 10 ? 'h-full' : 'h-svh'} md:${user?.notifications?.length > 7 ? 'h-full' : 'h-svh'} ${user?.notifications?.length > 5 ? 'h-full' : 'h-svh'} p-4 bg-white`}>
+                <div className={`lg:mx-28 lg:${user?.notifications?.length > 10 ? 'h-full' : 'h-svh'} md:${user?.notifications?.length > 7 ? 'h-full' : 'h-svh'} ${user?.notifications?.length > 5 ? 'h-full' : 'h-svh'} p-4 bg-white`}>
                     <p className='lg:text-3xl text-2xl font-semibold italic text-center mb-3'>Outstagram</p>
                     <p className='font-semibold text-gray-500 text-center mb-3'>Your notifications</p>
                     {user?.notifications?.length > 0 ? user?.notifications?.map(notification => (

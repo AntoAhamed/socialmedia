@@ -10,6 +10,7 @@ function Signup() {
   const dispatch = useDispatch();
   const { isLoading, user, error, success, message, isAuth } = useSelector(state => state.user);
 
+  const [warning, setWarning] = useState('gray');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,7 +30,8 @@ function Signup() {
       setName('');
       setEmail('');
       setPassword('');
-    }else{
+    } else {
+      setWarning("red")
       console.log(error)
     }
   }
@@ -54,7 +56,7 @@ function Signup() {
               </div>
               <div className='grid mb-3'>
                 <TextField type='password' id="filled-basic3" value={password} onChange={(e) => setPassword(e.target.value)} label="Password" variant="filled" required />
-                <p className='text-sm text-gray-500'>&#9432; Password should be at least 6 charecter long.</p>
+                <p className={`text-sm text-${warning}-500`}>&#9432; Password should be at least 6 charecter long.</p>
               </div>
               <div className='grid mb-3'>
                 <Button type='submit' variant='contained'>Sign up</Button>

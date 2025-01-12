@@ -11,9 +11,11 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import { useMediaQuery } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { loadUser } from '../../features/userSlice';
 
 function Navbar() {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [activeComponent, setActiveComponent] = useState("home");
   const isSmall = useMediaQuery("(max-width: 360px)");
   const isMedium = useMediaQuery("(max-width: 720px)");
@@ -54,35 +56,35 @@ function Navbar() {
           </li>
           <div className='flex justify-around lg:col-span-3'>
             <Link to="/home">
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "home" && 'bg-gray-200'}`} onClick={()=>handleComponent("home")}>
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "home" && 'bg-gray-200'}`} onClick={() => handleComponent("home")}>
                 {activeComponent === "home" ?
                   <HomeIcon fontSize={size} /> :
                   <HomeOutlinedIcon fontSize={size} />}
               </li>
             </Link>
-            <Link to="/create-post">
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "create-post" && 'bg-gray-200'}`} onClick={()=>handleComponent("create-post")}>
-                {activeComponent === "create-post" ?
-                  <AddIcon fontSize={size} /> :
-                  <AddOutlinedIcon fontSize={size} />}
-              </li>
-            </Link>
             <Link to="/search">
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "search" && 'bg-gray-200'}`} onClick={()=>handleComponent("search")}>
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "search" && 'bg-gray-200'}`} onClick={() => handleComponent("search")}>
                 {activeComponent === "search" ?
                   <SearchIcon fontSize={size} /> :
                   <SearchOutlinedIcon fontSize={size} />}
               </li>
             </Link>
+            <Link to="/create-post">
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "create-post" && 'bg-gray-200'}`} onClick={() => handleComponent("create-post")}>
+                {activeComponent === "create-post" ?
+                  <AddIcon fontSize={size} /> :
+                  <AddOutlinedIcon fontSize={size} />}
+              </li>
+            </Link>
             <Link to="/notifications">
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "notifications" && 'bg-gray-200'}`} onClick={()=>handleComponent("notifications")}>
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "notifications" && 'bg-gray-200'}`} onClick={() => {handleComponent("notifications"); dispatch(loadUser());}}>
                 {activeComponent === "notifications" ?
                   <NotificationsIcon fontSize={size} /> :
                   <NotificationsOutlinedIcon fontSize={size} />}
               </li>
             </Link>
             <Link to="/profile">
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "profile" && 'bg-gray-200'}`} onClick={()=>handleComponent("profile")}>
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "profile" && 'bg-gray-200'}`} onClick={() => handleComponent("profile")}>
                 {activeComponent === "profile" ?
                   <AccountCircleIcon fontSize={size} /> :
                   <AccountCircleOutlinedIcon fontSize={size} />}

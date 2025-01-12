@@ -526,7 +526,7 @@ exports.replyToComment = async (req, res) => {
     // Code for one user one comment and multiple replies
     // Notification for reply
     if (post.owner.toString() !== req.user._id.toString()) {
-      const user = await User.findById(post.owner);
+      const user = await User.findById(post.comments[commentIndex].user);
 
       user.notifications.unshift({
         type: "reply",

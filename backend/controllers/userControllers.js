@@ -431,7 +431,9 @@ exports.deleteMyProfile = async (req, res) => {
     // Delete all posts of the user
     for (let i = 0; i < posts.length; i++) {
       const post = await Post.findById(posts[i]);
-      await cloudinary.v2.uploader.destroy(post.image.public_id);
+      if (post.image.public_id) {
+        await cloudinary.v2.uploader.destroy(post.image.public_id);
+      }
       await post.deleteOne();
     }
 
@@ -466,8 +468,8 @@ exports.deleteMyProfile = async (req, res) => {
       }
       await post.save();
     }
-    // removing all likes of the user from all posts
 
+    // removing all likes of the user from all posts
     for (let i = 0; i < allPosts.length; i++) {
       const post = await Post.findById(allPosts[i]._id);
 

@@ -16,7 +16,7 @@ function ForgotPassword() {
 
     await dispatch(forgotPassword(email));
 
-    alert(`Account recovery link successfully sent to ${email}`)
+    alert(`Check ${email} email for account recovery link.`)
 
     setEmail('');
   }

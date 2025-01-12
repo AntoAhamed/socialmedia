@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteMyAccount, loadUser, tempLogout, updateProfile } from '../../features/userSlice';
 import Loader from '../layout/Loader';
+import userPic from '../../assets/user.png'
 
 function UpdateProfile() {
   const navigate = useNavigate();
@@ -36,7 +37,6 @@ function UpdateProfile() {
       setBio('');
       setEmail('');
       setAvatar('');
-      alert("Profile updated successfully");
       navigate('/profile');
     } else {
       console.log(error);
@@ -91,10 +91,11 @@ function UpdateProfile() {
                   <TextField type='text' id="filled-basic" value={bio} onChange={(e) => setBio(e.target.value)} label="Bio" variant="filled" multiline rows={3} placeholder={user?.bio} />
                 </div>
                 <div className='grid mb-3'>
-                  <TextField type='email' id="filled-basic" value={email} onChange={(e) => setEmail(e.target.value)} label="Email" variant="filled" placeholder={user?.email} />
+                  <TextField type='email' id="filled-basic" disabled value={email} onChange={(e) => setEmail(e.target.value)} label="Email" variant="filled" placeholder={user?.email} />
                 </div>
-                <div className='grid mb-3'>
-                  <input type='file' accept='.png, .jpg, .jpeg' onChange={handleImageChange} className='bg-gray-100 p-3 rounded-t-md border-b-gray-500 border-b' />
+                <div className='flex mb-3'>
+                  <img src={avatar || userPic} alt='' width={'10%'} className='rounded-lg' />
+                  <input type='file' accept='.png, .jpg, .jpeg' onChange={handleImageChange} className='bg-gray-100 p-3 rounded-t-md border-b-gray-500 border-b w-full ml-2' />
                 </div>
                 <div className='grid mb-3'>
                   <Button type='submit' variant='contained'>Update Profile Changes</Button>

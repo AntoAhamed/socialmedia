@@ -67,10 +67,9 @@ export default function PostCard(props) {
   const handleComment = async () => {
     await dispatch(createComment({ id: post._id, comment }));
 
-    if (postInfo?.success) {
-      setComment('');
-      getPosts();
-    }
+    setComment('');
+    
+    getPosts();
   };
 
   // Reply state and function

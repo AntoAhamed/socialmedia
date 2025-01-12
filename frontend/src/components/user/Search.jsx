@@ -21,7 +21,7 @@ function Search() {
   return (
     <>
       {isLoading ? <Loader /> :
-        <div className={`${users?.length > 5 ? 'h-full' : 'h-svh'} p-4`}>
+        <div className={`lg:mx-28 ${users?.length > 5 ? 'h-full' : 'h-svh'} p-4`}>
           <div className='flex flex-col lg:px-32 lg:py-20 p-4 bg-white'>
             <div className='pb-3'>
               <p className='lg:text-3xl text-2xl font-semibold italic text-center mb-3'>Outstagram</p>

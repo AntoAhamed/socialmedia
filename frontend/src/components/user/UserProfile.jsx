@@ -62,14 +62,18 @@ function UserProfile() {
     dispatch(getUserPosts(id));
   }
 
-  useEffect(() => {
-    dispatch(getUserProfile(id));
+  const getProfileWithPosts = async () => {
+    await dispatch(getUserProfile(id));
     dispatch(getUserPosts(id));
+  }
+
+  useEffect(() => {
+    getProfileWithPosts()
   }, [dispatch, id]);
   return (
     <>
       {isLoading ? <Loader /> :
-        <div className={`border-l-4 border-r-8 border-gray-300 ${posts?.length <= 0 ? 'h-svh' : null}`}>
+        <div className={`lg:mx-28 border-l-4 border-r-8 border-gray-300 ${posts?.length <= 0 ? 'h-svh' : null}`}>
           <div className='lg:p-6 p-3 bg-white rounded-br-lg shadow-xl'>
             <div className='grid lg:grid-cols-2 md:grid-cols-1 gap-4 mb-3'>
               <div className='flex justify-center'>
