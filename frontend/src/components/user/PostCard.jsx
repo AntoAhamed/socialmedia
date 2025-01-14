@@ -196,8 +196,6 @@ export default function PostCard(props) {
       setSaved(true);
     }
   }, [post]);
-
-  console.log(post.saves)
   return (
     <>
       {isLoading ? <Loader /> :
@@ -208,7 +206,7 @@ export default function PostCard(props) {
               <img
                 src={post?.owner?.avatar?.url || userPic}
                 alt="User"
-                className="w-12 h-12 rounded-full object-cover"
+                className="w-12 h-12 rounded-full"
               />
             }
             action={editAndDelete &&
@@ -463,7 +461,7 @@ export default function PostCard(props) {
             <img
               src={user?.avatar?.url || userPic}
               alt="User"
-              className="w-12 h-12 rounded-full object-cover"
+              className="w-12 h-12 rounded-full"
             />
             <input type='text' placeholder='Add a comment...(Upto 100 latters)' value={comment} onChange={(e) => setComment(e.target.value)} className='w-full p-2 mx-2 bg-gray-100 rounded-full focus:outline-none' maxLength={100} />
             <IconButton aria-label="send" disabled={comment === ''} onClick={handleComment} >

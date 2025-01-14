@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import { loadUser } from '../../features/userSlice';
 
 function Navbar() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [activeComponent, setActiveComponent] = useState("home");
   const isSmall = useMediaQuery("(max-width: 360px)");
@@ -26,30 +27,23 @@ function Navbar() {
 
   const handleComponent = (active) => {
     setActiveComponent(active)
-  }
-
-  /*
-  // To store which component is active
-  const handleActive = (component) => {
-    setActiveComponent(component);
-    //localStorage.setItem('active', component)
+    localStorage.setItem('active', active)
   }
 
   useEffect(() => {
-    //const active = localStorage.getItem('active')
-    let active = "home"
+    const active = localStorage.getItem('active')
 
     if (active) {
       setActiveComponent(active)
       navigate(`/${active}`)
     } else {
-      //localStorage.setItem('active', "home")
+      localStorage.setItem('active', "home")
     }
-  }, [])*/
+  }, [])
 
   return (
     <>
-      <nav className='border-b lg:py-3 py-2'>
+      <nav className='border-b lg:py-3 py-2 sticky top-0 z-10 bg-white'>
         <ul className='grid lg:grid-cols-4 grid-cols-1 gap-4'>
           <li className='p-2 select-none'>
             <p className='lg:text-2xl md:text-2xl text-xl font-bold italic text-center'>Outstagram</p>

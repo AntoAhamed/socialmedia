@@ -4,8 +4,6 @@ import img from '../../assets/img.jpg'
 
 function SavedItems(props) {
   const { saves } = props;
-
-  console.log(saves)
   return (
     <div className='p-4'>
       <div className={`lg:mx-28 lg:${saves.length > 10 ? 'h-full' : 'h-svh'} md:${saves.length > 7 ? 'h-full' : 'h-svh'} ${saves.length > 5 ? 'h-full' : 'h-svh'} p-4 bg-white`}>
