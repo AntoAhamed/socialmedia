@@ -13,7 +13,7 @@ function SavedItems(props) {
           <Link to={`/profile/${item.owner}`} key={item._id}>
             <div className='border p-3 flex items-center hover:font-semibold'>
               <img
-                src={item.image?.url || img}
+                src={item.images[0]?.url || img}
                 alt="Post"
                 className="w-12 h-12 rounded-full object-cover"
               />

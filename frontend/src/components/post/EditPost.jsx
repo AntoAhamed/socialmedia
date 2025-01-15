@@ -13,20 +13,20 @@ function EditPost() {
     const dispatch = useDispatch();
     const { isLoading, postInfo, error } = useSelector(state => state.post);
 
-    const [image, setImage] = useState('');
+    const [images, setImages] = useState([]);
     const [caption, setCaption] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const postData = {
-            image,
+            images,
             caption
         }
 
-        dispatch(updatePost({ id, postData }));
+        await dispatch(updatePost({ id, postData }));
 
-        setImage('');
+        setImages([]);
         setCaption('');
 
         navigate('/profile');
@@ -34,15 +34,26 @@ function EditPost() {
 
     const handleImageChange = (e) => {
         try {
-            const reader = new FileReader();
+            const files = Array.from(e.target.files);
 
-            reader.onload = () => {
-                if (reader.readyState === 2) {
-                    setImage(reader.result);
-                }
+            if (files.length > 4) {
+                alert("You can upload a maximum of 4 images!");
+                return;
             }
 
-            reader.readAsDataURL(e.target.files[0]);
+            setImages([]);
+
+            files.forEach((file) => {
+                const reader = new FileReader();
+
+                reader.onload = () => {
+                    if (reader.readyState === 2) {
+                        setImages((old) => [...old, reader.result]);
+                    }
+                }
+
+                reader.readAsDataURL(file);
+            })
         } catch (err) {
             console.log(err);
         }
@@ -54,13 +65,20 @@ function EditPost() {
                     <div className='border-2 flex flex-col lg:p-16 p-4 bg-white'>
                         <p className='lg:text-3xl text-2xl font-semibold italic text-center mb-3'>Outstagram</p>
                         <p className='font-semibold text-gray-500 text-center mb-3'>Edit post</p>
-                        <div className='grid mb-3 border-dashed border-2 h-96'>
-                            {image !== '' ? <img src={image} alt='' className='w-full h-96' /> :
-                                <p className='text-gray-500 text-center pt-52'>Preview image</p>}
+                        <div className='grid mb-3 border-dashed border-2 p-4'>
+                            {images.length > 0 ? (
+                                <div className='grid grid-cols-2 gap-4'>
+                                    {images.map((img, index) => (
+                                        <img key={index} src={img} alt={`uploaded-${index}`} className='h-40 w-full' />
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className='text-gray-500 text-center lg:py-32 py-16'>Preview image</p>
+                            )}
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div className='grid mb-3'>
-                                <input type='file' accept='.png, .jpg, .jpeg' className='bg-gray-100 p-3 rounded-t-md border-gray-500 border-b' onChange={handleImageChange} />
+                                <input type='file' accept='.png, .jpg, .jpeg' multiple className='bg-gray-100 p-3 rounded-t-md border-gray-500 border-b' onChange={handleImageChange} />
                             </div>
                             <div className='grid mb-3'>
                                 <TextField id="standard-basic" label="Caption" value={caption} onChange={(e) => setCaption(e.target.value)} variant="standard" multiline required inputProps={{ maxLength: 400 }} />

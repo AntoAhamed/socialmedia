@@ -86,7 +86,7 @@ function Profile() {
                 <img
                   src={user?.avatar?.url || userPic}
                   alt="User"
-                  className="lg:w-32 md:w-24 w-20 lg:h-32 md:h-24 h-20 rounded-full"
+                  className="lg:w-32 md:w-24 w-20 lg:h-32 md:h-24 h-20 rounded-full border-2"
                 />
               </div>
               <div className='flex justify-between items-center'>

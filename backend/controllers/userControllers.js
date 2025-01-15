@@ -431,8 +431,10 @@ exports.deleteMyProfile = async (req, res) => {
     // Delete all posts of the user
     for (let i = 0; i < posts.length; i++) {
       const post = await Post.findById(posts[i]);
-      if (post.image.public_id) {
-        await cloudinary.v2.uploader.destroy(post.image.public_id);
+      if (post.images) {
+        for (let i = 0; i < post.images.length; i++) {
+          await cloudinary.v2.uploader.destroy(post.images[i].public_id);
+        }
       }
       await post.deleteOne();
     }

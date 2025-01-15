@@ -5,19 +5,35 @@ const cloudinary = require("cloudinary");
 // Create post
 exports.createPost = async (req, res) => {
   try {
-    const { image, caption } = req.body
+    let images = []
 
-    if (image !== '') {
-      const myCloud = await cloudinary.v2.uploader.upload(image, {
-        folder: "posts",
-      });
+    if (typeof req.body.images === "string") {
+      images.push(req.body.images)
+    } else {
+      images = req.body.images
+    }
 
+    const imagesLinks = []
+
+    if (images.length > 0) {
+      for (let i = 0; i < images.length; i++) {
+        const result = await cloudinary.v2.uploader.upload(images[i], {
+          folder: "posts",
+        })
+
+        imagesLinks.push({
+          public_id: result.public_id,
+          url: result.secure_url,
+        })
+      }
+    }
+
+    req.body.images = imagesLinks
+
+    if (imagesLinks.length > 0) {
       const newPostData = {
-        caption: caption,
-        image: {
-          public_id: myCloud.public_id,
-          url: myCloud.secure_url,
-        },
+        caption: req.body.caption,
+        images: req.body.images,
         owner: req.user._id,
       };
 
@@ -30,7 +46,7 @@ exports.createPost = async (req, res) => {
       await user.save();
     } else {
       const newPostData = {
-        caption: caption,
+        caption: req.body.caption,
         owner: req.user._id,
       };
 
@@ -74,8 +90,10 @@ exports.deletePost = async (req, res) => {
       });
     }
 
-    if (post.image.public_id) {
-      await cloudinary.v2.uploader.destroy(post.image.public_id);
+    if (post.images) {
+      for (let i = 0; i < post.images.length; i++) {
+        await cloudinary.v2.uploader.destroy(post.images[i].public_id);
+      }
     }
 
     await post.deleteOne();
@@ -230,8 +248,6 @@ exports.updatePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    const { image, caption } = req.body;
-
     if (!post) {
       return res.status(404).json({
         success: false,
@@ -246,26 +262,43 @@ exports.updatePost = async (req, res) => {
       });
     }
 
-    if (post.image.public_id) {
-      await cloudinary.v2.uploader.destroy(post.image.public_id);
+    if (post.images) {
+      for (let i = 0; i < post.images.length; i++) {
+        await cloudinary.v2.uploader.destroy(post.images[i].public_id);
+      }
     }
 
-    if (image !== '') {
-      const myCloud = await cloudinary.v2.uploader.upload(image, {
-        folder: "posts",
-      });
+    let images = []
 
-      post.image = {
-        public_id: myCloud.public_id,
-        url: myCloud.secure_url,
+    if (typeof req.body.images === "string") {
+      images.push(req.body.images)
+    } else {
+      images = req.body.images
+    }
+
+    const imagesLinks = []
+
+    if (images.length > 0) {
+      for (let i = 0; i < images.length; i++) {
+        const result = await cloudinary.v2.uploader.upload(images[i], {
+          folder: "posts",
+        })
+
+        imagesLinks.push({
+          public_id: result.public_id,
+          url: result.secure_url,
+        })
       }
+    }
 
-      post.caption = caption;
+    req.body.images = imagesLinks
 
+    if (imagesLinks.length>0) {
+      post.images = req.body.images;
+      post.caption = req.body.caption;
       await post.save();
     } else {
-      post.caption = caption;
-
+      post.caption = req.body.caption;
       await post.save();
     }
 

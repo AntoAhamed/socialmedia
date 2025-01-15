@@ -44,7 +44,7 @@ function Navbar() {
   return (
     <>
       <nav className='border-b lg:py-3 py-2 sticky top-0 z-10 bg-white'>
-        <ul className='grid lg:grid-cols-4 grid-cols-1 gap-4'>
+        <ul className='grid lg:grid-cols-4 grid-cols-1 lg:gap-4 md:gap-2'>
           <li className='p-2 select-none'>
             <p className='lg:text-2xl md:text-2xl text-xl font-bold italic text-center'>Outstagram</p>
           </li>

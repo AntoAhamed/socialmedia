@@ -35,6 +35,8 @@ import { loadUser } from '../../features/userSlice';
 import userPic from '../../assets/user.png'
 import { useMediaQuery } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 export default function PostCard(props) {
   const { post, editAndDelete, getPosts } = props
@@ -68,7 +70,7 @@ export default function PostCard(props) {
     await dispatch(createComment({ id: post._id, comment }));
 
     setComment('');
-    
+
     getPosts();
   };
 
@@ -243,13 +245,46 @@ export default function PostCard(props) {
             </MenuItem>
           </Menu>
           {/* Card Media */}
-          {post?.image?.url && <CardMedia
-            component="img"
-            image={post?.image?.url}
-            alt="Post image"
-            sx={{ maxHeight: 300, objectFit: 'contain', backgroundColor: '#f0f0f0' }}
-          />
-          }
+          {(post.images && post.images.length > 0) && <Carousel
+            className="carousel-container"
+            autoPlay
+            infiniteLoop
+            showThumbs={false}
+            renderArrowPrev={(onClickHandler, hasPrev, label) =>
+              hasPrev && (
+                <button
+                  type="button"
+                  onClick={onClickHandler}
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-80 text-white rounded-full w-10 h-10 flex items-center justify-center z-10"
+                  aria-label={label}
+                >
+                  ‹
+                </button>
+              )
+            }
+            renderArrowNext={(onClickHandler, hasNext, label) =>
+              hasNext && (
+                <button
+                  type="button"
+                  onClick={onClickHandler}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-80 text-white rounded-full w-10 h-10 flex items-center justify-center z-10"
+                  aria-label={label}
+                >
+                  ›
+                </button>
+              )
+            }
+          >
+            {post.images.map((image, index) => (
+              <CardMedia
+                key={index}
+                component="img"
+                image={image.url}
+                alt="Post image"
+                sx={{ height: 300, objectFit: 'contain', backgroundColor: '#f0f0f0' }}
+              />
+            ))}
+          </Carousel>}
           {/* Card Content */}
           <CardContent>
             <Typography variant="body1">

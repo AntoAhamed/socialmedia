@@ -3,10 +3,12 @@ const mongoose = require("mongoose");
 const postSchema = new mongoose.Schema({
   caption: String,
 
-  image: {
-    public_id: String,
-    url: String,
-  },
+  images: [
+    {
+      public_id: String,
+      url: String,
+    },
+  ],
 
   owner: {
     type: mongoose.Schema.Types.ObjectId,
