@@ -36,7 +36,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={isAuth && <Navbar />}>
+          <Route path="/" element={isAuth && <Navbar user={user} />}>
             <Route index element={isAuth ? <Home /> : <Login />} />
             <Route path="signup" element={isAuth ? <Home /> : <Signup />} />
             <Route path="home" element={isAuth ? <Home /> : <Login />} />

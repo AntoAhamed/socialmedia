@@ -169,6 +169,8 @@ exports.likeAndUnlikePost = async (req, res) => {
           post: post._id,
         });
 
+        user.newNotifications = user.newNotifications + 1;
+
         user.save();
       }
 
@@ -415,6 +417,8 @@ exports.commentOnPost = async (req, res) => {
         post: post._id,
       });
 
+      user.newNotifications = user.newNotifications + 1;
+
       user.save();
     }
 
@@ -583,6 +587,8 @@ exports.replyToComment = async (req, res) => {
         user: req.user._id,
         post: post._id,
       });
+
+      user.newNotifications = user.newNotifications + 1;
 
       user.save();
     }

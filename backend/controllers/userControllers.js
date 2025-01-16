@@ -48,6 +48,8 @@ exports.register = async (req, res) => {
       message: "Account has been created successfully.",
     })
 
+    user.newNotifications = user.newNotifications + 1;
+
     await user.save();
 
     //Should be replaced by cookies...
@@ -245,6 +247,8 @@ exports.resetPassword = async (req, res) => {
       message: "Account recovered successfully.",
     })
 
+    user.newNotifications = user.newNotifications + 1;
+
     await user.save();
 
     res.status(200).json({
@@ -386,6 +390,8 @@ exports.followUser = async (req, res) => {
         message: "started following you.",
         user: req.user._id,
       })
+
+      userToFollow.newNotifications = userToFollow.newNotifications + 1;
 
       loggedInUser.following.push(userToFollow._id);
       userToFollow.followers.push(loggedInUser._id);
@@ -609,6 +615,27 @@ exports.removeNotification = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Notification Removed Successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// Clear Notification
+exports.clearNotifications = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    user.newNotifications = 0;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Notification Cleared Successfully",
     });
   } catch (error) {
     res.status(500).json({

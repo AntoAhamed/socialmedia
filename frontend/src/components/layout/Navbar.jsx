@@ -12,9 +12,10 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import { useMediaQuery } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { loadUser } from '../../features/userSlice';
+import { clearNotifications, loadUser } from '../../features/userSlice';
 
-function Navbar() {
+function Navbar(props) {
+  const {user} = props
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [activeComponent, setActiveComponent] = useState("home");
@@ -71,10 +72,10 @@ function Navbar() {
               </li>
             </Link>
             <Link to="/notifications">
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "notifications" && 'bg-gray-200'}`} onClick={() => {handleComponent("notifications"); dispatch(loadUser());}}>
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "notifications" && 'bg-gray-200'}`} onClick={async() => {handleComponent("notifications"); await dispatch(clearNotifications()); dispatch(loadUser());}}>
                 {activeComponent === "notifications" ?
                   <NotificationsIcon fontSize={size} /> :
-                  <NotificationsOutlinedIcon fontSize={size} />}
+                  <><NotificationsOutlinedIcon fontSize={size} />{<sup className='text-lg font-semibold text-blue-700'>{user.newNotifications > 0 && user.newNotifications}</sup>}</>}
               </li>
             </Link>
             <Link to="/profile">

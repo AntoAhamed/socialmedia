@@ -237,6 +237,24 @@ export const removeNotification = createAsyncThunk(
     }
 )
 
+export const clearNotifications = createAsyncThunk(
+    "user/clearNotifications",
+    async (_, { rejectWithValue }) => {
+        try {
+            const token = JSON.parse(localStorage.getItem('token'))
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const { data } = await axios.put(`${backend_url}/api/v1/notification/clear`, {}, config)
+            return data
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 export const profileLock = createAsyncThunk(
     "user/profileLock",
     async (isChecked, { rejectWithValue }) => {
@@ -496,6 +514,20 @@ const userSlice = createSlice({
                 state.message = action.payload.message
             })
             .addCase(removeNotification.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = action.payload
+            })
+            //Clear notifications
+            .addCase(clearNotifications.pending, (state) => {
+                state.isLoading = true
+                state.error = null
+            })
+            .addCase(clearNotifications.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.success = action.payload.success
+                state.message = action.payload.message
+            })
+            .addCase(clearNotifications.rejected, (state, action) => {
                 state.isLoading = false
                 state.error = action.payload
             })
