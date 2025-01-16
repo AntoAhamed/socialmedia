@@ -617,3 +617,31 @@ exports.removeNotification = async (req, res) => {
     });
   }
 };
+
+// Profile Lock
+exports.profileLock = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    user.profileLock = req.body.isChecked;
+
+    await user.save();
+
+    if (req.body.isChecked) {
+      res.status(200).json({
+        success: true,
+        message: "Profile Locked Successfully",
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: "Profile Unlocked Successfully",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

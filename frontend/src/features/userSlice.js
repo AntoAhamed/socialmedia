@@ -237,6 +237,24 @@ export const removeNotification = createAsyncThunk(
     }
 )
 
+export const profileLock = createAsyncThunk(
+    "user/profileLock",
+    async (isChecked, { rejectWithValue }) => {
+        try {
+            const token = JSON.parse(localStorage.getItem('token'))
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const { data } = await axios.put(`${backend_url}/api/v1/profile/lock`, {isChecked}, config)
+            return data
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 export const deleteMyAccount = createAsyncThunk(
     "user/deleteMyAccount",
     async (_, { rejectWithValue }) => {
@@ -478,6 +496,20 @@ const userSlice = createSlice({
                 state.message = action.payload.message
             })
             .addCase(removeNotification.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = action.payload
+            })
+            //Profile Lock
+            .addCase(profileLock.pending, (state) => {
+                state.isLoading = true
+                state.error = null
+            })
+            .addCase(profileLock.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.success = action.payload.success
+                state.message = action.payload.message
+            })
+            .addCase(profileLock.rejected, (state, action) => {
                 state.isLoading = false
                 state.error = action.payload
             })

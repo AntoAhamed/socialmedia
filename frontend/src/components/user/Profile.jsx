@@ -4,7 +4,7 @@ import { Button, IconButton, Typography, useMediaQuery } from '@mui/material'
 import MyPosts from './MyPosts'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getMyPosts, getUserProfile, loadUser, tempLogout } from '../../features/userSlice'
+import { getMyPosts, getUserProfile, loadUser, profileLock, tempLogout } from '../../features/userSlice'
 import Loader from '../layout/Loader'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -12,6 +12,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import LockResetIcon from '@mui/icons-material/LockReset';
+import Switch from '@mui/material/Switch';
 
 function Profile() {
   const navigate = useNavigate();
@@ -61,6 +63,23 @@ function Profile() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  //States for profile lock
+  const [openLockModal, setOpenLockModal] = React.useState(false);
+  const handleLockModalOpen = () => setOpenLockModal(true);
+  const handleLockModalClose = () => setOpenLockModal(false);
+
+  const [isChecked, setIsChecked] = useState(user.profileLock);
+
+  const handleSwitchChange = (event) => {
+    setIsChecked(event.target.checked); // Update the state with the new value
+    console.log("Switch is now:", event.target.checked);
+  };
+
+  const handleProfileLock = async () => {
+    await dispatch(profileLock(isChecked))
+    dispatch(loadUser())
+  }
 
   const handleLogout = () => {
     localStorage.removeItem('active');
@@ -165,7 +184,10 @@ function Profile() {
               <p className='lg:text-2xl text-xl font-semibold'>{user?.name}</p>
               <p className='lg:text-lg font-semibold'>{user?.bio}</p>
               <p className='font-semibold text-gray-500'>{user?.email}</p>
-              <p className='text-sm font-semibold text-gray-500'>Joined On : {user?.createdAt.substring(0, 10)} at {user?.createdAt.substring(11, 19)}</p>
+              <p className='text-sm font-semibold text-gray-500'>
+                Joined On : {user?.createdAt.substring(0, 10)} at {user?.createdAt.substring(11, 19)}
+              </p>
+              <p className='text-sm font-semibold text-black my-2'>{user?.profileLock ? "[Account Locked]" : ''}</p>
             </div>
             <div className='grid grid-cols-2'>
               <div className='grid lg:mr-3 md:mr-2 mr-1'>
@@ -186,7 +208,7 @@ function Profile() {
                   >
                     <MenuItem
                       onClick={async () => {
-                        handleClose();
+                        //handleClose();
                         await dispatch(loadUser());
                         //Save func
                         navigate('/saved-items');
@@ -195,6 +217,41 @@ function Profile() {
                       <BookmarksIcon />
                       <span className='text-black hover:text-blue-500'>Saved Items</span>
                     </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        //handleClose();
+                        handleLockModalOpen();
+                      }}
+                    >
+                      <LockResetIcon />
+                      <span className='text-black hover:text-blue-500'>Profile Lock</span>
+                    </MenuItem>
+                    {/* Profile lock modal */}
+                    <Modal
+                      open={openLockModal}
+                      onClose={handleLockModalClose}
+                      aria-labelledby="modal-modal-title"
+                      aria-describedby="modal-modal-description"
+                    >
+                      <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h5" component="h2" sx={{ borderBottom: '1px solid gray' }}>
+                          About Profile Lock
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          Profile Lock is a feature that allows you to restrict your profile's visibility to only your followers.
+                          If you enable Profile Lock, people who do not follow you will only see limited information, such as your profile picture and name.
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          <span className='flex justify-between items-center'>
+                            <span className='text-xl'>Profile Lock</span>
+                            <Switch checked={isChecked} onChange={handleSwitchChange} />
+                          </span>
+                        </Typography>
+                        <div className='grid mt-2'>
+                          <Button variant='contained' onClick={handleProfileLock}>Confirm</Button>
+                        </div>
+                      </Box>
+                    </Modal>
                   </Menu>
                 </div>
               </div>

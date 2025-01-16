@@ -93,6 +93,21 @@ const userSchema = new mongoose.Schema({
     },
   ],
 
+  newNotifications: {
+    type: Number,
+    default: 0,
+  },
+
+  anonymousPosts: {
+    type: Number,
+    default: 0,
+  },
+
+  profileLock: {
+    type: Boolean,
+    default: false,
+  },
+
   resetPasswordToken: String,
   resetPasswordExpire: Date,
 });

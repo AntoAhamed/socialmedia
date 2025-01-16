@@ -8,6 +8,7 @@ import { followUser, getUserPosts, getUserProfile, loadUser } from '../../featur
 import Loader from '../layout/Loader';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+import LockPersonIcon from '@mui/icons-material/LockPerson';
 
 function UserProfile() {
   const { id } = useParams();
@@ -70,6 +71,8 @@ function UserProfile() {
   useEffect(() => {
     getProfileWithPosts()
   }, [dispatch, id]);
+
+  console.log(userInfo)
   return (
     <>
       {isLoading ? <Loader /> :
@@ -165,10 +168,17 @@ function UserProfile() {
               <div className='grid mt-3'>
                 {isFollowed ? <Button variant='outlined' onClick={handleFollow}>Unfollow</Button> :
                   <Button variant='contained' onClick={handleFollow}>Follow</Button>}
-              </div> : <div className='text-center text-gray-500'>It's your</div>}
+              </div> : <div className='text-center text-gray-500'>It's you</div>}
           </div>
           <div>
-            <UserPosts posts={posts} getPosts={getPosts} />
+            {(!userInfo?.user?.profileLock || isFollowed || (userInfo?.user?._id === user?._id)) ?
+              <UserPosts posts={posts} getPosts={getPosts} /> :
+              <div className='h-svh flex flex-col justify-center items-center'>
+                <div className='border-4 border-gray-300 p-4 mb-2 rounded-full'>
+                  <LockPersonIcon fontSize='large' sx={{color: 'GrayText'}}/>
+                </div>
+                <p className='text-gray-700 select-none'>This profile is locked.</p>
+              </div>}
           </div>
         </div>}
     </>
