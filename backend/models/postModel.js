@@ -78,6 +78,11 @@ const postSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+
+  isAnonymous: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("Post", postSchema);

@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createPost } from '../../features/postSlice';
 import Loader from '../layout/Loader';
 import { getMyPosts, loadUser } from '../../features/userSlice';
+import Switch from '@mui/material/Switch';
 
-function CreatePost() {
+function CreatePost(props) {
+  const {user} = props
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -16,12 +18,20 @@ function CreatePost() {
   const [images, setImages] = useState([]);
   const [caption, setCaption] = useState('');
 
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleSwitchChange = (event) => {
+    setIsChecked(event.target.checked); // Update the state with the new value
+    //console.log(event.target.checked)
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const postData = {
       images,
-      caption
+      caption,
+      isChecked,
     }
 
     await dispatch(createPost(postData));
@@ -108,6 +118,11 @@ function CreatePost() {
                   required
                   inputProps={{ maxLength: 400 }}
                 />
+              </div>
+
+              <div className='flex justify-between items-center mb-3'>
+                <p>Anonymous Post <span className='text-sm font-semibold text-gray-500'>({user.anonymousPosts} post left)</span></p>
+                <Switch checked={isChecked} disabled={user.anonymousPosts === 0} onChange={handleSwitchChange} />
               </div>
 
               {/* Submit Button */}

@@ -37,6 +37,7 @@ import { useMediaQuery } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import Anonymous from '../../assets/anonymous.png'
 
 export default function PostCard(props) {
   const { post, editAndDelete, getPosts } = props
@@ -204,7 +205,12 @@ export default function PostCard(props) {
         <Card sx={{ width: '100%', justifySelf: 'center', border: '1px solid #bfbfbf' }}>
           {/* Card Header */}
           <CardHeader
-            avatar={
+            avatar={post.isAnonymous ?
+              <img
+                src={Anonymous}
+                alt="Anonymous"
+                className="w-12 h-12 rounded-full"
+              /> :
               <img
                 src={post?.owner?.avatar?.url || userPic}
                 alt="User"
@@ -216,7 +222,13 @@ export default function PostCard(props) {
                 <MoreVertIcon />
               </IconButton>
             }
-            title={<span className='text-lg font-semibold'><Link to={`/profile/${post?.owner?._id}`}>{post?.owner?.name}</Link></span>}
+            title={post.isAnonymous ?
+              <span className='text-lg font-semibold'>Anonymous</span> :
+              <span className='text-lg font-semibold'>
+                <Link to={`/profile/${post?.owner?._id}`}>
+                  {post?.owner?.name}
+                </Link>
+              </span>}
             subheader={<span className='text-sm text-gray-500 font-semibold'>{post?.createdAt.substring(0, 10)} at {post?.createdAt.substring(11, 19)}</span>}
           />
           {/* Settings Menu */}
@@ -300,9 +312,9 @@ export default function PostCard(props) {
               <Typography variant="div" color="text.secondary" sx={{ marginRight: '10px', cursor: 'pointer' }} onClick={handleCommentsModalOpen}>
                 {post?.comments.length} comments
               </Typography>
-              <Typography variant="div" color="text.secondary" sx={{ cursor: 'pointer' }}>
+              {!post.isAnonymous && <Typography variant="div" color="text.secondary" sx={{ cursor: 'pointer' }}>
                 {post?.saves.length} saves
-              </Typography>
+              </Typography>}
             </Typography>
           </CardContent>
           {/* Card Actions */}
@@ -314,10 +326,10 @@ export default function PostCard(props) {
             <IconButton aria-label="add to favorites" onClick={handleCommentsModalOpen}>
               <CommentIcon />
             </IconButton>
-            <IconButton aria-label="share" onClick={handleSave}>
+            {!post.isAnonymous && <IconButton aria-label="share" onClick={handleSave}>
               {!saved ? <BookmarkBorderOutlinedIcon /> :
                 <BookmarkOutlinedIcon sx={{ color: '#0066ff' }} />}
-            </IconButton>
+            </IconButton>}
           </CardActions>
           {/* Likes Modal */}
           <Modal

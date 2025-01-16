@@ -73,7 +73,6 @@ function Profile() {
 
   const handleSwitchChange = (event) => {
     setIsChecked(event.target.checked); // Update the state with the new value
-    console.log("Switch is now:", event.target.checked);
   };
 
   const handleProfileLock = async () => {

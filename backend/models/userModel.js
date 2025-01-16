@@ -100,7 +100,7 @@ const userSchema = new mongoose.Schema({
 
   anonymousPosts: {
     type: Number,
-    default: 0,
+    default: 3,
   },
 
   profileLock: {

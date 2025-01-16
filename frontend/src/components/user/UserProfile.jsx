@@ -71,8 +71,6 @@ function UserProfile() {
   useEffect(() => {
     getProfileWithPosts()
   }, [dispatch, id]);
-
-  console.log(userInfo)
   return (
     <>
       {isLoading ? <Loader /> :

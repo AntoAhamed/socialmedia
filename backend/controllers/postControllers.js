@@ -35,6 +35,7 @@ exports.createPost = async (req, res) => {
         caption: req.body.caption,
         images: req.body.images,
         owner: req.user._id,
+        isAnonymous: req.body.isChecked,
       };
 
       const post = await Post.create(newPostData);
@@ -42,12 +43,17 @@ exports.createPost = async (req, res) => {
       const user = await User.findById(req.user._id);
 
       user.posts.unshift(post._id);
+
+      if (req.body.isChecked) {
+        user.anonymousPosts = user.anonymousPosts - 1;
+      }
 
       await user.save();
     } else {
       const newPostData = {
         caption: req.body.caption,
         owner: req.user._id,
+        isAnonymous: req.body.isChecked,
       };
 
       const post = await Post.create(newPostData);
@@ -55,6 +61,10 @@ exports.createPost = async (req, res) => {
       const user = await User.findById(req.user._id);
 
       user.posts.unshift(post._id);
+
+      if (req.body.isChecked) {
+        user.anonymousPosts = user.anonymousPosts - 1;
+      }
 
       await user.save();
     }
@@ -96,6 +106,8 @@ exports.deletePost = async (req, res) => {
       }
     }
 
+    const isAnonymous = post.isAnonymous;
+
     await post.deleteOne();
 
     const user = await User.findById(req.user._id);
@@ -103,6 +115,10 @@ exports.deletePost = async (req, res) => {
     const index = user.posts.indexOf(req.params.id);
 
     user.posts.splice(index, 1);
+
+    if(isAnonymous){
+      user.anonymousPosts = user.anonymousPosts + 1;
+    }
 
     await user.save();
 
@@ -293,7 +309,7 @@ exports.updatePost = async (req, res) => {
 
     req.body.images = imagesLinks
 
-    if (imagesLinks.length>0) {
+    if (imagesLinks.length > 0) {
       post.images = req.body.images;
       post.caption = req.body.caption;
       await post.save();
