@@ -7,9 +7,11 @@ import { createPost } from '../../features/postSlice';
 import Loader from '../layout/Loader';
 import { getMyPosts, loadUser } from '../../features/userSlice';
 import Switch from '@mui/material/Switch';
+import { styled } from '@mui/material/styles';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 function CreatePost(props) {
-  const {user} = props
+  const { user } = props
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -24,6 +26,19 @@ function CreatePost(props) {
     setIsChecked(event.target.checked); // Update the state with the new value
     //console.log(event.target.checked)
   };
+
+  // Input btn style
+  const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -97,13 +112,21 @@ function CreatePost(props) {
             <form onSubmit={handleSubmit}>
               {/* Image Input */}
               <div className='grid mb-3'>
-                <input
-                  type='file'
-                  accept='.png, .jpg, .jpeg'
-                  multiple
-                  className='bg-gray-100 p-3 rounded-t-md border-gray-500 border-b'
-                  onChange={(e) => handleImageChange(e)}
-                />
+                <Button
+                  component="label"
+                  role={undefined}
+                  variant="contained"
+                  tabIndex={-1}
+                  startIcon={<CloudUploadIcon />}
+                >
+                  Upload photos
+                  <VisuallyHiddenInput
+                    type="file"
+                    accept='.png, .jpg, .jpeg'
+                    onChange={(e) => handleImageChange(e)}
+                    multiple
+                  />
+                </Button>
               </div>
 
               {/* Caption Input */}

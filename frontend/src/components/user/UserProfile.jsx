@@ -89,11 +89,11 @@ function UserProfile() {
                   <span className='text-lg font-bold'>{userInfo?.user?.posts.length}</span>
                   <span>Posts</span>
                 </div>
-                <div className='flex flex-col items-center mx-3 hover:underline cursor-pointer' onClick={handleFollowersModalOpen}>
+                <div className='flex flex-col items-center mx-3 hover:underline cursor-pointer' onClick={(!userInfo?.user?.profileLock || isFollowed || (userInfo?.user?._id === user?._id)) ? handleFollowersModalOpen : undefined}>
                   <span className='text-lg font-bold'>{userInfo?.user?.followers.length}</span>
                   <span>Followers</span>
                 </div>
-                <div className='flex flex-col items-center hover:underline cursor-pointer' onClick={handleFollowingModalOpen}>
+                <div className='flex flex-col items-center hover:underline cursor-pointer' onClick={(!userInfo?.user?.profileLock || isFollowed || (userInfo?.user?._id === user?._id)) ? handleFollowingModalOpen : undefined}>
                   <span className='text-lg font-bold'>{userInfo?.user?.following.length}</span>
                   <span>Following</span>
                 </div>
@@ -160,7 +160,7 @@ function UserProfile() {
               <p className='lg:text-2xl text-xl font-semibold'>{userInfo?.user?.name}</p>
               <p className='lg:text-lg font-semibold'>{userInfo?.user?.bio}</p>
               <p className='font-semibold text-gray-500'>{userInfo?.user?.email}</p>
-              <p className='text-sm font-semibold text-gray-500'>Joined On : {userInfo?.user?.createdAt.substring(0, 10)} at {userInfo?.user?.createdAt.substring(11, 19)}</p>
+              <p className='text-sm font-semibold text-gray-500'>Joined On : {new Date(userInfo?.user?.createdAt).toLocaleString().replace(',',' at')}</p>
             </div>
             {userInfo?.user?._id !== user?._id ?
               <div className='grid mt-3'>

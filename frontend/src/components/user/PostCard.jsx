@@ -229,7 +229,7 @@ export default function PostCard(props) {
                   {post?.owner?.name}
                 </Link>
               </span>}
-            subheader={<span className='text-sm text-gray-500 font-semibold'>{post?.createdAt.substring(0, 10)} at {post?.createdAt.substring(11, 19)}</span>}
+            subheader={<span className='text-sm text-gray-500 font-semibold'>{new Date(post?.createdAt).toLocaleString().replace(',',' at')}</span>}
           />
           {/* Settings Menu */}
           <Menu

@@ -184,7 +184,7 @@ function Profile() {
               <p className='lg:text-lg font-semibold'>{user?.bio}</p>
               <p className='font-semibold text-gray-500'>{user?.email}</p>
               <p className='text-sm font-semibold text-gray-500'>
-                Joined On : {user?.createdAt.substring(0, 10)} at {user?.createdAt.substring(11, 19)}
+                Joined On : {new Date(user?.createdAt).toLocaleString().replace(',',' at')}
               </p>
               <p className='text-sm font-semibold text-black my-2'>{user?.profileLock ? "[Account Locked]" : ''}</p>
             </div>

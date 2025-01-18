@@ -15,7 +15,7 @@ import { useDispatch } from 'react-redux';
 import { clearNotifications, loadUser } from '../../features/userSlice';
 
 function Navbar(props) {
-  const {user} = props
+  const { user } = props
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [activeComponent, setActiveComponent] = useState("home");
@@ -72,7 +72,7 @@ function Navbar(props) {
               </li>
             </Link>
             <Link to="/notifications">
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "notifications" && 'bg-gray-200'}`} onClick={async() => {handleComponent("notifications"); await dispatch(clearNotifications()); dispatch(loadUser());}}>
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "notifications" && 'bg-gray-200'}`} onClick={async () => { handleComponent("notifications"); await dispatch(clearNotifications()); dispatch(loadUser()); }}>
                 {activeComponent === "notifications" ?
                   <NotificationsIcon fontSize={size} /> :
                   <><NotificationsOutlinedIcon fontSize={size} />{<sup className='text-lg font-semibold text-blue-700'>{user.newNotifications > 0 && user.newNotifications}</sup>}</>}
@@ -89,9 +89,22 @@ function Navbar(props) {
         </ul>
       </nav>
 
-      <div className='lg:px-36 md:px-4 bg-gray-100'>
-        <Outlet />
+      <div className="relative h-screen">
+        {/* Image as Background */}
+        <div className="absolute inset-0">
+          <img
+            src={user?.avatar?.url}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Outlet Content */}
+        <div className="relative lg:px-36 md:px-4 bg-gray-100 bg-opacity-80 h-full overflow-y-auto">
+          <Outlet />
+        </div>
       </div>
+
     </>
   )
 }

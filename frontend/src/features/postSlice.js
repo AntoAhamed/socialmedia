@@ -160,7 +160,7 @@ export const replyToComment = createAsyncThunk(
                     Authorization: `Bearer ${token}`
                 }
             }
-            const { data } = await axios.post(`${backend_url}/api/v1/post/comment/reply/${id}`, {commentId, reply}, config)
+            const { data } = await axios.post(`${backend_url}/api/v1/post/comment/reply/${id}`, { commentId, reply }, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)

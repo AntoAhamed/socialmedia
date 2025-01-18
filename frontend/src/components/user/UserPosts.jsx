@@ -4,7 +4,7 @@ import PostCard from './PostCard'
 function UserPosts(props) {
   const { posts, getPosts } = props;
 
-  const originalPosts = posts.filter(post => post.isAnonymous === false)
+  const originalPosts = posts?.filter(post => post.isAnonymous === false)
 
   return (
     <div className='grid grid-cols-1 lg:gap-6 gap-4 lg:p-6 p-3'>
