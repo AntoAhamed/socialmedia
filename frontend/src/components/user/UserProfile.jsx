@@ -4,13 +4,15 @@ import { Button, Typography, useMediaQuery } from '@mui/material'
 import UserPosts from './UserPosts'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { followUser, getUserPosts, getUserProfile, loadUser } from '../../features/userSlice';
+import { acceptRequest, followUser, getUserPosts, getUserProfile, ignoreRequest, loadUser } from '../../features/userSlice';
 import Loader from '../layout/Loader';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import LockPersonIcon from '@mui/icons-material/LockPerson';
+import PeopleIcon from '@mui/icons-material/People';
 
-function UserProfile() {
+function UserProfile(props) {
+  const { handleComponent } = props;
   const { id } = useParams();
 
   const dispatch = useDispatch();
@@ -53,9 +55,30 @@ function UserProfile() {
     (follower) => follower._id === user?._id
   );
 
+  // Calculate requested dynamically (I sent req)
+  const isRequested = userInfo?.user?.requests.some(
+    (request) => request._id === user?._id
+  );
+
+  // Calculate requests dynamically (user sent me)
+  const isRequests = user?.requests.some(
+    (request) => request._id === userInfo?.user?._id
+  );
+
   const handleFollow = async () => {
     await dispatch(followUser(id));
     await dispatch(getUserProfile(id));
+    dispatch(loadUser());
+  }
+
+  // Handle request
+  const handleRequestAccept = async () => {
+    await dispatch(acceptRequest(id));
+    dispatch(loadUser());
+  }
+
+  const handleRequestIgnore = async () => {
+    await dispatch(ignoreRequest(id));
     dispatch(loadUser());
   }
 
@@ -81,7 +104,7 @@ function UserProfile() {
                 <img
                   src={userInfo?.user?.avatar?.url || userPic}
                   alt="User"
-                  className="lg:w-32 md:w-24 w-20 lg:h-32 md:h-24 h-20 rounded-full border-2"
+                  className="lg:w-32 md:w-24 w-20 lg:h-32 md:h-24 h-20 rounded-full object-cover border-2"
                 />
               </div>
               <div className='flex justify-between items-center'>
@@ -160,20 +183,46 @@ function UserProfile() {
               <p className='lg:text-2xl text-xl font-semibold'>{userInfo?.user?.name}</p>
               <p className='lg:text-lg font-semibold'>{userInfo?.user?.bio}</p>
               <p className='font-semibold text-gray-500'>{userInfo?.user?.email}</p>
-              <p className='text-sm font-semibold text-gray-500'>Joined On : {new Date(userInfo?.user?.createdAt).toLocaleString().replace(',',' at')}</p>
+              <p className='text-sm font-semibold text-gray-500'>Joined On : {new Date(userInfo?.user?.createdAt).toLocaleString().replace(',', ' at')}</p>
             </div>
+
+
+
             {userInfo?.user?._id !== user?._id ?
               <div className='grid mt-3'>
                 {isFollowed ? <Button variant='outlined' onClick={handleFollow}>Unfollow</Button> :
-                  <Button variant='contained' onClick={handleFollow}>Follow</Button>}
+                  isRequested ?
+                    <Button variant='contained' sx={{ bgcolor: 'grey' }} onClick={handleFollow}>
+                      <PeopleIcon />
+                      <span className='ml-2'>Cancel Request</span>
+                    </Button> :
+                    isRequests ?
+                      <div className='grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1'>
+                        <div className='grid lg:mb-0 md:mb-0 mb-3'>
+                          <Button variant='contained' sx={{ bgcolor: 'grey' }} onClick={handleRequestAccept}>
+                            <PeopleIcon />
+                            <span className='ml-2'>Accept Request</span>
+                          </Button>
+                        </div>
+                        <Button variant='outlined'
+                          sx={{ color: 'gray', borderColor: 'gray', '&:hover': { borderColor: 'darkgray', backgroundColor: 'lightgray' } }}
+                          onClick={handleRequestIgnore}>
+                          <span className='ml-2'>Remove Request</span>
+                        </Button>
+                      </div>
+                      :
+                      <Button variant='contained' onClick={handleFollow}>Follow</Button>}
               </div> : <div className='text-center text-gray-500'>It's you</div>}
+
+
+
           </div>
           <div>
             {(!userInfo?.user?.profileLock || isFollowed || (userInfo?.user?._id === user?._id)) ?
-              <UserPosts posts={posts} getPosts={getPosts} /> :
+              <UserPosts handleComponent={handleComponent} posts={posts} getPosts={getPosts} /> :
               <div className='h-svh flex flex-col justify-center items-center'>
                 <div className='border-4 border-gray-300 p-4 mb-2 rounded-full'>
-                  <LockPersonIcon fontSize='large' sx={{color: 'GrayText'}}/>
+                  <LockPersonIcon fontSize='large' sx={{ color: 'GrayText' }} />
                 </div>
                 <p className='text-gray-700 select-none'>This profile is locked.</p>
               </div>}

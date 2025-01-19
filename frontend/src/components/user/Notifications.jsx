@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import userPic from '../../assets/user.png';
@@ -7,7 +7,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { IconButton } from '@mui/material';
 import { loadUser, removeNotification } from '../../features/userSlice';
 
-function Notifications() {
+function Notifications(props) {
+    const {handleComponent} = props;
     const dispatch = useDispatch();
     const { isLoading, user, error, success, message, users } = useSelector(state => state.user);
 
@@ -15,6 +16,10 @@ function Notifications() {
         await dispatch(removeNotification(id))
         dispatch(loadUser())
     }
+
+    useEffect(()=>{
+        handleComponent("notifications")
+    },[dispatch])
     return (
         <div className='p-4'>
             {isLoading ? <Loader /> :
@@ -30,7 +35,7 @@ function Notifications() {
                             />
                             <div className='flex items-center justify-between w-full mx-3'>
                                 <p>
-                                    <Link to={`/profile/${notification.user?._id}`} className='font-semibold hover:border-b-2 hover:border-black'>{notification.user?.name}</Link>
+                                    <Link to={`/profile/${notification.user?._id}`} onClick={()=>handleComponent(`profile/${notification.user?._id}`)} className='font-semibold hover:border-b-2 hover:border-black'>{notification.user?.name}</Link>
                                     <span> {notification.message}</span>
                                 </p>
                                 <p className='text-blue-700 text-sm font-semibold flex lg:flex-row md:flex-row flex-col'>

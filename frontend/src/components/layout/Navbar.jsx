@@ -10,26 +10,22 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+import PeopleIcon from '@mui/icons-material/People';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import { useMediaQuery } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { clearNotifications, loadUser } from '../../features/userSlice';
+import { clearNotifications, clearRequests, loadUser } from '../../features/userSlice';
 
 function Navbar(props) {
-  const { user } = props
+  const { user, activeComponent, setActiveComponent, handleComponent } = props
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [activeComponent, setActiveComponent] = useState("home");
   const isSmall = useMediaQuery("(max-width: 360px)");
   const isMedium = useMediaQuery("(max-width: 720px)");
 
   let size = "large";
   if (isSmall) size = "small";
   else if (isMedium) size = "medium";
-
-  const handleComponent = (active) => {
-    setActiveComponent(active)
-    localStorage.setItem('active', active)
-  }
 
   useEffect(() => {
     const active = localStorage.getItem('active')
@@ -40,7 +36,7 @@ function Navbar(props) {
     } else {
       localStorage.setItem('active', "home")
     }
-  }, [])
+  }, [dispatch])
 
   return (
     <>
@@ -57,6 +53,13 @@ function Navbar(props) {
                   <HomeOutlinedIcon fontSize={size} />}
               </li>
             </Link>
+            <Link to="/friend-requests">
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "friend-requests" && 'bg-gray-200'}`} onClick={async () => { handleComponent("friend-requests"); await dispatch(clearRequests()); dispatch(loadUser()); }}>
+                {activeComponent === "friend-requests" ?
+                  <PeopleIcon fontSize={size} /> :
+                  <><PeopleOutlineIcon fontSize={size} />{<sup className='lg:text-lg font-semibold text-blue-700'>{user.newRequests > 0 && user.newRequests}</sup>}</>}
+              </li>
+            </Link>
             <Link to="/search">
               <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "search" && 'bg-gray-200'}`} onClick={() => handleComponent("search")}>
                 {activeComponent === "search" ?
@@ -64,18 +67,11 @@ function Navbar(props) {
                   <SearchOutlinedIcon fontSize={size} />}
               </li>
             </Link>
-            <Link to="/create-post">
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "create-post" && 'bg-gray-200'}`} onClick={() => handleComponent("create-post")}>
-                {activeComponent === "create-post" ?
-                  <AddIcon fontSize={size} /> :
-                  <AddOutlinedIcon fontSize={size} />}
-              </li>
-            </Link>
             <Link to="/notifications">
               <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "notifications" && 'bg-gray-200'}`} onClick={async () => { handleComponent("notifications"); await dispatch(clearNotifications()); dispatch(loadUser()); }}>
                 {activeComponent === "notifications" ?
                   <NotificationsIcon fontSize={size} /> :
-                  <><NotificationsOutlinedIcon fontSize={size} />{<sup className='text-lg font-semibold text-blue-700'>{user.newNotifications > 0 && user.newNotifications}</sup>}</>}
+                  <><NotificationsOutlinedIcon fontSize={size} />{<sup className='lg:text-lg font-semibold text-blue-700'>{user.newNotifications > 0 && user.newNotifications}</sup>}</>}
               </li>
             </Link>
             <Link to="/profile">

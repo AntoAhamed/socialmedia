@@ -16,14 +16,22 @@ import ForgotPassword from './components/user/ForgotPassword';
 import ResetPassword from './components/user/ResetPassword';
 import UserProfile from './components/user/UserProfile';
 import EditPost from './components/post/EditPost';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from './features/userSlice';
 import SavedItems from './components/user/SavedItems';
+import FriendRequests from './components/user/FriendRequests';
 
 function App() {
   const dispatch = useDispatch();
   const { user, isAuth } = useSelector(state => state.user);
+
+  //To handle active components
+  const [activeComponent, setActiveComponent] = useState("home");
+  const handleComponent = (active) => {
+    setActiveComponent(active)
+    localStorage.setItem('active', active)
+  }
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -36,17 +44,18 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={isAuth && <Navbar user={user} />}>
-            <Route index element={isAuth ? <Home /> : <Login />} />
-            <Route path="signup" element={isAuth ? <Home /> : <Signup />} />
-            <Route path="home" element={isAuth ? <Home /> : <Login />} />
+          <Route path="/" element={isAuth && <Navbar user={user} activeComponent={activeComponent} setActiveComponent={setActiveComponent} handleComponent={handleComponent} />}>
+            <Route index element={isAuth ? <Home handleComponent={handleComponent} user={user} /> : <Login />} />
+            <Route path="signup" element={isAuth ? <Home handleComponent={handleComponent} user={user} /> : <Signup />} />
+            <Route path="home" element={isAuth ? <Home handleComponent={handleComponent} user={user} /> : <Login />} />
             <Route path="create-post" element={isAuth ? <CreatePost user={user} /> : <Login />} />
-            <Route path="saved-items" element={isAuth ? <SavedItems saves={user?.saves} /> : <Login />} />
+            <Route path="friend-requests" element={isAuth ? <FriendRequests handleComponent={handleComponent} /> : <Login />} />
+            <Route path="saved-items" element={isAuth ? <SavedItems /> : <Login />} />
             <Route path="edit-post/:id" element={isAuth ? <EditPost user={user} /> : <Login />} />
-            <Route path="search" element={isAuth ? <Search /> : <Login />} />
-            <Route path="notifications" element={isAuth ? <Notifications /> : <Login />} />
-            <Route path="profile" element={isAuth ? <Profile /> : <Login />} />
-            <Route path="profile/:id" element={isAuth ? <UserProfile /> : <Login />} />
+            <Route path="search" element={isAuth ? <Search handleComponent={handleComponent} /> : <Login />} />
+            <Route path="notifications" element={isAuth ? <Notifications handleComponent={handleComponent} /> : <Login />} />
+            <Route path="profile" element={isAuth ? <Profile handleComponent={handleComponent} /> : <Login />} />
+            <Route path="profile/:id" element={isAuth ? <UserProfile handleComponent={handleComponent} /> : <Login />} />
             <Route path="update-profile" element={isAuth ? <UpdateProfile /> : <Login />} />
             <Route path="update-password" element={isAuth ? <UpdatePassword /> : <Login />} />
             <Route path="forgot-password" element={!isAuth ? <ForgotPassword /> : <NoPage />} />

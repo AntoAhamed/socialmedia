@@ -138,7 +138,7 @@ exports.logout = async (req, res) => {
 exports.myProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).populate(
-      "posts followers following notifications.user saves"
+      "posts followers following notifications.user saves requests requested"
     );
 
     res.status(200).json({
@@ -384,26 +384,170 @@ exports.followUser = async (req, res) => {
         message: "User Unfollowed",
       });
     } else {
-      // Notification for follows
-      userToFollow.notifications.unshift({
-        type: "follow",
-        message: "started following you.",
-        user: req.user._id,
-      })
+      if (!userToFollow.profileLock) {
+        // Notification for follows
+        userToFollow.notifications.unshift({
+          type: "follow",
+          message: "started following you.",
+          user: req.user._id,
+        })
 
-      userToFollow.newNotifications = userToFollow.newNotifications + 1;
+        userToFollow.newNotifications = userToFollow.newNotifications + 1;
 
-      loggedInUser.following.push(userToFollow._id);
-      userToFollow.followers.push(loggedInUser._id);
+        loggedInUser.following.push(userToFollow._id);
+        userToFollow.followers.push(loggedInUser._id);
 
-      await loggedInUser.save();
-      await userToFollow.save();
+        await loggedInUser.save();
+        await userToFollow.save();
 
-      res.status(200).json({
-        success: true,
-        message: "User followed",
+        res.status(200).json({
+          success: true,
+          message: "User followed",
+        });
+      } else {
+        if (loggedInUser.requested.includes(userToFollow._id)) {
+          const indexRequested = loggedInUser.requested.indexOf(userToFollow._id);
+          const indexRequests = userToFollow.requests.indexOf(loggedInUser._id);
+
+          loggedInUser.requested.splice(indexRequested, 1);
+          userToFollow.requests.splice(indexRequests, 1);
+
+          await loggedInUser.save();
+          await userToFollow.save();
+
+          res.status(200).json({
+            success: true,
+            message: "Requeste canceled",
+          });
+        } else {
+          userToFollow.newRequests = userToFollow.newRequests + 1;
+
+          loggedInUser.requested.push(userToFollow._id);
+          userToFollow.requests.push(loggedInUser._id);
+
+          await loggedInUser.save();
+          await userToFollow.save();
+
+          res.status(200).json({
+            success: true,
+            message: "Request sent",
+          });
+        }
+      }
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// Accept Follow Request
+exports.acceptFollowRequest = async (req, res) => {
+  try {
+    const whoSentFollowReq = await User.findById(req.params.id);
+    const loggedInUser = await User.findById(req.user._id);
+
+    if (!whoSentFollowReq) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
       });
     }
+
+    // Notification for follows
+    whoSentFollowReq.notifications.unshift({
+      type: "follow",
+      message: "started following you.",
+      user: req.user._id,
+    })
+
+    loggedInUser.notifications.unshift({
+      type: "follow",
+      message: "started following you.",
+      user: req.params.id,
+    })
+
+    whoSentFollowReq.newNotifications = whoSentFollowReq.newNotifications + 1;
+    loggedInUser.newNotifications = loggedInUser.newNotifications + 1;
+
+    //Remove reqs
+    const indexRequested = whoSentFollowReq.requested.indexOf(loggedInUser._id);
+    const indexRequests = loggedInUser.requests.indexOf(whoSentFollowReq._id);
+
+    loggedInUser.requests.splice(indexRequests, 1);
+    whoSentFollowReq.requested.splice(indexRequested, 1);
+
+    // And follow each other
+    loggedInUser.followers.push(whoSentFollowReq._id);
+    loggedInUser.following.push(whoSentFollowReq._id);
+    whoSentFollowReq.followers.push(loggedInUser._id);
+    whoSentFollowReq.following.push(loggedInUser._id);
+
+    await loggedInUser.save();
+    await whoSentFollowReq.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Request accepted",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// Ignore Follow Request
+exports.ignoreFollowRequest = async (req, res) => {
+  try {
+    const whoSentFollowReq = await User.findById(req.params.id);
+    const loggedInUser = await User.findById(req.user._id);
+
+    if (!whoSentFollowReq) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    //Remove reqs
+    const indexRequested = whoSentFollowReq.requested.indexOf(loggedInUser._id);
+    const indexRequests = loggedInUser.requests.indexOf(whoSentFollowReq._id);
+
+    loggedInUser.requests.splice(indexRequests, 1);
+    whoSentFollowReq.requested.splice(indexRequested, 1);
+
+    await loggedInUser.save();
+    await whoSentFollowReq.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Request removed",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// Clear Requests
+exports.clearRequests = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    user.newRequests = 0;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Request Cleared Successfully",
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -419,6 +563,8 @@ exports.deleteMyProfile = async (req, res) => {
     const posts = user.posts;
     const followers = user.followers;
     const following = user.following;
+    const requests = user.requests;
+    const requested = user.requested;
     const userId = user._id;
 
     // Removing Avatar from cloudinary
@@ -463,6 +609,24 @@ exports.deleteMyProfile = async (req, res) => {
       await follows.save();
     }
 
+    // Removing User from Requests Requested
+    for (let i = 0; i < requests.length; i++) {
+      const request = await User.findById(requests[i]);
+
+      const index = request.requested.indexOf(userId);
+      request.requested.splice(index, 1);
+      await request.save();
+    }
+
+    // Removing User from Requested's Requests
+    for (let i = 0; i < requested.length; i++) {
+      const request = await User.findById(requested[i]);
+
+      const index = request.requests.indexOf(userId);
+      request.requests.splice(index, 1);
+      await request.save();
+    }
+
     // removing all comments of the user from all posts
     const allPosts = await Post.find();
 
@@ -505,7 +669,7 @@ exports.deleteMyProfile = async (req, res) => {
 exports.getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).populate(
-      "posts followers following saves"
+      "posts followers following saves requests requested"
     );
 
     if (!user) {

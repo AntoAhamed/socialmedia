@@ -219,6 +219,56 @@ export const followUser = createAsyncThunk(
     }
 )
 
+export const acceptRequest = createAsyncThunk(
+    "user/acceptRequest",
+    async (id, { rejectWithValue }) => {
+        try {
+            const token = JSON.parse(localStorage.getItem('token'))
+            const config = {
+                headers: { Authorization: `Bearer ${token}` }
+            };
+            const { data } = await axios.get(`${backend_url}/api/v1/request/accept/${id}`, config)
+            return data
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const ignoreRequest = createAsyncThunk(
+    "user/ignoreRequest",
+    async (id, { rejectWithValue }) => {
+        try {
+            const token = JSON.parse(localStorage.getItem('token'))
+            const config = {
+                headers: { Authorization: `Bearer ${token}` }
+            };
+            const { data } = await axios.get(`${backend_url}/api/v1/request/ignore/${id}`, config)
+            return data
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const clearRequests = createAsyncThunk(
+    "user/clearRequests",
+    async (_, { rejectWithValue }) => {
+        try {
+            const token = JSON.parse(localStorage.getItem('token'))
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const { data } = await axios.put(`${backend_url}/api/v1/request/clear`, {}, config)
+            return data
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 export const removeNotification = createAsyncThunk(
     "user/removeNotification",
     async (id, { rejectWithValue }) => {
@@ -500,6 +550,48 @@ const userSlice = createSlice({
                 state.message = action.payload.message
             })
             .addCase(followUser.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = action.payload
+            })
+            //Accept Request
+            .addCase(acceptRequest.pending, (state) => {
+                state.isLoading = true
+                state.error = null
+            })
+            .addCase(acceptRequest.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.success = action.payload.success
+                state.message = action.payload.message
+            })
+            .addCase(acceptRequest.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = action.payload
+            })
+            //Ignore Request
+            .addCase(ignoreRequest.pending, (state) => {
+                state.isLoading = true
+                state.error = null
+            })
+            .addCase(ignoreRequest.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.success = action.payload.success
+                state.message = action.payload.message
+            })
+            .addCase(ignoreRequest.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = action.payload
+            })
+            //Clear Requests
+            .addCase(clearRequests.pending, (state) => {
+                state.isLoading = true
+                state.error = null
+            })
+            .addCase(clearRequests.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.success = action.payload.success
+                state.message = action.payload.message
+            })
+            .addCase(clearRequests.rejected, (state, action) => {
                 state.isLoading = false
                 state.error = action.payload
             })

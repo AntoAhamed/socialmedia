@@ -7,7 +7,8 @@ import { getAllUsers } from '../../features/userSlice';
 import userPic from '../../assets/user.png';
 import Loader from '../layout/Loader';
 
-function Search() {
+function Search(props) {
+  const {handleComponent} = props;
   const dispatch = useDispatch();
   const { isLoading, user, error, success, message, users } = useSelector(state => state.user);
 
@@ -18,6 +19,10 @@ function Search() {
 
     dispatch(getAllUsers(name));
   }
+
+  useEffect(()=>{
+    handleComponent("search")
+  },[dispatch])
   return (
     <>
       {isLoading ? <Loader /> :
@@ -40,7 +45,7 @@ function Search() {
 
             <div className='border-t pt-3'>
               {users && users.map(user => (
-                <Link to={`/profile/${user._id}`} key={user._id}>
+                <Link to={`/profile/${user._id}`} key={user._id} onClick={()=>handleComponent(`profile/${user._id}`)}>
                   <div className='border p-3 flex items-center'>
                     <img
                       src={user.avatar?.url || userPic}

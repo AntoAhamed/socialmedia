@@ -15,7 +15,8 @@ import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import LockResetIcon from '@mui/icons-material/LockReset';
 import Switch from '@mui/material/Switch';
 
-function Profile() {
+function Profile(props) {
+  const { handleComponent } = props;
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -92,6 +93,7 @@ function Profile() {
   }
 
   useEffect(() => {
+    handleComponent("profile")
     getPosts();
   }, [dispatch]);
   return (
@@ -104,7 +106,7 @@ function Profile() {
                 <img
                   src={user?.avatar?.url || userPic}
                   alt="User"
-                  className="lg:w-32 md:w-24 w-20 lg:h-32 md:h-24 h-20 rounded-full border-2"
+                  className="lg:w-32 md:w-24 w-20 lg:h-32 md:h-24 h-20 rounded-full object-cover border-2"
                 />
               </div>
               <div className='flex justify-between items-center'>
@@ -143,7 +145,7 @@ function Profile() {
                         className="w-12 h-12 rounded-full object-cover"
                       />
                       <div className='mx-3'>
-                        <Link to={`/profile/${follower._id}`} className='font-semibold'>{follower.name}</Link>
+                        <Link to={`/profile/${follower._id}`} onClick={() => handleComponent(`profile/${follower._id}`)} className='font-semibold'>{follower.name}</Link>
                       </div>
                     </div>
                   </div>
@@ -171,7 +173,7 @@ function Profile() {
                         className="w-12 h-12 rounded-full object-cover"
                       />
                       <div className='mx-3'>
-                        <Link to={`/profile/${following._id}`} className='font-semibold'>{following.name}</Link>
+                        <Link to={`/profile/${following._id}`} onClick={() => handleComponent(`profile/${following._id}`)} className='font-semibold'>{following.name}</Link>
                       </div>
                     </div>
                   </div>
@@ -184,13 +186,13 @@ function Profile() {
               <p className='lg:text-lg font-semibold'>{user?.bio}</p>
               <p className='font-semibold text-gray-500'>{user?.email}</p>
               <p className='text-sm font-semibold text-gray-500'>
-                Joined On : {new Date(user?.createdAt).toLocaleString().replace(',',' at')}
+                Joined On : {new Date(user?.createdAt).toLocaleString().replace(',', ' at')}
               </p>
               <p className='text-sm font-semibold text-black my-2'>{user?.profileLock ? "[Account Locked]" : ''}</p>
             </div>
             <div className='grid grid-cols-2'>
               <div className='grid lg:mr-3 md:mr-2 mr-1'>
-                <Button variant='contained' onClick={() => navigate('/update-profile')}>Edit Profile</Button>
+                <Button variant='contained' onClick={() => { handleComponent('update-profile'); navigate('/update-profile'); }}>Edit Profile</Button>
               </div>
               <div className='grid lg:grid-cols-12 md:grid-cols-8 grid-cols-4 lg:ml-3 md:ml-2 ml-1'>
                 <div className='grid lg:col-span-11 md:col-span-7 col-span-3'>
@@ -210,6 +212,7 @@ function Profile() {
                         //handleClose();
                         await dispatch(loadUser());
                         //Save func
+                        handleComponent('saved-items');
                         navigate('/saved-items');
                       }}
                     >
@@ -257,7 +260,13 @@ function Profile() {
             </div>
           </div>
           <div>
-            <MyPosts posts={posts} getPosts={getPosts} />
+            <Link to='/create-post' onClick={() => handleComponent("create-post")}>
+              <div className='flex items-center border-2 rounded-md p-3 lg:mx-5 mx-3 lg:mt-5 mt-3 bg-white hover:bg-gray-100 cursor-pointer border-gray-300'>
+                <img src={user?.avatar?.url || userPic} alt='User' className='w-12 h-12 rounded-full object-cover mr-3' />
+                <p className='text-gray-700'>Share your thoughts...</p>
+              </div>
+            </Link>
+            <MyPosts handleComponent={handleComponent} posts={posts} getPosts={getPosts} />
           </div>
         </div>}
     </>

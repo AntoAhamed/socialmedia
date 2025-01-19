@@ -1,9 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import img from '../../assets/img.jpg'
+import { useDispatch, useSelector } from 'react-redux';
 
-function SavedItems(props) {
-  const { saves } = props;
+function SavedItems() {
+  const dispatch = useDispatch();
+  const { isLoading, user, error, success, message, users } = useSelector(state => state.user);
+
+  const saves = user.saves;
   return (
     <div className='p-4'>
       <div className={`lg:mx-28 lg:${saves.length > 10 ? 'h-full' : 'h-svh'} md:${saves.length > 7 ? 'h-full' : 'h-svh'} ${saves.length > 5 ? 'h-full' : 'h-svh'} p-4 bg-white`}>

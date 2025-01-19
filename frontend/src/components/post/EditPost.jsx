@@ -73,6 +73,10 @@ function EditPost() {
             console.log(err);
         }
     }
+
+    useEffect(()=>{
+        
+    },[])
     return (
         <>
             {isLoading ? <Loader /> :

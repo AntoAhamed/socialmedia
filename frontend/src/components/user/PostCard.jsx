@@ -40,7 +40,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import Anonymous from '../../assets/anonymous.png'
 
 export default function PostCard(props) {
-  const { post, editAndDelete, getPosts } = props
+  const { handleComponent, post, editAndDelete, getPosts } = props
 
   const naigate = useNavigate();
 
@@ -209,12 +209,12 @@ export default function PostCard(props) {
               <img
                 src={Anonymous}
                 alt="Anonymous"
-                className="w-12 h-12 rounded-full"
+                className="w-12 h-12 rounded-full object-cover"
               /> :
               <img
                 src={post?.owner?.avatar?.url || userPic}
                 alt="User"
-                className="w-12 h-12 rounded-full"
+                className="w-12 h-12 rounded-full object-cover"
               />
             }
             action={editAndDelete &&
@@ -225,7 +225,7 @@ export default function PostCard(props) {
             title={post.isAnonymous ?
               <span className='text-lg font-semibold'>Anonymous</span> :
               <span className='text-lg font-semibold'>
-                <Link to={`/profile/${post?.owner?._id}`}>
+                <Link to={`/profile/${post?.owner?._id}`} onClick={()=>handleComponent(`profile/${post?.owner?._id}`)}>
                   {post?.owner?.name}
                 </Link>
               </span>}
@@ -240,6 +240,7 @@ export default function PostCard(props) {
             <MenuItem
               onClick={() => {
                 handleClose();
+                handleComponent(`edit-post/${post._id}`)
                 naigate(`/edit-post/${post._id}`);
               }}
             >
@@ -305,14 +306,14 @@ export default function PostCard(props) {
           </CardContent>
           {/* Card likes and comments summery */}
           <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography variant="div" color="text.secondary" sx={{ marginRight: '10px', cursor: 'pointer' }} onClick={handleLikesModalOpen}>
+            <Typography variant="div" color="text.secondary" sx={{ cursor: 'pointer' }} onClick={handleLikesModalOpen}>
               {post?.likes.length} reacts
             </Typography>
             <Typography>
-              <Typography variant="div" color="text.secondary" sx={{ marginRight: '10px', cursor: 'pointer' }} onClick={handleCommentsModalOpen}>
+              <Typography variant="div" color="text.secondary" sx={{ cursor: 'pointer' }} onClick={handleCommentsModalOpen}>
                 {post?.comments.length} comments
               </Typography>
-              {!post.isAnonymous && <Typography variant="div" color="text.secondary" sx={{ cursor: 'pointer' }}>
+              {!post.isAnonymous && <Typography variant="div" color="text.secondary" sx={{ marginLeft: '10px', cursor: 'pointer' }}>
                 {post?.saves.length} saves
               </Typography>}
             </Typography>
@@ -351,7 +352,7 @@ export default function PostCard(props) {
                       className="w-12 h-12 rounded-full object-cover"
                     />
                     <div className='mx-3'>
-                      <Link to={`/profile/${like._id}`} className='font-semibold'>{like.name}</Link>
+                      <Link to={`/profile/${like._id}`} onClick={()=>handleComponent(`profile/${like._id}`)} className='font-semibold'>{like.name}</Link>
                     </div>
                   </div>
                 </div>
@@ -382,7 +383,7 @@ export default function PostCard(props) {
                       />
                       <div className='mx-3'>
                         <div>
-                          <Link to={`/profile/${comment.user?._id}`} className='font-semibold'>{comment.user?.name}</Link>
+                          <Link to={`/profile/${comment.user?._id}`} onClick={()=>handleComponent(`profile/${comment.user?._id}`)} className='font-semibold'>{comment.user?.name}</Link>
                           <span className='font-semibold text-gray-500' style={{ fontSize: '12px' }}> {comment.createdAt.substring(8, 10)}-{comment.createdAt.substring(5, 7)} at {comment.createdAt.substring(11, 16)}</span>
                         </div>
                         <p>{comment.comment}</p>
@@ -432,7 +433,7 @@ export default function PostCard(props) {
                             />
                             <div className='mx-3'>
                               <div>
-                                <Link to={`/profile/${reply.user?._id}`} className='font-semibold'>{reply.user?.name}</Link>
+                                <Link to={`/profile/${reply.user?._id}`} onClick={()=>handleComponent(`profile/${reply.user?._id}`)} className='font-semibold'>{reply.user?.name}</Link>
                                 <span className='font-semibold text-gray-500' style={{ fontSize: '10px' }}> {comment.createdAt.substring(8, 10)}-{comment.createdAt.substring(5, 7)} at {comment.createdAt.substring(11, 16)}</span>
                               </div>
                               <p className='text-sm'>{reply.reply}</p>
@@ -508,7 +509,7 @@ export default function PostCard(props) {
             <img
               src={user?.avatar?.url || userPic}
               alt="User"
-              className="w-12 h-12 rounded-full"
+              className="w-12 h-12 rounded-full object-cover"
             />
             <input type='text' placeholder='Add a comment...(Upto 100 latters)' value={comment} onChange={(e) => setComment(e.target.value)} className='w-full p-2 mx-2 bg-gray-100 rounded-full focus:outline-none' maxLength={100} />
             <IconButton aria-label="send" disabled={comment === ''} onClick={handleComment} >

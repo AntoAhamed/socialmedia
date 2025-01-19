@@ -53,6 +53,26 @@ const userSchema = new mongoose.Schema({
     },
   ],
 
+  requests: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+
+  //Request sent
+  requested: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+
+  newRequests: {
+    type: Number,
+    default: 0,
+  },
+
   following: [
     {
       type: mongoose.Schema.Types.ObjectId,
