@@ -200,325 +200,321 @@ export default function PostCard(props) {
     }
   }, [post]);
   return (
-    <>
-      {isLoading ? <Loader /> :
-        <Card sx={{ width: '100%', justifySelf: 'center', border: '1px solid #bfbfbf' }}>
-          {/* Card Header */}
-          <CardHeader
-            avatar={post.isAnonymous ?
-              <img
-                src={Anonymous}
-                alt="Anonymous"
-                className="w-12 h-12 rounded-full object-cover"
-              /> :
-              <img
-                src={post?.owner?.avatar?.url || userPic}
-                alt="User"
-                className="w-12 h-12 rounded-full object-cover"
-              />
-            }
-            action={editAndDelete &&
-              <IconButton aria-label="settings" onClick={handleClick}>
-                <MoreVertIcon />
-              </IconButton>
-            }
-            title={post.isAnonymous ?
-              <span className='text-lg font-semibold'>Anonymous</span> :
-              <span className='text-lg font-semibold'>
-                <Link to={`/profile/${post?.owner?._id}`} onClick={()=>handleComponent(`profile/${post?.owner?._id}`)}>
-                  {post?.owner?.name}
-                </Link>
-              </span>}
-            subheader={<span className='text-sm text-gray-500 font-semibold'>{new Date(post?.createdAt).toLocaleString().replace(',',' at')}</span>}
+    <Card sx={{ width: '100%', justifySelf: 'center', border: '1px solid #bfbfbf' }}>
+      {/* Card Header */}
+      <CardHeader
+        avatar={post.isAnonymous ?
+          <img
+            src={Anonymous}
+            alt="Anonymous"
+            className="w-12 h-12 rounded-full object-cover"
+          /> :
+          <img
+            src={post?.owner?.avatar?.url || userPic}
+            alt="User"
+            className="w-12 h-12 rounded-full object-cover"
           />
-          {/* Settings Menu */}
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem
-              onClick={() => {
-                handleClose();
-                handleComponent(`edit-post/${post._id}`)
-                naigate(`/edit-post/${post._id}`);
-              }}
+        }
+        action={editAndDelete &&
+          <IconButton aria-label="settings" onClick={handleClick}>
+            <MoreVertIcon />
+          </IconButton>
+        }
+        title={post.isAnonymous ?
+          <span className='text-lg font-semibold'>Anonymous</span> :
+          <span className='text-lg font-semibold'>
+            <Link to={`/profile/${post?.owner?._id}`} onClick={() => handleComponent(`profile/${post?.owner?._id}`)}>
+              {post?.owner?.name}
+            </Link>
+          </span>}
+        subheader={<span className='text-sm text-gray-500 font-semibold'>{new Date(post?.createdAt).toLocaleString().replace(',', ' at')}</span>}
+      />
+      {/* Settings Menu */}
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            handleComponent(`edit-post/${post._id}`)
+            naigate(`/edit-post/${post._id}`);
+          }}
+        >
+          <EditNoteIcon />
+          <span className='text-blue-500'>Edit</span>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            handleDelete();
+          }}
+        >
+          <DeleteIcon />
+          <span className='text-red-500'>Delete</span>
+        </MenuItem>
+      </Menu>
+      {/* Card Media */}
+      {(post.images && post.images.length > 0) && <Carousel
+        className="carousel-container"
+        autoPlay
+        infiniteLoop
+        showThumbs={false}
+        renderArrowPrev={(onClickHandler, hasPrev, label) =>
+          hasPrev && (
+            <button
+              type="button"
+              onClick={onClickHandler}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-80 text-white rounded-full w-10 h-10 flex items-center justify-center z-10"
+              aria-label={label}
             >
-              <EditNoteIcon />
-              <span className='text-blue-500'>Edit</span>
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                handleClose();
-                handleDelete();
-              }}
+              ‹
+            </button>
+          )
+        }
+        renderArrowNext={(onClickHandler, hasNext, label) =>
+          hasNext && (
+            <button
+              type="button"
+              onClick={onClickHandler}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-80 text-white rounded-full w-10 h-10 flex items-center justify-center z-10"
+              aria-label={label}
             >
-              <DeleteIcon />
-              <span className='text-red-500'>Delete</span>
-            </MenuItem>
-          </Menu>
-          {/* Card Media */}
-          {(post.images && post.images.length > 0) && <Carousel
-            className="carousel-container"
-            autoPlay
-            infiniteLoop
-            showThumbs={false}
-            renderArrowPrev={(onClickHandler, hasPrev, label) =>
-              hasPrev && (
-                <button
-                  type="button"
-                  onClick={onClickHandler}
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-80 text-white rounded-full w-10 h-10 flex items-center justify-center z-10"
-                  aria-label={label}
-                >
-                  ‹
-                </button>
-              )
-            }
-            renderArrowNext={(onClickHandler, hasNext, label) =>
-              hasNext && (
-                <button
-                  type="button"
-                  onClick={onClickHandler}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-80 text-white rounded-full w-10 h-10 flex items-center justify-center z-10"
-                  aria-label={label}
-                >
-                  ›
-                </button>
-              )
-            }
-          >
-            {post.images.map((image, index) => (
-              <CardMedia
-                key={index}
-                component="img"
-                image={image.url}
-                alt="Post image"
-                sx={{ height: 300, objectFit: 'contain', backgroundColor: '#f0f0f0' }}
-              />
-            ))}
-          </Carousel>}
-          {/* Card Content */}
-          <CardContent>
-            <Typography variant="body1">
-              {post?.caption}
-            </Typography>
-          </CardContent>
-          {/* Card likes and comments summery */}
-          <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography variant="div" color="text.secondary" sx={{ cursor: 'pointer' }} onClick={handleLikesModalOpen}>
-              {post?.likes.length} reacts
-            </Typography>
-            <Typography>
-              <Typography variant="div" color="text.secondary" sx={{ cursor: 'pointer' }} onClick={handleCommentsModalOpen}>
-                {post?.comments.length} comments
-              </Typography>
-              {!post.isAnonymous && <Typography variant="div" color="text.secondary" sx={{ marginLeft: '10px', cursor: 'pointer' }}>
-                {post?.saves.length} saves
-              </Typography>}
-            </Typography>
-          </CardContent>
-          {/* Card Actions */}
-          <CardActions disableSpacing sx={{ display: 'flex', justifyContent: 'space-around', borderTop: '1px solid #bfbfbf' }}>
-            <IconButton aria-label="add to favorites" onClick={handleLike}>
-              {!liked ? <FavoriteBorderIcon /> :
-                <FavoriteIcon sx={{ color: 'red' }} />}
-            </IconButton>
-            <IconButton aria-label="add to favorites" onClick={handleCommentsModalOpen}>
-              <CommentIcon />
-            </IconButton>
-            {!post.isAnonymous && <IconButton aria-label="share" onClick={handleSave}>
-              {!saved ? <BookmarkBorderOutlinedIcon /> :
-                <BookmarkOutlinedIcon sx={{ color: '#0066ff' }} />}
-            </IconButton>}
-          </CardActions>
-          {/* Likes Modal */}
-          <Modal
-            open={openLikes}
-            onClose={handleLikesModalClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ marginBottom: '10px' }}>
-                Likes
-              </Typography>
-              {post?.likes.map((like, index) => (
-                <div className='flex justify-between items-center border-b py-3' key={index}>
-                  <div className='flex items-center'>
-                    <img
-                      src={like.avatar?.url || userPic}
-                      alt="User"
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                    <div className='mx-3'>
-                      <Link to={`/profile/${like._id}`} onClick={()=>handleComponent(`profile/${like._id}`)} className='font-semibold'>{like.name}</Link>
+              ›
+            </button>
+          )
+        }
+      >
+        {post.images.map((image, index) => (
+          <CardMedia
+            key={index}
+            component="img"
+            image={image.url}
+            alt="Post image"
+            sx={{ height: 300, objectFit: 'contain', backgroundColor: '#f0f0f0' }}
+          />
+        ))}
+      </Carousel>}
+      {/* Card Content */}
+      <CardContent>
+        <Typography variant="body1">
+          {post?.caption}
+        </Typography>
+      </CardContent>
+      {/* Card likes and comments summery */}
+      <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography variant="div" color="text.secondary" sx={{ cursor: 'pointer' }} onClick={handleLikesModalOpen}>
+          {post?.likes.length} reacts
+        </Typography>
+        <Typography>
+          <Typography variant="div" color="text.secondary" sx={{ cursor: 'pointer' }} onClick={handleCommentsModalOpen}>
+            {post?.comments.length} comments
+          </Typography>
+          {!post.isAnonymous && <Typography variant="div" color="text.secondary" sx={{ marginLeft: '10px', cursor: 'pointer' }}>
+            {post?.saves.length} saves
+          </Typography>}
+        </Typography>
+      </CardContent>
+      {/* Card Actions */}
+      <CardActions disableSpacing sx={{ display: 'flex', justifyContent: 'space-around', borderTop: '1px solid #bfbfbf' }}>
+        <IconButton aria-label="add to favorites" onClick={handleLike}>
+          {!liked ? <FavoriteBorderIcon /> :
+            <FavoriteIcon sx={{ color: 'red' }} />}
+        </IconButton>
+        <IconButton aria-label="add to favorites" onClick={handleCommentsModalOpen}>
+          <CommentIcon />
+        </IconButton>
+        {!post.isAnonymous && <IconButton aria-label="share" onClick={handleSave}>
+          {!saved ? <BookmarkBorderOutlinedIcon /> :
+            <BookmarkOutlinedIcon sx={{ color: '#0066ff' }} />}
+        </IconButton>}
+      </CardActions>
+      {/* Likes Modal */}
+      <Modal
+        open={openLikes}
+        onClose={handleLikesModalClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ marginBottom: '10px' }}>
+            Likes
+          </Typography>
+          {post?.likes.map((like, index) => (
+            <div className='flex justify-between items-center border-b py-3' key={index}>
+              <div className='flex items-center'>
+                <img
+                  src={like.avatar?.url || userPic}
+                  alt="User"
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <div className='mx-3'>
+                  <Link to={`/profile/${like._id}`} onClick={() => handleComponent(`profile/${like._id}`)} className='font-semibold'>{like.name}</Link>
+                </div>
+              </div>
+            </div>
+          ))}
+        </Box>
+      </Modal>
+      {/* Comments Modal */}
+      <Modal
+        open={openComments}
+        onClose={handleCommentsModalClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ marginBottom: '10px' }}>
+            Comments
+          </Typography>
+
+          {/*Comment*/}
+          {post?.comments.map((comment, index) => (
+            <div key={index} className='border-b py-2'>
+              <div className='flex justify-between items-center'>
+                <div className='flex items-center'>
+                  <img
+                    src={comment.user?.avatar?.url || userPic}
+                    alt="User"
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                  <div className='mx-3'>
+                    <div>
+                      <Link to={`/profile/${comment.user?._id}`} onClick={() => handleComponent(`profile/${comment.user?._id}`)} className='font-semibold'>{comment.user?.name}</Link>
+                      <span className='font-semibold text-gray-500' style={{ fontSize: '12px' }}> {comment.createdAt.substring(8, 10)}-{comment.createdAt.substring(5, 7)} at {comment.createdAt.substring(11, 16)}</span>
                     </div>
+                    <p>{comment.comment}</p>
                   </div>
                 </div>
-              ))}
-            </Box>
-          </Modal>
-          {/* Comments Modal */}
-          <Modal
-            open={openComments}
-            onClose={handleCommentsModalClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ marginBottom: '10px' }}>
-                Comments
-              </Typography>
+                <div className='flex flex-col justify-center items-center'>
+                  {comment.user?._id === user?._id &&
+                    <div>
+                      <IconButton aria-label="settings" onClick={handleCommentClick}>
+                        <MoreVertIcon fontSize='small' />
+                      </IconButton>
 
-              {/*Comment*/}
-              {post?.comments.map((comment, index) => (
-                <div key={index} className='border-b py-2'>
-                  <div className='flex justify-between items-center'>
-                    <div className='flex items-center'>
-                      <img
-                        src={comment.user?.avatar?.url || userPic}
-                        alt="User"
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                      <div className='mx-3'>
-                        <div>
-                          <Link to={`/profile/${comment.user?._id}`} onClick={()=>handleComponent(`profile/${comment.user?._id}`)} className='font-semibold'>{comment.user?.name}</Link>
-                          <span className='font-semibold text-gray-500' style={{ fontSize: '12px' }}> {comment.createdAt.substring(8, 10)}-{comment.createdAt.substring(5, 7)} at {comment.createdAt.substring(11, 16)}</span>
-                        </div>
-                        <p>{comment.comment}</p>
-                      </div>
-                    </div>
-                    <div className='flex flex-col justify-center items-center'>
-                      {comment.user?._id === user?._id &&
-                        <div>
-                          <IconButton aria-label="settings" onClick={handleCommentClick}>
-                            <MoreVertIcon fontSize='small' />
-                          </IconButton>
+                      <Menu
+                        anchorEl={anchorElCom}
+                        open={Boolean(anchorElCom)}
+                        onClose={handleCommentClose}
+                      >
+                        <MenuItem
+                          onClick={() => {
+                            handleCommentClose();
+                            handleDeleteComment(comment._id)
+                          }}
+                          className='hover:text-red-500'
+                        >
+                          <DeleteIcon fontSize='small' />
+                        </MenuItem>
+                      </Menu>
+                    </div>}
 
-                          <Menu
-                            anchorEl={anchorElCom}
-                            open={Boolean(anchorElCom)}
-                            onClose={handleCommentClose}
-                          >
-                            <MenuItem
-                              onClick={() => {
-                                handleCommentClose();
-                                handleDeleteComment(comment._id)
-                              }}
-                              className='hover:text-red-500'
-                            >
-                              <DeleteIcon fontSize='small' />
-                            </MenuItem>
-                          </Menu>
-                        </div>}
-
-                      {/*<IconButton aria-label="add to favorites" onClick={handleLike}>
+                  {/*<IconButton aria-label="add to favorites" onClick={handleLike}>
                         {!liked ? <FavoriteBorderIcon fontSize='small' /> :
                           <FavoriteIcon fontSize='small' sx={{ color: 'red' }} />}
                       </IconButton>*/}
-                    </div>
-                  </div>
+                </div>
+              </div>
 
-                  {/*Replies*/}
-                  <div className='pl-14 flex flex-col'>
-                    {openReplies[comment._id] ?
-                      comment.replies.map((reply, index) => (
-                        <div key={index} className='flex justify-between items-center py-1'>
-                          <div className='flex items-center'>
-                            <img
-                              src={reply.user?.avatar?.url || userPic}
-                              alt="User"
-                              className="w-12 h-12 rounded-full object-cover"
-                            />
-                            <div className='mx-3'>
-                              <div>
-                                <Link to={`/profile/${reply.user?._id}`} onClick={()=>handleComponent(`profile/${reply.user?._id}`)} className='font-semibold'>{reply.user?.name}</Link>
-                                <span className='font-semibold text-gray-500' style={{ fontSize: '10px' }}> {comment.createdAt.substring(8, 10)}-{comment.createdAt.substring(5, 7)} at {comment.createdAt.substring(11, 16)}</span>
-                              </div>
-                              <p className='text-sm'>{reply.reply}</p>
-                            </div>
+              {/*Replies*/}
+              <div className='pl-14 flex flex-col'>
+                {openReplies[comment._id] ?
+                  comment.replies.map((reply, index) => (
+                    <div key={index} className='flex justify-between items-center py-1'>
+                      <div className='flex items-center'>
+                        <img
+                          src={reply.user?.avatar?.url || userPic}
+                          alt="User"
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                        <div className='mx-3'>
+                          <div>
+                            <Link to={`/profile/${reply.user?._id}`} onClick={() => handleComponent(`profile/${reply.user?._id}`)} className='font-semibold'>{reply.user?.name}</Link>
+                            <span className='font-semibold text-gray-500' style={{ fontSize: '10px' }}> {comment.createdAt.substring(8, 10)}-{comment.createdAt.substring(5, 7)} at {comment.createdAt.substring(11, 16)}</span>
                           </div>
-                          <div className='flex flex-col justify-center items-center'>
-                            {reply.user?._id === user?._id &&
-                              <div>
-                                <IconButton aria-label="settings" onClick={handleReplyClick}>
-                                  <MoreVertIcon fontSize='small' />
-                                </IconButton>
+                          <p className='text-sm'>{reply.reply}</p>
+                        </div>
+                      </div>
+                      <div className='flex flex-col justify-center items-center'>
+                        {reply.user?._id === user?._id &&
+                          <div>
+                            <IconButton aria-label="settings" onClick={handleReplyClick}>
+                              <MoreVertIcon fontSize='small' />
+                            </IconButton>
 
-                                <Menu
-                                  anchorEl={anchorElRep}
-                                  open={Boolean(anchorElRep)}
-                                  onClose={handleReplyClose}
-                                >
-                                  <MenuItem
-                                    onClick={() => {
-                                      handleReplyClose();
-                                      handleDeleteReply(comment._id, reply._id)
-                                    }}
-                                    className='hover:text-red-500'
-                                  >
-                                    <DeleteIcon fontSize='small' />
-                                  </MenuItem>
-                                </Menu>
-                              </div>}
+                            <Menu
+                              anchorEl={anchorElRep}
+                              open={Boolean(anchorElRep)}
+                              onClose={handleReplyClose}
+                            >
+                              <MenuItem
+                                onClick={() => {
+                                  handleReplyClose();
+                                  handleDeleteReply(comment._id, reply._id)
+                                }}
+                                className='hover:text-red-500'
+                              >
+                                <DeleteIcon fontSize='small' />
+                              </MenuItem>
+                            </Menu>
+                          </div>}
 
-                            {/*<IconButton aria-label="add to favorites" onClick={handleLike}>
+                        {/*<IconButton aria-label="add to favorites" onClick={handleLike}>
                               {!liked ? <FavoriteBorderIcon fontSize='small' /> :
                                 <FavoriteIcon fontSize='small' sx={{ color: 'red' }} />}
                             </IconButton>*/}
-                          </div>
-                        </div>
-                      )) :
-                      comment.replies.length > 0 &&
-                      <div className='py-1'>
-                        <span
-                          className='text-sm font-semibold hover:border-b-2 border-black hover:cursor-pointer'
-                          onClick={() => toggleReplies(comment._id)}
-                        >
-                          {comment.replies.length} more replies
-                        </span>
-                      </div>}
-
-                    {/*Reply field*/}
-                    <div className='flex'>
-                      <input
-                        type='text'
-                        placeholder={`Reply to ${comment.user?.name || 'Outstagram user'}...(Upto 100 letters)`}
-                        value={replies[comment._id] || ''} // Use the specific comment's reply
-                        onChange={(e) => handleReplyChange(comment._id, e.target.value)} // Update reply for the specific comment
-                        disabled={!comment.user}
-                        className='w-full p-2 mt-1 mr-1 bg-gray-100 rounded-full focus:outline-none'
-                        maxLength={100}
-                      />
-                      <IconButton
-                        aria-label="send"
-                        disabled={!replies[comment._id]} // Disable if the reply is empty
-                        onClick={() => handleReply(comment._id)} // Send reply for the specific comment
-                      >
-                        <SendIcon fontSize='small' sx={{ color: `${!replies[comment._id] ? 'gray' : '#0099ff'}` }} />
-                      </IconButton>
+                      </div>
                     </div>
-                  </div>
+                  )) :
+                  comment.replies.length > 0 &&
+                  <div className='py-1'>
+                    <span
+                      className='text-sm font-semibold hover:border-b-2 border-black hover:cursor-pointer'
+                      onClick={() => toggleReplies(comment._id)}
+                    >
+                      {comment.replies.length} more replies
+                    </span>
+                  </div>}
+
+                {/*Reply field*/}
+                <div className='flex'>
+                  <input
+                    type='text'
+                    placeholder={`Reply to ${comment.user?.name || 'Outstagram user'}...(Upto 100 letters)`}
+                    value={replies[comment._id] || ''} // Use the specific comment's reply
+                    onChange={(e) => handleReplyChange(comment._id, e.target.value)} // Update reply for the specific comment
+                    disabled={!comment.user}
+                    className='w-full p-2 mt-1 mr-1 bg-gray-100 rounded-full focus:outline-none'
+                    maxLength={100}
+                  />
+                  <IconButton
+                    aria-label="send"
+                    disabled={!replies[comment._id]} // Disable if the reply is empty
+                    onClick={() => handleReply(comment._id)} // Send reply for the specific comment
+                  >
+                    <SendIcon fontSize='small' sx={{ color: `${!replies[comment._id] ? 'gray' : '#0099ff'}` }} />
+                  </IconButton>
                 </div>
-              ))}
-            </Box>
-          </Modal>
-          {/* Add Comment */}
-          <CardActions disableSpacing sx={{ borderTop: '1px solid #bfbfbf' }}>
-            <img
-              src={user?.avatar?.url || userPic}
-              alt="User"
-              className="w-12 h-12 rounded-full object-cover"
-            />
-            <input type='text' placeholder='Add a comment...(Upto 100 latters)' value={comment} onChange={(e) => setComment(e.target.value)} className='w-full p-2 mx-2 bg-gray-100 rounded-full focus:outline-none' maxLength={100} />
-            <IconButton aria-label="send" disabled={comment === ''} onClick={handleComment} >
-              <SendIcon sx={{ color: `${comment === '' ? 'gray' : '#0099ff'}` }} />
-            </IconButton>
-          </CardActions>
-        </Card>
-      }
-    </>
+              </div>
+            </div>
+          ))}
+        </Box>
+      </Modal>
+      {/* Add Comment */}
+      <CardActions disableSpacing sx={{ borderTop: '1px solid #bfbfbf' }}>
+        <img
+          src={user?.avatar?.url || userPic}
+          alt="User"
+          className="w-12 h-12 rounded-full object-cover"
+        />
+        <input type='text' placeholder='Add a comment...(Upto 100 latters)' value={comment} onChange={(e) => setComment(e.target.value)} className='w-full p-2 mx-2 bg-gray-100 rounded-full focus:outline-none' maxLength={100} />
+        <IconButton aria-label="send" disabled={comment === ''} onClick={handleComment} >
+          <SendIcon sx={{ color: `${comment === '' ? 'gray' : '#0099ff'}` }} />
+        </IconButton>
+      </CardActions>
+    </Card>
   );
 }
 

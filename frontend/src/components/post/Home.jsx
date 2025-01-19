@@ -25,7 +25,7 @@ function Home(props) {
     <>
       {isLoading ? <Loader /> :
         <div className='lg:px-32 md:px-16 sm:px-8'>
-          <div className='flex flex-col lg:px-16 lg:py-4 p-4 bg-white'>
+          <div className={`flex flex-col lg:px-16 lg:py-4 p-4 bg-white ${posts?.length < 2 && 'h-svh'}`}>
             <Link to='/create-post' onClick={()=>handleComponent("create-post")}>
               <div className='flex items-center border-2 rounded-md p-3 mb-4 bg-white hover:bg-gray-100 cursor-pointer'>
                 <img src={user?.avatar?.url || userPic} alt='User' className='w-12 h-12 rounded-full object-cover mr-3' />
@@ -36,7 +36,7 @@ function Home(props) {
               <div className='mb-4' key={index}>
                 <PostCard handleComponent={handleComponent} post={post} getPosts={getPosts} />
               </div>
-            )) : <p className='text-center text-2xl font-semibold text-gray-500 h-svh'>No posts to show. Follow somebody to see their posts.</p>}
+            )) : <p className='text-center text-2xl font-semibold text-gray-500'>No posts to show. Follow somebody to see their posts.</p>}
           </div>
         </div>}
     </>
