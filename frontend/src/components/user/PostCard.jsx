@@ -301,12 +301,8 @@ export default function PostCard(props) {
         <Typography variant="body1" component={"pre"}
           sx={{
             whiteSpace: "pre-wrap", // Preserves spaces and breaks lines
-            wordWrap: "break-word", // Breaks long words
+            wordWrap: "break-word", // Ensures long words are wrapped
             overflow: "hidden", // Prevents text overflow
-            textOverflow: "ellipsis", // Adds ellipsis for overflowed text
-            display: "-webkit-box", // Limits text to a certain number of lines
-            WebkitLineClamp: 3, // Limits to 3 lines
-            WebkitBoxOrient: "vertical", // Required for WebkitLineClamp to work
           }}
         >
           {post?.caption}
