@@ -298,7 +298,7 @@ export default function PostCard(props) {
       </Carousel>}
       {/* Card Content */}
       <CardContent>
-        <Typography variant="body1">
+        <Typography variant="body1" component={"pre"}>
           {post?.caption}
         </Typography>
       </CardContent>
@@ -382,7 +382,7 @@ export default function PostCard(props) {
                   <div className='mx-3'>
                     <div>
                       <Link to={`/profile/${comment.user?._id}`} onClick={() => handleComponent(`profile/${comment.user?._id}`)} className='font-semibold'>{comment.user?.name}</Link>
-                      <span className='font-semibold text-gray-500' style={{ fontSize: '12px' }}> {comment.createdAt.substring(8, 10)}-{comment.createdAt.substring(5, 7)} at {comment.createdAt.substring(11, 16)}</span>
+                      <span className='font-semibold text-gray-500' style={{ fontSize: '12px' }}> {new Date(comment.createdAt).toLocaleString().replace(',', ' at')}</span>
                     </div>
                     <p>{comment.comment}</p>
                   </div>
@@ -432,7 +432,7 @@ export default function PostCard(props) {
                         <div className='mx-3'>
                           <div>
                             <Link to={`/profile/${reply.user?._id}`} onClick={() => handleComponent(`profile/${reply.user?._id}`)} className='font-semibold'>{reply.user?.name}</Link>
-                            <span className='font-semibold text-gray-500' style={{ fontSize: '10px' }}> {comment.createdAt.substring(8, 10)}-{comment.createdAt.substring(5, 7)} at {comment.createdAt.substring(11, 16)}</span>
+                            <span className='font-semibold text-gray-500' style={{ fontSize: '10px' }}> {new Date(reply.createdAt).toLocaleString().replace(',', ' at')}</span>
                           </div>
                           <p className='text-sm'>{reply.reply}</p>
                         </div>

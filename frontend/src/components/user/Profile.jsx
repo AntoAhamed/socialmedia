@@ -183,10 +183,10 @@ function Profile(props) {
 
             <div className='mb-3'>
               <p className='lg:text-2xl text-xl font-semibold'>{user?.name}</p>
-              <p className='lg:text-lg font-semibold'>{user?.bio}</p>
+              <pre className='lg:text-lg font-sans'>{user?.bio}</pre>
               <p className='font-semibold text-gray-500'>{user?.email}</p>
               <p className='text-sm font-semibold text-gray-500'>
-                Joined On : {new Date(user?.createdAt).toLocaleString().replace(',', ' at')}
+                Joined On : {new Date(user?.createdAt).toLocaleDateString().replace(',', ' at')}
               </p>
               <p className='text-sm font-semibold text-black my-2'>{user?.profileLock ? "[Account Locked]" : ''}</p>
             </div>

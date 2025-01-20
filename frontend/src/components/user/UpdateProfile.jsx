@@ -98,7 +98,7 @@ function UpdateProfile() {
                   <input type='file' accept='.png, .jpg, .jpeg' onChange={handleImageChange} className='bg-gray-100 p-3 rounded-t-md border-b-gray-500 border-b w-full ml-2' />
                 </div>
                 <div className='grid mb-3'>
-                  <Button type='submit' variant='contained'>Update Profile Changes</Button>
+                  <Button type='submit' variant='contained' disabled={name === '' && bio === '' && email === '' && avatar === ''}>Update Profile Changes</Button>
                 </div>
               </form>
             </div>

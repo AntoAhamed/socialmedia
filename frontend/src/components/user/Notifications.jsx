@@ -8,7 +8,7 @@ import { IconButton } from '@mui/material';
 import { loadUser, removeNotification } from '../../features/userSlice';
 
 function Notifications(props) {
-    const {handleComponent} = props;
+    const { handleComponent } = props;
     const dispatch = useDispatch();
     const { isLoading, user, error, success, message, users } = useSelector(state => state.user);
 
@@ -17,9 +17,9 @@ function Notifications(props) {
         dispatch(loadUser())
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         handleComponent("notifications")
-    },[dispatch])
+    }, [dispatch])
     return (
         <div className='p-4'>
             {isLoading ? <Loader /> :
@@ -35,11 +35,11 @@ function Notifications(props) {
                             />
                             <div className='flex items-center justify-between w-full mx-3'>
                                 <p>
-                                    <Link to={`/profile/${notification.user?._id}`} onClick={()=>handleComponent(`profile/${notification.user?._id}`)} className='font-semibold hover:border-b-2 hover:border-black'>{notification.user?.name}</Link>
+                                    <Link to={`/profile/${notification.user?._id}`} onClick={() => handleComponent(`profile/${notification.user?._id}`)} className='font-semibold hover:border-b-2 hover:border-black'>{notification.user?.name}</Link>
                                     <span> {notification.message}</span>
                                 </p>
                                 <p className='text-blue-700 text-sm font-semibold flex lg:flex-row md:flex-row flex-col'>
-                                    <span>On {notification.createdAt.substring(0, 10)} at {notification.createdAt.substring(11, 19)}</span>
+                                    <span>{new Date(notification.createdAt).toLocaleString().replace(',', ' at')}</span>
                                 </p>
                             </div>
                             <IconButton className='hover:text-red-500' onClick={() => handleRemoveNotification(notification._id)}>

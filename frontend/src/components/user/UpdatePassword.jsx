@@ -61,7 +61,7 @@ function UpdatePassword() {
                   <TextField type='password' id="filled-basic" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} label="Confirm Password" variant="filled" required />
                 </div>
                 <div className='grid mb-3'>
-                  <Button type='submit' variant='contained'>Update Password Changes</Button>
+                  <Button type='submit' variant='contained' disabled={oldPassword === '' || newPassword === '' || confirmPassword === ''}>Update Password Changes</Button>
                 </div>
               </form>
             </div>

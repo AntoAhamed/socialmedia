@@ -181,9 +181,9 @@ function UserProfile(props) {
 
             <div className='mb-3'>
               <p className='lg:text-2xl text-xl font-semibold'>{userInfo?.user?.name}</p>
-              <p className='lg:text-lg font-semibold'>{userInfo?.user?.bio}</p>
+              <pre className='lg:text-lg font-sans'>{userInfo?.user?.bio}</pre>
               <p className='font-semibold text-gray-500'>{userInfo?.user?.email}</p>
-              <p className='text-sm font-semibold text-gray-500'>Joined On : {new Date(userInfo?.user?.createdAt).toLocaleString().replace(',', ' at')}</p>
+              <p className='text-sm font-semibold text-gray-500'>Joined On : {new Date(userInfo?.user?.createdAt).toLocaleDateString().replace(',', ' at')}</p>
             </div>
 
 
