@@ -298,7 +298,17 @@ export default function PostCard(props) {
       </Carousel>}
       {/* Card Content */}
       <CardContent>
-        <Typography variant="body1" component={"pre"}>
+        <Typography variant="body1" component={"pre"}
+          sx={{
+            whiteSpace: "pre-wrap", // Preserves spaces and breaks lines
+            wordWrap: "break-word", // Breaks long words
+            overflow: "hidden", // Prevents text overflow
+            textOverflow: "ellipsis", // Adds ellipsis for overflowed text
+            display: "-webkit-box", // Limits text to a certain number of lines
+            WebkitLineClamp: 3, // Limits to 3 lines
+            WebkitBoxOrient: "vertical", // Required for WebkitLineClamp to work
+          }}
+        >
           {post?.caption}
         </Typography>
       </CardContent>
