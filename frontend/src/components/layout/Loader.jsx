@@ -3,7 +3,7 @@ import logo from '../../assets/favicon.png'
 
 function Loader() {
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+        <div className="flex flex-col items-center justify-center h-screen">
             <div className="flex items-center justify-center mb-4">
                 <img src={logo} alt='logo' className='w-16 h-16 opacity-75 animate-bounce' />
             </div>

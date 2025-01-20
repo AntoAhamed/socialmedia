@@ -27,6 +27,28 @@ function Navbar(props) {
   if (isSmall) size = "small";
   else if (isMedium) size = "medium";
 
+  const textStyle = {
+    position: "relative",
+    display: "inline-block",
+    color: "#000",
+    fontSize: "1.25rem", // For "text-xl"
+    fontWeight: "bold", // For "font-bold"
+    fontStyle: "italic", // For "italic"
+    textAlign: "center", // For "text-center"
+    overflow: "hidden", // Prevents the animation from exceeding text bounds
+    lineHeight: "1.5", // To keep the text visually balanced
+  };
+
+  const shineStyle = {
+    position: "absolute",
+    top: 0,
+    left: "-150%",
+    width: "150%",
+    height: "100%",
+    background: "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent)",
+    animation: "shineAnimation 2s linear infinite",
+  };
+
   useEffect(() => {
     const active = localStorage.getItem('active')
 
@@ -43,7 +65,26 @@ function Navbar(props) {
       <nav className='border-b lg:py-3 py-2 sticky top-0 z-10 bg-white'>
         <ul className='grid lg:grid-cols-4 grid-cols-1 lg:gap-4 md:gap-2'>
           <li className='p-2 select-none'>
-            <p className='lg:text-2xl md:text-2xl text-xl font-bold italic text-center'>Outstagram</p>
+            <div style={{ textAlign: "center" }}>
+              {/* Inject keyframes into the document */}
+              <style>
+                {`
+          @keyframes shineAnimation {
+            0% {
+              left: -150%;
+            }
+            100% {
+              left: 150%;
+            }
+          }
+        `}
+              </style>
+              <div style={textStyle}>
+                <p className='lg:text-2xl md:text-2xl text-xl'>Outstagram</p>
+                <div style={shineStyle}></div>
+              </div>
+            </div>
+            {/*<p className='lg:text-2xl md:text-2xl text-xl font-bold italic text-center'>Outstagram</p>*/}
           </li>
           <div className='flex justify-around lg:col-span-3'>
             <Link to="/home">

@@ -27,7 +27,7 @@ function Login() {
     if (isAuth) {
       setEmail('');
       setPassword('');
-    }else{
+    } else {
       setWarning("red")
       console.log(error)
     }
