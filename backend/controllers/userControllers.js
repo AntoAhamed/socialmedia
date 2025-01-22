@@ -819,7 +819,7 @@ exports.removeNotification = async (req, res) => {
 
     for(let i=0;i<user.notifications.length;i++){
       if(req.params.id.toString() === user.notifications[i]._id.toString()){
-        index = user.notifications[i];
+        index = i;
       }
     }
 
