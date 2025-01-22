@@ -765,12 +765,63 @@ exports.getUserPosts = async (req, res) => {
   }
 };
 
+// Get Notifications
+exports.getNotifications = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    const notifications = [];
+
+    for (let i = 0; i < user.notifications.length; i++) {
+      const iUser = await User.findById(user.notifications[i].user).populate(
+        "posts followers following saves requests requested"
+      );
+
+      if (user.notifications.post !== null) {
+        const post = await Post.findById(user.notifications[i].post).populate(
+          "likes comments.user comments.replies.user saves owner"
+        );
+
+        let tmpNotification = user.notifications[i];
+
+        tmpNotification.post = post;
+
+        tmpNotification.user = iUser;
+
+        notifications.push(tmpNotification);
+      } else {
+        let tmpNotification = user.notifications[i];
+
+        tmpNotification.user = iUser;
+
+        notifications.push(tmpNotification);
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      notifications,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
 // Remove Notification
 exports.removeNotification = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
 
-    const index = user.notifications.indexOf(req.params.id);
+    let index;
+
+    for(let i=0;i<user.notifications.length;i++){
+      if(req.params.id.toString() === user.notifications[i]._id.toString()){
+        index = user.notifications[i];
+      }
+    }
 
     user.notifications.splice(index, 1);
 
@@ -800,6 +851,33 @@ exports.clearNotifications = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Notification Cleared Successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// Get saved posts
+exports.getSavedPosts = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    const saves = [];
+
+    for (let i = 0; i < user.saves.length; i++) {
+      const post = await Post.findById(user.saves[i]).populate(
+        "likes comments.user comments.replies.user saves owner"
+      );
+
+      saves.push(post);
+    }
+
+    res.status(200).json({
+      success: true,
+      saves,
     });
   } catch (error) {
     res.status(500).json({

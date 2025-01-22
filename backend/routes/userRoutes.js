@@ -20,6 +20,8 @@ const {
   acceptFollowRequest,
   ignoreFollowRequest,
   clearRequests,
+  getNotifications,
+  getSavedPosts,
 } = require("../controllers/userControllers");
 const { isAuthenticated } = require("../middlewares/auth");
 
@@ -59,9 +61,13 @@ router.route("/forgot/password").post(forgotPassword);
 
 router.route("/password/reset/:token").put(resetPassword);
 
-router.route("/notification/clear").put(isAuthenticated, clearNotifications);
+router.route("/notification")
+  .get(isAuthenticated, getNotifications)
+  .put(isAuthenticated, clearNotifications);
 
 router.route("/notification/:id").delete(isAuthenticated, removeNotification);
+
+router.route("/saved/posts").get(isAuthenticated, getSavedPosts);
 
 router.route("/profile/lock").put(isAuthenticated, profileLock);
 

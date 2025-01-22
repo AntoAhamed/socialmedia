@@ -50,7 +50,7 @@ function App() {
             <Route path="home" element={isAuth ? <Home handleComponent={handleComponent} user={user} /> : <Login />} />
             <Route path="create-post" element={isAuth ? <CreatePost user={user} /> : <Login />} />
             <Route path="friend-requests" element={isAuth ? <FriendRequests handleComponent={handleComponent} /> : <Login />} />
-            <Route path="saved-items" element={isAuth ? <SavedItems /> : <Login />} />
+            <Route path="saved-items" element={isAuth ? <SavedItems handleComponent={handleComponent} /> : <Login />} />
             <Route path="edit-post/:id" element={isAuth ? <EditPost user={user} /> : <Login />} />
             <Route path="search" element={isAuth ? <Search handleComponent={handleComponent} /> : <Login />} />
             <Route path="notifications" element={isAuth ? <Notifications handleComponent={handleComponent} /> : <Login />} />

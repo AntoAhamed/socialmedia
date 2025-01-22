@@ -109,7 +109,7 @@ function Navbar(props) {
               </li>
             </Link>
             <Link to="/notifications">
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "notifications" && 'bg-gray-200'}`} onClick={async () => { handleComponent("notifications"); await dispatch(clearNotifications()); dispatch(loadUser()); }}>
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "notifications" && 'bg-gray-200'}`} onClick={() => { handleComponent("notifications"); dispatch(clearNotifications()) }}>
                 {activeComponent === "notifications" ?
                   <NotificationsIcon fontSize={size} /> :
                   <><NotificationsOutlinedIcon fontSize={size} />{<sup className='lg:text-lg font-semibold text-blue-700'>{user.newNotifications > 0 && user.newNotifications}</sup>}</>}

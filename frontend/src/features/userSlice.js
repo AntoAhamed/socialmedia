@@ -269,6 +269,24 @@ export const clearRequests = createAsyncThunk(
     }
 )
 
+export const getNotification = createAsyncThunk(
+    "user/getNotification",
+    async (_, { rejectWithValue }) => {
+        try {
+            const token = JSON.parse(localStorage.getItem('token'))
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const { data } = await axios.get(`${backend_url}/api/v1/notification`, config)
+            return data
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 export const removeNotification = createAsyncThunk(
     "user/removeNotification",
     async (id, { rejectWithValue }) => {
@@ -297,7 +315,25 @@ export const clearNotifications = createAsyncThunk(
                     Authorization: `Bearer ${token}`
                 }
             }
-            const { data } = await axios.put(`${backend_url}/api/v1/notification/clear`, {}, config)
+            const { data } = await axios.put(`${backend_url}/api/v1/notification`, {}, config)
+            return data
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const getSavedPosts = createAsyncThunk(
+    "user/getSavedPosts",
+    async (_, { rejectWithValue }) => {
+        try {
+            const token = JSON.parse(localStorage.getItem('token'))
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const { data } = await axios.get(`${backend_url}/api/v1/saved/posts`, config)
             return data
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -595,6 +631,19 @@ const userSlice = createSlice({
                 state.isLoading = false
                 state.error = action.payload
             })
+            //Get notification
+            .addCase(getNotification.pending, (state) => {
+                state.isLoading = true
+                state.error = null
+            })
+            .addCase(getNotification.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.userInfo = action.payload
+            })
+            .addCase(getNotification.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = action.payload
+            })
             //Remove notification
             .addCase(removeNotification.pending, (state) => {
                 state.isLoading = true
@@ -620,6 +669,19 @@ const userSlice = createSlice({
                 state.message = action.payload.message
             })
             .addCase(clearNotifications.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = action.payload
+            })
+            //Get saved posts
+            .addCase(getSavedPosts.pending, (state) => {
+                state.isLoading = true
+                state.error = null
+            })
+            .addCase(getSavedPosts.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.userInfo = action.payload
+            })
+            .addCase(getSavedPosts.rejected, (state, action) => {
                 state.isLoading = false
                 state.error = action.payload
             })

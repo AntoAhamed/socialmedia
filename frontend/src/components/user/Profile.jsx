@@ -208,9 +208,9 @@ function Profile(props) {
                     onClose={handleClose}
                   >
                     <MenuItem
-                      onClick={async () => {
+                      onClick={() => {
                         //handleClose();
-                        await dispatch(loadUser());
+                        //await dispatch(loadUser());
                         //Save func
                         handleComponent('saved-items');
                         navigate('/saved-items');
