@@ -443,6 +443,30 @@ exports.followUser = async (req, res) => {
   }
 };
 
+//Get Requests
+exports.getRequests = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    const requests = [];
+
+    for (let i = 0; i < user.requests.length; i++) {
+      const iUser = await User.findById(user.requests[i]);
+      requests.push(iUser);
+    }
+
+    res.status(200).json({
+      success: true,
+      requests,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
 // Accept Follow Request
 exports.acceptFollowRequest = async (req, res) => {
   try {
@@ -817,8 +841,8 @@ exports.removeNotification = async (req, res) => {
 
     let index;
 
-    for(let i=0;i<user.notifications.length;i++){
-      if(req.params.id.toString() === user.notifications[i]._id.toString()){
+    for (let i = 0; i < user.notifications.length; i++) {
+      if (req.params.id.toString() === user.notifications[i]._id.toString()) {
         index = i;
       }
     }

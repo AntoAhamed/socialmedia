@@ -36,7 +36,7 @@ function Signup() {
     }
   }
   return (
-    <div className='grid lg:grid-cols-2 md:grid-cols-1 h-screen'>
+    <div className='grid lg:grid-cols-2 md:grid-cols-1 h-full'>
       <div>
         <div className='bg-blue-500 w-full h-full rounded-br-full'></div>
       </div>

@@ -95,7 +95,7 @@ function Navbar(props) {
               </li>
             </Link>
             <Link to="/friend-requests">
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "friend-requests" && 'bg-gray-200'}`} onClick={async () => { handleComponent("friend-requests"); await dispatch(clearRequests()); dispatch(loadUser()); }}>
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "friend-requests" && 'bg-gray-200'}`} onClick={() => { handleComponent("friend-requests"); dispatch(clearRequests()); }}>
                 {activeComponent === "friend-requests" ?
                   <PeopleIcon fontSize={size} /> :
                   <><PeopleOutlineIcon fontSize={size} />{<sup className='lg:text-lg font-semibold text-blue-700'>{user.newRequests > 0 && user.newRequests}</sup>}</>}

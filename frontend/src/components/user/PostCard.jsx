@@ -48,6 +48,7 @@ export default function PostCard(props) {
   const { user } = useSelector(state => state.user);
   const { isLoading, postInfo, error } = useSelector(state => state.post);
 
+  //Media Query
   const isSmall = useMediaQuery("(max-width: 500px)");
   const isMedium = useMediaQuery("(max-width: 755px)");
 

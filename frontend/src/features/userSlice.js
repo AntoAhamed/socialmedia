@@ -219,6 +219,24 @@ export const followUser = createAsyncThunk(
     }
 )
 
+export const getRequest = createAsyncThunk(
+    "user/getRequest",
+    async (_, { rejectWithValue }) => {
+        try {
+            const token = JSON.parse(localStorage.getItem('token'))
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            const { data } = await axios.get(`${backend_url}/api/v1/request`, config)
+            return data
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 export const acceptRequest = createAsyncThunk(
     "user/acceptRequest",
     async (id, { rejectWithValue }) => {
@@ -586,6 +604,19 @@ const userSlice = createSlice({
                 state.message = action.payload.message
             })
             .addCase(followUser.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = action.payload
+            })
+            //Get Request
+            .addCase(getRequest.pending, (state) => {
+                state.isLoading = true
+                state.error = null
+            })
+            .addCase(getRequest.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.userInfo = action.payload
+            })
+            .addCase(getRequest.rejected, (state, action) => {
                 state.isLoading = false
                 state.error = action.payload
             })

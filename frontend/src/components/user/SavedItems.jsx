@@ -6,24 +6,37 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import PostCard from './PostCard';
 import { getSavedPosts } from '../../features/userSlice';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+import { useMediaQuery } from '@mui/material';
 
 function SavedItems(props) {
   const { handleComponent } = props;
   const dispatch = useDispatch();
   const { isLoading, user, error, success, message, users, userInfo } = useSelector(state => state.user);
-  const [post, setPost] = useState({})
+  const [post, setPost] = useState({});
+
+  //Media Query
+  const isSmall = useMediaQuery("(max-width: 400px)");
+
+  let responsive = {
+    width: 400,
+    padding: 4,
+  };
+  if (isSmall) {
+    responsive.width = 360
+    responsive.padding = 0
+  }
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: responsive.width,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: responsive.padding,
+  };
 
   //Modal state
   const [open, setOpen] = useState(false);
@@ -49,7 +62,7 @@ function SavedItems(props) {
         <p className='lg:text-3xl text-2xl font-semibold italic text-center mb-3'>Outstagram</p>
         <p className='font-semibold text-gray-500 text-center mb-3'>Your saved items</p>
         {saves?.length > 0 ? saves?.map(item => (
-          <div className='border p-3 flex items-center hover:font-semibold cursor-pointer' key={item?._id} onClick={()=>handleOpen(item)}>
+          <div className='border p-3 flex items-center hover:font-semibold cursor-pointer' key={item?._id} onClick={() => handleOpen(item)}>
             <img
               src={item?.images[0]?.url || img}
               alt="Post"

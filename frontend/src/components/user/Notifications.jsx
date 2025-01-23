@@ -48,8 +48,6 @@ function Notifications(props) {
         //dispatch(loadUser())
     }
 
-    console.log(notifications)
-
     useEffect(() => {
         handleComponent("notifications")
         dispatch(getNotification())

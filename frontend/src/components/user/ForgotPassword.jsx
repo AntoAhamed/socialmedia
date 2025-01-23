@@ -27,7 +27,7 @@ function ForgotPassword() {
           <div>
             <div className='bg-blue-500 w-full h-full rounded-br-full'></div>
           </div>
-          <div className='col-span-2 lg:mx-32 md:mx-16 my-32'>
+          <div className='col-span-2 lg:mx-32 md:mx-16 my-48'>
             <div className='border-2 flex flex-col lg:p-16 p-8 mb-3 bg-white'>
               <p className='lg:text-3xl text-2xl font-semibold italic text-center mb-3'>Outstagram</p>
               <p className='font-semibold text-gray-500 text-center mb-3'>

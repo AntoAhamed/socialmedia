@@ -22,6 +22,7 @@ const {
   clearRequests,
   getNotifications,
   getSavedPosts,
+  getRequests,
 } = require("../controllers/userControllers");
 const { isAuthenticated } = require("../middlewares/auth");
 
@@ -34,6 +35,8 @@ router.route("/login").post(login);
 router.route("/logout").get(logout);
 
 router.route("/follow/:id").get(isAuthenticated, followUser);
+
+router.route("/request").get(isAuthenticated, getRequests);
 
 router.route("/request/accept/:id").get(isAuthenticated, acceptFollowRequest);
 
