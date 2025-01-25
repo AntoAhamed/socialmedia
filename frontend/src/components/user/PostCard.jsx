@@ -349,7 +349,7 @@ export default function PostCard(props) {
             Likes
           </Typography>
           {post?.likes.map((like, index) => (
-            <div className='flex justify-between items-center border-b py-3' key={index}>
+            <div className='flex justify-between items-center py-3' key={index}>
               <div className='flex items-center'>
                 <img
                   src={like.avatar?.url || userPic}
@@ -378,7 +378,7 @@ export default function PostCard(props) {
 
           {/*Comment*/}
           {post?.comments.map((comment, index) => (
-            <div key={index} className='border-b py-2'>
+            <div key={index} className='py-2'>
               <div className='flex justify-between items-center'>
                 <div className='flex items-center'>
                   <img
