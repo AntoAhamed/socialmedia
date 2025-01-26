@@ -95,10 +95,10 @@ function Navbar(props) {
               </li>
             </Link>
             <Link to="/friend-requests">
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "friend-requests" && 'bg-gray-200'}`} onClick={() => { handleComponent("friend-requests"); dispatch(clearRequests()); }}>
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "friend-requests" && 'bg-gray-200'}`} onClick={async () => { handleComponent("friend-requests"); await dispatch(clearRequests()); dispatch(loadUser()); }}>
                 {activeComponent === "friend-requests" ?
                   <PeopleIcon fontSize={size} /> :
-                  <><PeopleOutlineIcon fontSize={size} />{<sup className='lg:text-lg font-semibold text-blue-700'>{user.newRequests > 0 && user.newRequests}</sup>}</>}
+                  <><PeopleOutlineIcon fontSize={size} />{user.newRequests > 0 && <sup className='lg:text-lg font-semibold text-white rounded-full px-1 bg-blue-500'>{user.newRequests}</sup>}</>}
               </li>
             </Link>
             <Link to="/search">
@@ -109,10 +109,10 @@ function Navbar(props) {
               </li>
             </Link>
             <Link to="/notifications">
-              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "notifications" && 'bg-gray-200'}`} onClick={() => { handleComponent("notifications"); dispatch(clearNotifications()) }}>
+              <li className={`hover:bg-gray-200 rounded-full p-2 ${activeComponent === "notifications" && 'bg-gray-200'}`} onClick={async () => { handleComponent("notifications"); await dispatch(clearNotifications()); dispatch(loadUser()); }}>
                 {activeComponent === "notifications" ?
                   <NotificationsIcon fontSize={size} /> :
-                  <><NotificationsOutlinedIcon fontSize={size} />{<sup className='lg:text-lg font-semibold text-blue-700'>{user.newNotifications > 0 && user.newNotifications}</sup>}</>}
+                  <><NotificationsOutlinedIcon fontSize={size} />{user.newNotifications > 0 && <sup className='lg:text-lg font-semibold text-white rounded-full px-1 bg-blue-500'>{user.newNotifications}</sup>}</>}
               </li>
             </Link>
             <Link to="/profile">

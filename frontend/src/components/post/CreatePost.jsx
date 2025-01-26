@@ -9,6 +9,7 @@ import { getMyPosts, loadUser } from '../../features/userSlice';
 import Switch from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import imageCompression from 'browser-image-compression';
 
 function CreatePost(props) {
   const { user } = props
@@ -61,7 +62,7 @@ function CreatePost(props) {
     navigate('/profile');
   }
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     try {
       const files = Array.from(e.target.files);
 
@@ -72,17 +73,27 @@ function CreatePost(props) {
 
       setImages([]);
 
-      files.forEach((file) => {
-        const reader = new FileReader();
+      const compressedImages = await Promise.all(
+        files.map(async (file) => {
+          const options = {
+            maxSizeMB: 0.3,
+            maxWidthOrHeight: 300,
+            useWebWorker: true,
+          };
+          const compressedFile = await imageCompression(file, options);
+          return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+              if (reader.readyState === 2) {
+                resolve(reader.result);
+              }
+            };
+            reader.readAsDataURL(compressedFile);
+          });
+        })
+      );
 
-        reader.onload = () => {
-          if (reader.readyState === 2) {
-            setImages((old) => [...old, reader.result]);
-          }
-        }
-
-        reader.readAsDataURL(file);
-      })
+      setImages(compressedImages);
     } catch (err) {
       console.log(err);
     }

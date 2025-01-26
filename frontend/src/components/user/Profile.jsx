@@ -108,10 +108,12 @@ function Profile(props) {
             />
           </div>
           <div className='flex justify-between items-center'>
-            <div className='flex flex-col items-center hover:underline cursor-pointer'>
-              <span className='text-lg font-bold'>{user?.posts.length}</span>
-              <span>Posts</span>
-            </div>
+            <a href='#posts'>
+              <div className='flex flex-col items-center hover:underline cursor-pointer'>
+                <span className='text-lg font-bold'>{user?.posts.length}</span>
+                <span>Posts</span>
+              </div>
+            </a>
             <div className='flex flex-col items-center mx-3 hover:underline cursor-pointer' onClick={handleFollowersModalOpen}>
               <span className='text-lg font-bold'>{user?.followers.length}</span>
               <span>Followers</span>
@@ -257,7 +259,7 @@ function Profile(props) {
           </div>
         </div>
       </div>
-      <div>
+      <div id='posts'>
         <Link to='/create-post' onClick={() => handleComponent("create-post")}>
           <div className='flex items-center border-2 rounded-md p-3 lg:mx-5 mx-3 lg:mt-5 mt-3 bg-white hover:bg-gray-100 cursor-pointer border-gray-300'>
             <img src={user?.avatar?.url || userPic} alt='User' className='w-12 h-12 rounded-full object-cover mr-3' />

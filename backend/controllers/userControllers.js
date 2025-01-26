@@ -901,7 +901,7 @@ exports.getSavedPosts = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      saves,
+      saves: saves.reverse(),
     });
   } catch (error) {
     res.status(500).json({

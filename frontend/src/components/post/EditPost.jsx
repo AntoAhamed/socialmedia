@@ -7,6 +7,7 @@ import { updatePost } from '../../features/postSlice';
 import Loader from '../layout/Loader';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import imageCompression from 'browser-image-compression';
 
 function EditPost() {
     const { id } = useParams();
@@ -47,7 +48,7 @@ function EditPost() {
         navigate('/profile');
     }
 
-    const handleImageChange = (e) => {
+    const handleImageChange = async (e) => {
         try {
             const files = Array.from(e.target.files);
 
@@ -58,25 +59,35 @@ function EditPost() {
 
             setImages([]);
 
-            files.forEach((file) => {
-                const reader = new FileReader();
+            const compressedImages = await Promise.all(
+                files.map(async (file) => {
+                    const options = {
+                        maxSizeMB: 0.3,
+                        maxWidthOrHeight: 300,
+                        useWebWorker: true,
+                    };
+                    const compressedFile = await imageCompression(file, options);
+                    return new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                            if (reader.readyState === 2) {
+                                resolve(reader.result);
+                            }
+                        };
+                        reader.readAsDataURL(compressedFile);
+                    });
+                })
+            );
 
-                reader.onload = () => {
-                    if (reader.readyState === 2) {
-                        setImages((old) => [...old, reader.result]);
-                    }
-                }
-
-                reader.readAsDataURL(file);
-            })
+            setImages(compressedImages);
         } catch (err) {
             console.log(err);
         }
     }
 
-    useEffect(()=>{
-        
-    },[])
+    useEffect(() => {
+
+    }, [])
     return (
         <>
             {isLoading ? <Loader /> :

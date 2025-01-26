@@ -106,10 +106,12 @@ function UserProfile(props) {
             />
           </div>
           <div className='flex justify-between items-center'>
-            <div className='flex flex-col items-center hover:underline cursor-pointer'>
-              <span className='text-lg font-bold'>{userInfo?.user?.posts.length}</span>
-              <span>Posts</span>
-            </div>
+            <a href='#posts'>
+              <div className='flex flex-col items-center hover:underline cursor-pointer'>
+                <span className='text-lg font-bold'>{userInfo?.user?.posts.length}</span>
+                <span>Posts</span>
+              </div>
+            </a>
             <div className='flex flex-col items-center mx-3 hover:underline cursor-pointer' onClick={(!userInfo?.user?.profileLock || isFollowed || (userInfo?.user?._id === user?._id)) ? handleFollowersModalOpen : undefined}>
               <span className='text-lg font-bold'>{userInfo?.user?.followers.length}</span>
               <span>Followers</span>
@@ -215,7 +217,7 @@ function UserProfile(props) {
 
 
       </div>
-      <div>
+      <div id='posts'>
         {(!userInfo?.user?.profileLock || isFollowed || (userInfo?.user?._id === user?._id)) ?
           <UserPosts handleComponent={handleComponent} posts={posts} getPosts={getPosts} /> :
           <div className='h-svh flex flex-col justify-center items-center'>

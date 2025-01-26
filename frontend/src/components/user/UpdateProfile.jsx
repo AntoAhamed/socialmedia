@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteMyAccount, loadUser, tempLogout, updateProfile } from '../../features/userSlice';
 import Loader from '../layout/Loader';
 import userPic from '../../assets/user.png'
+import imageCompression from 'browser-image-compression';
 
 function UpdateProfile() {
   const navigate = useNavigate();
@@ -43,8 +44,15 @@ function UpdateProfile() {
     }
   }
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     try {
+      const file = e.target.files[0];
+      const options = {
+        maxSizeMB: 0.1, // Set max size to 100 KB
+        maxWidthOrHeight: 300, // Set max dimensions to 300x300 pixels
+        useWebWorker: true,
+      };
+      const compressedFile = await imageCompression(file, options);
       const reader = new FileReader();
 
       reader.onload = () => {
@@ -53,7 +61,7 @@ function UpdateProfile() {
         }
       }
 
-      reader.readAsDataURL(e.target.files[0]);
+      reader.readAsDataURL(compressedFile);
     } catch (err) {
       console.log(err);
     }

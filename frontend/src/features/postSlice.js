@@ -191,6 +191,7 @@ let initialState = {
     isLoading: false,
     postInfo: null,
     error: null,
+    posts: null,
 }
 
 const postSlice = createSlice({
@@ -250,6 +251,7 @@ const postSlice = createSlice({
             .addCase(getPostsOfTheFollowings.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.postInfo = action.payload
+                state.posts = action.payload.posts
             })
             .addCase(getPostsOfTheFollowings.rejected, (state, action) => {
                 state.isLoading = false
