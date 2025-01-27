@@ -45,8 +45,8 @@ function Navbar(props) {
     left: "-150%",
     width: "150%",
     height: "100%",
-    background: "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent)",
-    animation: "shineAnimation 2s linear infinite",
+    background: "linear-gradient(160deg, transparent, rgba(255, 255, 255, 0.8), transparent)",
+    animation: "shineAnimation 5s linear infinite",
   };
 
   useEffect(() => {
@@ -137,7 +137,7 @@ function Navbar(props) {
         </div>
 
         {/* Outlet Content */}
-        <div className="relative lg:px-36 md:px-4 bg-gray-100 bg-opacity-80 h-full overflow-y-auto">
+        <div className="relative lg:px-36 md:px-4 bg-gradient-to-r from-blue-100 to-purple-100 bg-opacity-80 h-full overflow-y-auto">
           <Outlet />
         </div>
       </div>

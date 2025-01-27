@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { clearErrorAndMessage, login } from '../../features/userSlice';
 import Loader from './Loader';
+import { lightGreen } from '@mui/material/colors';
 
 function Login() {
   const dispatch = useDispatch();
@@ -32,6 +33,15 @@ function Login() {
       console.log(error)
     }
   }
+
+  const handleGuest = async () => {
+    const userData = {
+      email: "user@gmail.com",
+      password: "password123",
+    }
+    
+    await dispatch(login(userData));
+  }
   return (
     <div className='grid lg:grid-cols-2 md:grid-cols-1 h-full'>
       <div>
@@ -57,8 +67,11 @@ function Login() {
               <Link to='/forgot-password'>Forgot Password?</Link>
             </p>
           </div>
-          <div className='border-2 p-8 bg-white'>
+          <div className='border-2 p-8 bg-white mb-3'>
             <p className='text-center'>Don't have an account? <Link to='/signup' className='text-blue-700 font-semibold'>Sign up</Link></p>
+          </div>
+          <div className='border-2 p-8 bg-white'>
+            <p className='text-center'>Want to visit as a guest? <Button variant='contained' sx={{ borderRadius: '24px', backgroundColor: 'lightcoral', color: 'black', fontWeight: '600' }} onClick={handleGuest}>Login as Guest</Button> <sup className='font-semibold text-blue-500 select-none'>[New]</sup></p>
           </div>
         </div>}
     </div>

@@ -12,12 +12,18 @@ function UpdatePassword() {
   const dispatch = useDispatch();
   const { isLoading, user, error, success, message } = useSelector(state => state.user);
 
+  const [alertMessage, setAlertMessage] = useState('');
+
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (user?.email === "user@gmail.com") {
+      return setAlertMessage("You can't change the guest user password...");
+    }
 
     const passwords = {
       oldPassword,
@@ -52,17 +58,19 @@ function UpdatePassword() {
               </p>
               <form onSubmit={handleSubmit}>
                 <div className='grid mb-3'>
-                  <TextField type='password' id="filled-basic" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} label="Old Password" variant="filled" required />
+                  <TextField type='password' value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} label="Old Password" variant="filled" required />
                 </div>
                 <div className='grid mb-3'>
-                  <TextField type='password' id="filled-basic" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} label="New Password" variant="filled" required />
+                  <TextField type='password' value={newPassword} onChange={(e) => setNewPassword(e.target.value)} label="New Password" variant="filled" required />
+                  <p className={`text-sm text-gray-500`}>&#9432; Password should be at least 6 charecter long.</p>
                 </div>
                 <div className='grid mb-3'>
-                  <TextField type='password' id="filled-basic" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} label="Confirm Password" variant="filled" required />
+                  <TextField type='password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} label="Confirm Password" variant="filled" required />
                 </div>
                 <div className='grid mb-3'>
                   <Button type='submit' variant='contained' disabled={oldPassword === '' || newPassword === '' || confirmPassword === ''}>Update Password Changes</Button>
                 </div>
+                {alertMessage.length > 0 && <p className='text-red-500 font-semibold'>&#9432; {alertMessage}</p>}
               </form>
             </div>
           </div>

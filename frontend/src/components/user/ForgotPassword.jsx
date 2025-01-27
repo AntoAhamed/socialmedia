@@ -9,10 +9,16 @@ function ForgotPassword() {
   const dispatch = useDispatch();
   const { isLoading, user, error, success, message } = useSelector(state => state.user);
 
+  const [alertMessage, setAlertMessage] = useState('');
+
   const [email, setEmail] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (email === "user@gmail.com") {
+      return setAlertMessage("You can't reset the guest user password...");
+    }
 
     await dispatch(forgotPassword(email));
 
@@ -40,6 +46,7 @@ function ForgotPassword() {
                 <div className='grid mb-3'>
                   <Button type='submit' variant='contained'>Continue</Button>
                 </div>
+                {alertMessage.length > 0 && <p className='text-red-500 font-semibold'>&#9432; {alertMessage}</p>}
               </form>
             </div>
           </div>

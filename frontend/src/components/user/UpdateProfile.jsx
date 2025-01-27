@@ -14,6 +14,9 @@ function UpdateProfile() {
   const dispatch = useDispatch();
   const { isLoading, user, error, success, message } = useSelector(state => state.user);
 
+  const [alertMessageForUpdate, setAlertMessageForUpdate] = useState('');
+  const [alertMessageForDelete, setAlertMessageForDelete] = useState('');
+
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
   const [email, setEmail] = useState('');
@@ -21,6 +24,10 @@ function UpdateProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    /*if (user?.email === "user@gmail.com") {
+      return setAlertMessageForUpdate("You can't change the guest user profile...");
+    }*/
 
     const userData = {
       name,
@@ -68,6 +75,10 @@ function UpdateProfile() {
   }
 
   const handleDeleteAccount = () => {
+    if (user?.email === "user@gmail.com") {
+      return setAlertMessageForDelete("You can't delete the guest user...");
+    }
+
     if (window.confirm('Are you sure you want to delete your account?')) {
       dispatch(deleteMyAccount());
       if (success) {
@@ -102,12 +113,13 @@ function UpdateProfile() {
                   <TextField type='email' id="filled-basic" disabled value={email} onChange={(e) => setEmail(e.target.value)} label="Email" variant="filled" placeholder={user?.email} />
                 </div>
                 <div className='flex mb-3'>
-                  <img src={avatar || userPic} alt='' width={'10%'} className='rounded-lg' />
+                  <img src={avatar || userPic} alt='' className='w-14 h-14 rounded-lg' />
                   <input type='file' accept='.png, .jpg, .jpeg' onChange={handleImageChange} className='bg-gray-100 p-3 rounded-t-md border-b-gray-500 border-b w-full ml-2' />
                 </div>
                 <div className='grid mb-3'>
                   <Button type='submit' variant='contained' disabled={name === '' && bio === '' && email === '' && avatar === ''}>Update Profile Changes</Button>
                 </div>
+                {alertMessageForUpdate.length > 0 && <p className='text-red-500 font-semibold'>&#9432; {alertMessageForUpdate}</p>}
               </form>
             </div>
             <div className='border-2 lg:p-8 p-4 flex justify-center items-center bg-white mb-3'>
@@ -118,6 +130,7 @@ function UpdateProfile() {
               <div className='mr-3'>
                 <p className='text-center mr-3'>Want to delete account?</p>
                 <p className='text-red-700'>(Be careful and think again)</p>
+                {alertMessageForDelete.length > 0 && <p className='text-red-500 font-semibold'>&#9432; {alertMessageForDelete}</p>}
               </div>
               <Button variant='contained' size='small' color='error' onClick={handleDeleteAccount}>Delete Account</Button>
             </div>
