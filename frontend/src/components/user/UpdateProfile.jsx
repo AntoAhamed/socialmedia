@@ -25,9 +25,9 @@ function UpdateProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    /*if (user?.email === "user@gmail.com") {
+    if (user?.email === "user@gmail.com") {
       return setAlertMessageForUpdate("You can't change the guest user profile...");
-    }*/
+    }
 
     const userData = {
       name,

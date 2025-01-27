@@ -97,178 +97,181 @@ function Profile(props) {
     getPosts();
   }, [dispatch]);
   return (
-    <div className={`lg:mx-28 border-l-4 border-r-8 border-gray-300 ${posts?.length <= 0 ? 'h-svh' : null}`}>
-      <div className='lg:p-6 p-3 bg-white rounded-b-lg shadow-xl'>
-        <div className='grid lg:grid-cols-2 md:grid-cols-1 gap-4 mb-3'>
-          <div className='flex justify-center'>
-            <img
-              src={user?.avatar?.url || userPic}
-              alt="User"
-              className="lg:w-32 md:w-24 w-20 lg:h-32 md:h-24 h-20 rounded-full object-cover border-2"
-            />
-          </div>
-          <div className='flex justify-between items-center'>
-            <a href='#posts'>
-              <div className='flex flex-col items-center hover:underline cursor-pointer'>
-                <span className='text-lg font-bold'>{user?.posts.length}</span>
-                <span>Posts</span>
+    <>
+      {isLoading ? <Loader /> :
+        <div className={`lg:mx-28 border-l-4 border-r-8 border-gray-300 ${posts?.length <= 0 ? 'h-svh' : null}`}>
+          <div className='lg:p-6 p-3 bg-white rounded-b-lg shadow-xl'>
+            <div className='grid lg:grid-cols-2 md:grid-cols-1 gap-4 mb-3'>
+              <div className='flex justify-center'>
+                <img
+                  src={user?.avatar?.url || userPic}
+                  alt="User"
+                  className="lg:w-32 md:w-24 w-20 lg:h-32 md:h-24 h-20 rounded-full object-cover border-2"
+                />
               </div>
-            </a>
-            <div className='flex flex-col items-center mx-3 hover:underline cursor-pointer' onClick={handleFollowersModalOpen}>
-              <span className='text-lg font-bold'>{user?.followers.length}</span>
-              <span>Followers</span>
-            </div>
-            <div className='flex flex-col items-center hover:underline cursor-pointer' onClick={handleFollowingModalOpen}>
-              <span className='text-lg font-bold'>{user?.following.length}</span>
-              <span>Following</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Followers Modal */}
-        <Modal
-          open={openFollowers}
-          onClose={handleFollowersModalClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ marginBottom: '10px' }}>
-              Followers
-            </Typography>
-            {user?.followers.map((follower, index) => (
-              <div className='flex justify-between items-center py-3' key={index}>
-                <div className='flex items-center'>
-                  <img
-                    src={follower.avatar?.url || userPic}
-                    alt="User"
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div className='mx-3'>
-                    <Link to={`/profile/${follower._id}`} onClick={() => handleComponent(`profile/${follower._id}`)} className='font-semibold'>{follower.name}</Link>
+              <div className='flex justify-between items-center'>
+                <a href='#posts'>
+                  <div className='flex flex-col items-center hover:underline cursor-pointer'>
+                    <span className='text-lg font-bold'>{user?.posts.length}</span>
+                    <span>Posts</span>
                   </div>
+                </a>
+                <div className='flex flex-col items-center mx-3 hover:underline cursor-pointer' onClick={handleFollowersModalOpen}>
+                  <span className='text-lg font-bold'>{user?.followers.length}</span>
+                  <span>Followers</span>
+                </div>
+                <div className='flex flex-col items-center hover:underline cursor-pointer' onClick={handleFollowingModalOpen}>
+                  <span className='text-lg font-bold'>{user?.following.length}</span>
+                  <span>Following</span>
                 </div>
               </div>
-            ))}
-          </Box>
-        </Modal>
-
-        {/* Following Modal */}
-        <Modal
-          open={openFollowing}
-          onClose={handleFollowingModalClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ marginBottom: '10px' }}>
-              Following
-            </Typography>
-            {user?.following.map((following, index) => (
-              <div className='flex justify-between items-center py-3' key={index}>
-                <div className='flex items-center'>
-                  <img
-                    src={following.avatar?.url || userPic}
-                    alt="User"
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div className='mx-3'>
-                    <Link to={`/profile/${following._id}`} onClick={() => handleComponent(`profile/${following._id}`)} className='font-semibold'>{following.name}</Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </Box>
-        </Modal>
-
-        <div className='mb-3'>
-          <p className='lg:text-2xl text-xl font-semibold'>{user?.name}</p>
-          <pre className='lg:text-lg font-sans whitespace-pre-wrap break-words overflow-hidden'>{user?.bio}</pre>
-          <p className='font-semibold text-gray-500'>{user?.email}</p>
-          <p className='text-sm font-semibold text-gray-500'>
-            Joined On : {new Date(user?.createdAt).toLocaleDateString().replace(',', ' at')}
-          </p>
-          <p className='text-sm font-semibold text-black my-2'>{user?.profileLock ? "[Account Locked]" : ''}</p>
-        </div>
-        <div className='grid grid-cols-2'>
-          <div className='grid lg:mr-3 md:mr-2 mr-1'>
-            <Button variant='contained' onClick={() => { handleComponent('update-profile'); navigate('/update-profile'); }}>Edit Profile</Button>
-          </div>
-          <div className='grid lg:grid-cols-12 md:grid-cols-8 grid-cols-4 lg:ml-3 md:ml-2 ml-1'>
-            <div className='grid lg:col-span-11 md:col-span-7 col-span-3'>
-              <Button variant='outlined' onClick={handleLogout}>Log out</Button>
             </div>
-            <div className='flex justify-end'>
-              <IconButton aria-label='action' onClick={handleClick}>
-                <MoreVertIcon />
-              </IconButton>
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem
-                  onClick={() => {
-                    //handleClose();
-                    //await dispatch(loadUser());
-                    //Save func
-                    handleComponent('saved-items');
-                    navigate('/saved-items');
-                  }}
-                >
-                  <BookmarksIcon />
-                  <span className='text-black hover:text-blue-500'>Saved Items</span>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    //handleClose();
-                    handleLockModalOpen();
-                  }}
-                >
-                  <LockResetIcon />
-                  <span className='text-black hover:text-blue-500'>Profile Lock</span>
-                </MenuItem>
-                {/* Profile lock modal */}
-                <Modal
-                  open={openLockModal}
-                  onClose={handleLockModalClose}
-                  aria-labelledby="modal-modal-title"
-                  aria-describedby="modal-modal-description"
-                >
-                  <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h5" component="h2" sx={{ borderBottom: '1px solid gray' }}>
-                      About Profile Lock
-                    </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                      Profile Lock is a feature that allows you to restrict your profile's visibility to only your followers.
-                      If you enable Profile Lock, people who do not follow you will only see limited information, such as your profile picture and name.
-                    </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                      <span className='flex justify-between items-center'>
-                        <span className='text-xl'>Profile Lock</span>
-                        <Switch checked={isChecked} onChange={handleSwitchChange} />
-                      </span>
-                    </Typography>
-                    <div className='grid mt-2'>
-                      <Button variant='contained' onClick={handleProfileLock}>Confirm</Button>
+
+            {/* Followers Modal */}
+            <Modal
+              open={openFollowers}
+              onClose={handleFollowersModalClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ marginBottom: '10px' }}>
+                  Followers
+                </Typography>
+                {user?.followers.map((follower, index) => (
+                  <div className='flex justify-between items-center py-3' key={index}>
+                    <div className='flex items-center'>
+                      <img
+                        src={follower.avatar?.url || userPic}
+                        alt="User"
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                      <div className='mx-3'>
+                        <Link to={`/profile/${follower._id}`} onClick={() => handleComponent(`profile/${follower._id}`)} className='font-semibold'>{follower.name}</Link>
+                      </div>
                     </div>
-                  </Box>
-                </Modal>
-              </Menu>
+                  </div>
+                ))}
+              </Box>
+            </Modal>
+
+            {/* Following Modal */}
+            <Modal
+              open={openFollowing}
+              onClose={handleFollowingModalClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ marginBottom: '10px' }}>
+                  Following
+                </Typography>
+                {user?.following.map((following, index) => (
+                  <div className='flex justify-between items-center py-3' key={index}>
+                    <div className='flex items-center'>
+                      <img
+                        src={following.avatar?.url || userPic}
+                        alt="User"
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                      <div className='mx-3'>
+                        <Link to={`/profile/${following._id}`} onClick={() => handleComponent(`profile/${following._id}`)} className='font-semibold'>{following.name}</Link>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </Box>
+            </Modal>
+
+            <div className='mb-3'>
+              <p className='lg:text-2xl text-xl font-semibold'>{user?.name}</p>
+              <pre className='lg:text-lg font-sans whitespace-pre-wrap break-words overflow-hidden'>{user?.bio}</pre>
+              <p className='font-semibold text-gray-500'>{user?.email}</p>
+              <p className='text-sm font-semibold text-gray-500'>
+                Joined On : {new Date(user?.createdAt).toLocaleDateString().replace(',', ' at')}
+              </p>
+              <p className='text-sm font-semibold text-black my-2'>{user?.profileLock ? "[Account Locked]" : ''}</p>
+            </div>
+            <div className='grid grid-cols-2'>
+              <div className='grid lg:mr-3 md:mr-2 mr-1'>
+                <Button variant='contained' onClick={() => { handleComponent('update-profile'); navigate('/update-profile'); }}>Edit Profile</Button>
+              </div>
+              <div className='grid lg:grid-cols-12 md:grid-cols-8 grid-cols-4 lg:ml-3 md:ml-2 ml-1'>
+                <div className='grid lg:col-span-11 md:col-span-7 col-span-3'>
+                  <Button variant='outlined' onClick={handleLogout}>Log out</Button>
+                </div>
+                <div className='flex justify-end'>
+                  <IconButton aria-label='action' onClick={handleClick}>
+                    <MoreVertIcon />
+                  </IconButton>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem
+                      onClick={() => {
+                        //handleClose();
+                        //await dispatch(loadUser());
+                        //Save func
+                        handleComponent('saved-items');
+                        navigate('/saved-items');
+                      }}
+                    >
+                      <BookmarksIcon />
+                      <span className='text-black hover:text-blue-500'>Saved Items</span>
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        //handleClose();
+                        handleLockModalOpen();
+                      }}
+                    >
+                      <LockResetIcon />
+                      <span className='text-black hover:text-blue-500'>Profile Lock</span>
+                    </MenuItem>
+                    {/* Profile lock modal */}
+                    <Modal
+                      open={openLockModal}
+                      onClose={handleLockModalClose}
+                      aria-labelledby="modal-modal-title"
+                      aria-describedby="modal-modal-description"
+                    >
+                      <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h5" component="h2" sx={{ borderBottom: '1px solid gray' }}>
+                          About Profile Lock
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          Profile Lock is a feature that allows you to restrict your profile's visibility to only your followers.
+                          If you enable Profile Lock, people who do not follow you will only see limited information, such as your profile picture and name.
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          <span className='flex justify-between items-center'>
+                            <span className='text-xl'>Profile Lock</span>
+                            <Switch checked={isChecked} onChange={handleSwitchChange} />
+                          </span>
+                        </Typography>
+                        <div className='grid mt-2'>
+                          <Button variant='contained' onClick={handleProfileLock}>Confirm</Button>
+                        </div>
+                      </Box>
+                    </Modal>
+                  </Menu>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div id='posts'>
-        <Link to='/create-post' onClick={() => handleComponent("create-post")}>
-          <div className='flex items-center border-2 rounded-md p-3 lg:mx-5 mx-3 lg:mt-5 mt-3 bg-white hover:bg-gray-100 cursor-pointer border-gray-300'>
-            <img src={user?.avatar?.url || userPic} alt='User' className='w-12 h-12 rounded-full object-cover mr-3' />
-            <p className='text-gray-700'>Share your thoughts...</p>
+          <div id='posts'>
+            <Link to='/create-post' onClick={() => handleComponent("create-post")}>
+              <div className='flex items-center border-2 rounded-md p-3 lg:mx-5 mx-3 lg:mt-5 mt-3 bg-white hover:bg-gray-100 cursor-pointer border-gray-300'>
+                <img src={user?.avatar?.url || userPic} alt='User' className='w-12 h-12 rounded-full object-cover mr-3' />
+                <p className='text-gray-700'>Share your thoughts...</p>
+              </div>
+            </Link>
+            <MyPosts handleComponent={handleComponent} posts={posts} getPosts={getPosts} />
           </div>
-        </Link>
-        <MyPosts handleComponent={handleComponent} posts={posts} getPosts={getPosts} />
-      </div>
-    </div>
+        </div>}
+    </>
   )
 }
 
